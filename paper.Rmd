@@ -1,0 +1,33 @@
+---
+title: "Noise-induced phenonema in Population Biology"
+author: "Carl Boettiger"
+---
+
+Outline
+
+## What is noise?  
+
+All that you leave out of the model
+
+## Sources of noise
+
+- Demographic stochasticity 
+- Environmental stochasticity
+- Individual heterogeneity
+- Spatial variability
+- stochastic chaos
+
+## Noise-induced phenonema
+
+- Oscillations (parametric oscillator, stochastic resonance)
+- population inflation
+- Critical transitions
+- Spatial pattern formation
+- Population persistence (bet-hedging)
+- Species coexistence
+
+## Noise as information
+
+- Measuring stability
+- Early warning signals
+- maximum entropy methods

@@ -1,11 +1,13 @@
 ---
-title: "Noise-induced phenonema in Population Biology"
+title: "From noise to knowledge: how randomness generates novel phenomena and information"
 author: "Carl Boettiger"
 ---
 
-Outline
+# Outline
 
-## What is noise?  
+In this paper, I provide a brief synthesis of ecological research in stochastic phenomena. Noise, as the term itself suggests, is most often seen a nuisance to ecological insight, a inconvenient reality that must be acknowledged, a haystack that must be stripped away to reveal the processes of interest underneath. Yet despite this well-earned reputation, noise is often interesting in its own right: noise can induce novel phenomena that could not be understood from some underlying determinstic model alone.  Nor is all noise the same, and close examination of differences in in frequency, color or magnitude can reveal insights that would otherwise be inaccessible.  While an exhaustive review is beyond the scope of this piece, I endeavor to highlight some of the most interesting examples of both noise-induced phenomena and noise-derived information, and point the way towards yet uncharted territory.
+
+## What is noise? 
 
 All that you leave out of the model
 
@@ -17,7 +19,11 @@ All that you leave out of the model
 - Spatial variability
 - stochastic chaos
 
-## Noise-induced phenonema
+## Noise the nuisance: Noise can obscure patterns
+
+- deterministic skeletons, signal-to-noise ratio, model fitting
+
+## Noise the creator: Noise can induced novel phenonema
 
 - Oscillations (parametric oscillator, stochastic resonance)
 - population inflation
@@ -26,7 +32,7 @@ All that you leave out of the model
 - Population persistence (bet-hedging)
 - Species coexistence
 
-## Noise as information
+## Noise the informer: Noise can provide novel information
 
 - Measuring stability
 - Early warning signals

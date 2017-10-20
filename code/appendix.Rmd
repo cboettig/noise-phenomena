@@ -1,0 +1,147 @@
+---
+title: "Appendix"
+output: html_notebook
+---
+
+
+```{r}
+knitr::opts_chunk(message=FALSE)
+```
+
+```{r}
+library(nimble)
+library(tidyverse)
+```
+
+
+
+## Stochastic inflation
+
+
+```{r}
+
+logistic  <- nimble::nimbleCode({
+  
+  x[1] <- x0
+  for(t in 1:(N-1)){
+    mu[t] <- x[t] + x[t] * r * (1 - x[t] / K)
+    x[t+1] ~ dnorm(mu[t], sd = sigma)
+  }
+  
+})
+
+p <- list(r = .4, K = 1, sigma = .2, N = 500)
+
+model <- 
+nimbleModel(logistic,
+            constants = p,
+            inits = list(x0 = 1))
+cmodel <- compileNimble(model)
+set.seed(123)
+
+df <- map_dfr(1:10000, 
+              function(rep){
+                simulate(cmodel)
+                data.frame(t = seq_along(cmodel$x), x = cmodel$x)
+              },
+              .id = "rep")
+
+```
+
+
+```{r}
+(p$K + sqrt(p$K^2 - 8 * p$sigma^2) )/ 2
+```
+
+```{r}
+df %>% filter(t > 20, x > 0) %>%  summarize(mean(x))
+```
+
+
+```{r}
+
+df %>% 
+  filter(x > 0) %>% 
+  group_by(t) %>%
+  summarise(ave = mean(x), sd = sd(x)) %>%
+  gather(moment, value, -t) %>%
+  ggplot(aes(t,value, col=moment)) + geom_line()
+
+```
+
+
+------------
+
+
+
+# Quasi-cycles
+
+Understanding the origin of sustained oscillations has long been a central question in ecology [@Hastings]
+
+
+```{r}
+
+quasicycle  <- nimble::nimbleCode({
+  
+  x[1] <- x0
+  y[1] <- y0
+  
+  for(t in 1:(N-1)){
+    mu_x[t] <- x[t] + x[t] * r * (1 - x[t] / K) - b * x[t] * y[t]
+    x[t+1] ~ dnorm(mu_x[t], sd = sigma_x)
+    mu_y[t] <- y[t] + c * x[t] * y[t] - d * y[t]
+    y[t+1] ~ dnorm(mu_y[t], sd = sigma_y)
+  }
+  
+})
+
+p <- 
+  data.frame(
+  data.frame(r = .1, K = 5,  b = .1, c = .1, d = .1, N = 500),
+  data.frame(sigma_x = c(.00001,0.01),  sigma_y = c(.00001,0.01)))
+
+
+
+
+f <- function(constants){
+  model <- compileNimble(nimbleModel(quasicycle, constants = constants, inits = list(x0 = 1, y0 = 1)))
+  set.seed(123)
+  simulate(model)
+  tibble(t = seq_along(model$x), x = model$x, y = model$y, sigma = constants$sigma_x)
+}
+
+df <- p %>% rowwise() %>% do(f(.))        
+
+```
+
+
+```{r}
+df %>%
+  gather(species, pop, -t, -sigma) %>%
+  ggplot(aes(t, pop, col=species)) + geom_line() + facet_wrap(~sigma)
+```
+
+
+
+# Turing patterns?
+
+
+
+
+
+------------
+
+
+```{r}
+data(lynx)
+lynx <- tibble(year = 1821:1934, lynx = as.numeric(lynx))
+
+lynx %>%
+  ggplot(aes(year,lynx)) + geom_point() + geom_line()
+```
+
+
+
+
+
+

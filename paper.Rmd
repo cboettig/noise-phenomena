@@ -9,19 +9,36 @@ In this paper, I provide a brief synthesis of ecological research in stochastic 
 
 ## What is noise? 
 
-All that you leave out of the model
+<!-- Our state variables don't "exist" except as averages of a lower level process -->
+
+Where does noise come from?  It is important to bear in mind that whenever stochasticity is introduced into a model, it is only as a simplification or summary of the effects of a large number of other processes, often occuring at different scales.  Simply put, *noise is all that we leave out of our model*.  While ecologists will sometimes assert that stochasticity is inherent: birth and death are inherently stochastic events; or the environment is inherently stochastic, these are only assertions at a particular scale.  Obviously events such as births and deaths are themselves the results of mechanistic processes, just as fluctuations in rainfall and temperature are the result of deterministic laws of physics and not fundamentally random forces.  In all of science, only quantum mechanics claims a fundamentally probabilistic view of events, and then at such scales that have no relevance to ecology.  The term "noise" itself reflects this emergent rather than fundamental origin: the combination of hundreds of voices and sounds each individually distinct blends together into a background of noise.  
+
+
+
 
 ## Sources of noise
 
-**Demographic stochasticity**.  Demographic stochasticity refers to fluctuations in population sizes or densities that arise from the fundamentally discrete nature of individual birth and death events.  Demographic stochasticity is a particularly instructive case for illustrating a mechanism for how noise arises as an aggregate description from a fundamentally lower-level mechanistic process.  Demographic stochasticity is typically modeled as Markov jump process: in a population of $N$ identical individuals at time $t$, a birth occurs with probability $b_t(N_t)$ (_i.e._ a rate that can depend on both the population size $N$) and increases the population size, $N$ to $N+1$, and deaths occur with probability $d_t(N_t)$, decreasing the population size, $N$ to $N-1$.  Assuming each of these events are independent, this is a Poisson process 
+
+**Demographic stochasticity**.  Demographic stochasticity refers to fluctuations in population sizes or densities that arise from the fundamentally discrete nature of individual birth and death events.  Demographic stochasticity is a particularly instructive case for illustrating a mechanism for how noise arises as an aggregate description from a fundamentally lower-level mechanistic process.  We summarize the myriad lower-level processes that mechanistically lead to the event of a 'birth' in the population as a probability: in a population of $N$ identical individuals at time $t$, a birth occurs with probability $b_t(N_t)$ (_i.e._ a rate that can depend on both the population size $N$) and increases the population size, $N$ to $N+1$, and deaths occur with probability $d_t(N_t)$, decreasing the population size, $N$ to $N-1$.  Assuming each of these events are independent, this is a Poisson process.  
+
+<!-- Master equation transform--> 
+
+<!-- Demographic noise scaling with population size -->
+
+
+<!-- Gillespie algorithm -->
 
 [@Black2012]
 
-**Environmental stochasticity**
+**Environmental stochasticity**.  Whereas demographic noise reflects processes at a lower scale (the individual, rather than the population), environmental stochasticity reflects processes operating at the same scale that we are not explicitly modelling.  
 
 [@Black2012]
+
+Colored noise e.g. [@Marshall2015]
 
 **Individual heterogeneity**
+
+[@Hart2016]
 
 **Spatial variability**
 
@@ -33,35 +50,49 @@ In addition to these sources of variation, there are additional sources of varia
 **Observational error**: Observational error acts much like another form of stochasticity, arising from
 sampling effects or limitations of instruments, etc. Yet unlike the sources described above, this 
 uncertainty does not impact the actual state of our system, and thus does not give rise to any
-additional phenomena or information about that process.
+additional phenomena or information about that process.  So while this is indeed a source of noise,
+it falls outside our scope here.
 
 **Reducible uncertainty**: In constructing and estimating mathematical models of ecological processes, 
 we encounter uncertainty over our parameter estimates and possible choice of models [@Ellison2004].  In some ways, this
 uncertainty can act like the stochasticity described above: for instance, both introduce variation into
 any forecast of future outcomes. Yet unlike stochasticity, this uncertainty is reducible: with additional
-observations, we can narrow the uncertainty over parameters or models, while stochasticity remains an
-inherent source of variation.  
+observations, we can narrow the uncertainty over parameters or candidate models, while stochasticity remains an
+inherent source of variation. We will this not consider model and parameter uncertainty, as they are not 
+sources of noise.
 
 
 **Chaos**: Deterministic chaos [@Desharnais2001] is another mechanism of introducing significant variation into a simple
-model which can be observationally indistinguishable from a stochastic process [@Werndl2009].  
+model. Chaos can a look a lot like noise: indeed, it can be observationally indistinguishable from a stochastic process [@Werndl2009].  Despite substantial interest in previous decades and the relative ease of encountering chaos in simple ecological models (particularly in differences equations), and convincing reconstructions of chaotic dynamics in laboratory manipulations [@Constantino1997] the prevelance of chaotic dynamics as a driving factor in most ecological systems remains unclear. Meanwhile, the undeniable influences of 
 
 
 Figure: schematic showing types of noise
 
 ## Noise the nuisance: Noise can obscure patterns
 
-- deterministic skeletons, signal-to-noise ratio, model fitting
+- deterministic skeletons, 
+- signal-to-noise ratio, 
+- model fitting
 
-Figure:
+Figure: Lynx-hare data
 
 ## Noise the creator: Noise can induce novel phenonema
 
+
+
+Stochasticity can give rise to a wide array of interesting phenomena that are often at odds with our intuition. 
+
+
+**Quasi-cycles**
+
+
+
 - Oscillations (parametric oscillator, stochastic resonance)
 
-[@Black2010]
+[@Black2010] 
+[@Blarer1999]
 
-- population inflation
+- population inflation / deflation
 
 @Read2007 <!-- Stochasticity generates an evolutionary instability for infectious disease -->
 
@@ -69,13 +100,19 @@ Figure:
 
 [@Schreiber2008] decreasing variance before crash
 
-- Spatial pattern formation
+- Spatial pattern formation 
+
+Turning patterms found in plankton-herbivore dynamics [@Levin1976]
+
 - Population persistence (bet-hedging)
-- Species coexistence
+
+- Species coexistence  ([@Hart2016])
 
 Figure: 
 
 ## Noise the informer: Noise can provide novel information
+
+One of the most interesting aspects of noise is as a source of additional information.  Noise can act like a miniature perturbation experiment, constantly perturbing a system away from an equilibrium to reveal it's behavior elsewhere in state space.  
 
 - Measuring stability
 - Early warning signals

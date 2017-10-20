@@ -122,6 +122,81 @@ df %>%
 ```
 
 
+# Stochastic oscillator
+
+```{r}
+p <- list(r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 1e4)
+
+f <- function(x) x * p$r * (1 - x / p$K)
+g <- function(x) p$a * x ^ p$Q / (x^p$Q + p$H^p$Q)
+
+x <- seq(0,2, length.out = 100)
+data.frame(x, f = f(x), g = g(x)) %>%
+  ggplot(aes(x)) + geom_line(aes(y = f-g)) + 
+  geom_hline(aes(yintercept=0), lty=2) +
+  coord_cartesian(xlim = c(0,1.5), ylim=c(-.015,.1))
+
+```
+
+```{r}
+system.time({
+may  <- nimble::nimbleCode({
+  
+  x[1] <- x0
+  for(t in 1:(N-1)){
+    mu[t] <- x[t] + x[t] * r * (1 - x[t] / K)  - a * x[t] ^ Q / (x[t] ^ Q + H ^ Q)
+    y[t+1] ~ dnorm(mu[t], sd = sigma)
+    x[t+1] <- max(y[t+1],0)
+  }
+  
+})
+
+model <- nimbleModel(may,constants = p, inits = list(x0 = 1.2))
+cmodel <- compileNimble(model)
+set.seed(123)
+
+simulate(cmodel)
+df <- tibble(t = seq_along(cmodel$x), x = cmodel$x)
+})
+
+
+df  %>% ggplot(aes(t,x)) + geom_line()
+```
+
+
+
+# Tipping points
+
+Needs a model with non-zero alternate state!
+
+```{r}
+
+tip  <- nimble::nimbleCode({
+  
+  x[1] <- x0
+  for(t in 1:(N-1)){
+    mu[t] <- x[t] + x[t] * r * (1 - x[t] / K) * (x[t] - A) / K - h[t]
+    y[t+1] ~ dnorm(mu[t], sd = sigma)
+    x[t+1] <- max(y[t+1],0)
+  }
+  
+})
+
+p <- list(r = .2, K = 1, A = 0.2, sigma = .01, N = 500, h = seq(0,.03,length=500))
+
+model <- nimbleModel(tip,constants = p, inits = list(x0 = 1))
+cmodel <- compileNimble(model)
+set.seed(123)
+
+simulate(cmodel)
+df <- tibble(t = seq_along(cmodel$x), x = cmodel$x)
+
+```
+
+```{r}
+df %>% ggplot(aes(t,x)) + geom_line()
+```
+
 
 # Turing patterns?
 

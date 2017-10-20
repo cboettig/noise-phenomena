@@ -1,0 +1,45 @@
+Jeremy Fox says:
+January 29, 2012 at 1:09 pm
+What Eric said! Here are some further references for readers interested in the state of the art in ‘eco-statistical’ time series modeling. Not an exhaustive list, just some of my favorite papers off the top of my head:
+
+Wood 2010 Nature 466:1102. Statistical inference for noisy nonlinear ecological dynamic systems. http://www.nature.com/nature/journal/v466/n7310/full/nature09319.html
+
+Kendall et al. 2005 Ecological Monographs. Population cycles in the pine looper moth: dynamical tests of mechanistic hypotheses.
+
+Wood 2001 Ecological Monographs 71:1. Partially specified ecological models.
+
+Nelson et al. 2004 Ecology 85:889. Capturing dynamics with the correct rates: inverse problems using semiparametric approaches.
+
+Ellner et al. 2002 Ecology 83:2256. Fitting population dynamic models to time-series data by gradient matching. http://www.esajournals.org/doi/abs/10.1890/0012-9658%282002%29083%5B2256%3AFPDMTT%5D2.0.CO%3B2?journalCode=ecol
+
+Turchin et al. 2003 Ecology 84:1207. Dynamical effects of plant quality and parasitism on population cycles of the larch budmoth. http://www.esajournals.org/doi/abs/10.1890/0012-9658%282003%29084%5B1207%3ADEOPQA%5D2.0.CO%3B2?journalCode=ecol
+
+Bjornstad et al. 2002 Ecological Monographs 72:169. Dynamics of measles epidemics: estimating scaling of transmission rates using a time series SIR model. http://asi23.ent.psu.edu/publ/bcf/bcf1.pdf
+
+Rees and Ellner 2009 Ecological Monographs 79:575. Integral projection models for populations in temporally varying environments. http://www.esajournals.org/doi/abs/10.1890/08-1474.1?journalCode=emon
+
+Harrison 1995 Ecology 76:357. Comparing predator-prey models to Luckinbill’s experiment with Didinium and Paramecium. http://www.jstor.org/pss/1941195
+
+Lots of papers on disease dynamics from Aaron King (U Michigan) and his colleagues: see http://kinglab.eeb.lsa.umich.edu/lab/pubs. Of these, Ionides et al. 2006 PNAS is probably the most important: http://www.pnas.org/content/103/49/18438
+
+Worth noting that not all these authors are ecologists; some, such as Simon Wood, are applied statisticians. The statisticians involved in this work are well-known in ecology; not sure how widely their work is known in statistics.
+
+Also worth noting that this approach got a real trial by fire during the 2001 foot and mouth disease outbreak in Britain, when the British government asked teams of ecologists and statisticians to model an ongoing disease outbreak in real time and based its management decisions on their advice. See papers by Matt Keeling and others in Nature and Science.
+
+
+
+data(hare):
+
+MacLulich, D. A. (1937) Fluctuations in the Number of the Varying Hare (Lepus americanus) (Univ. of Toronto Press, Toronto)
+
+Stenseth, N. C., Falck, W., Bjornstad, O. N. and Krebs. C. J. (1997) Population regulation in snowshoe hare and Canadian lynx: Asymmetric food web configurations between hare and lynx. Proc. Natl. Acad. Sci., 94, 5147-5152.
+
+data(lynx): 
+
+Brockwell, P. J. and Davis, R. A. (1991) Time Series and Forecasting Methods. Second edition. Springer. Series G (page 557).
+
+References
+
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) The New S Language. Wadsworth & Brooks/Cole.
+
+Campbell, M. J.and A. M. Walker (1977). A Survey of statistical work on the Mackenzie River series of annual Canadian lynx trappings for the years 1821–1934 and a new analysis. Journal of the Royal Statistical Society series A, 140, 411–431.

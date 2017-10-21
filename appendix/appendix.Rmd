@@ -10,7 +10,9 @@ knitr::opts_chunk(message=FALSE)
 
 ```{r}
 library(nimble)
+library(hrbrthemes)
 library(tidyverse)
+ggplot2::theme_set(hrbrthemes::theme_ipsum())
 ```
 
 
@@ -130,7 +132,7 @@ quasicycle  <- nimble::nimbleCode({
 
 p <- 
   data.frame(
-  data.frame(r = .1, K = 5,  b = .1, c = .1, d = .1, N = 500),
+  data.frame(r = .1, K = 5,  b = .1, c = .1, d = .1, N = 800),
   data.frame(sigma_x = c(.00001,0.01),  sigma_y = c(.00001,0.01)))
 
 
@@ -146,9 +148,9 @@ f <- function(constants){
 quasicycle_df <- p %>% rowwise() %>% do(f(.))        
 write_csv(quasicycle_df, "quasicycles.csv")
 
-quasicycle_df %>%
+read_csv("quasicycles.csv") %>%
   gather(species, pop, -t, -sigma) %>%
-  ggplot(aes(t, pop, col=species)) + geom_line() + facet_wrap(~sigma)
+  ggplot(aes(t, pop, col=species)) + geom_line() + facet_wrap(~sigma) + scale_color_ipsum()
 ```
 
 

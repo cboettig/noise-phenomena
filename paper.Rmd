@@ -3,6 +3,15 @@ title: "From noise to knowledge: how randomness generates novel phenomena and in
 author: "Carl Boettiger"
 ---
 
+```{r include=FALSE, message=FALSE}
+knitr::opts_chunk$set(include = FALSE)
+library(hrbrthemes)
+library(tidyverse)
+ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
+```
+
+
+
 # Outline
 
 In this paper, I provide a brief synthesis of ecological research in stochastic phenomena. Noise, as the term itself suggests, is most often seen a nuisance to ecological insight, a inconvenient reality that must be acknowledged, a haystack that must be stripped away to reveal the processes of interest underneath. Yet despite this well-earned reputation, noise is often interesting in its own right: noise can induce novel phenomena that could not be understood from some underlying determinstic model alone.  Nor is all noise the same, and close examination of differences in in frequency, color or magnitude can reveal insights that would otherwise be inaccessible.  While an exhaustive review is beyond the scope of this piece, I endeavor to highlight some of the most interesting examples of both noise-induced phenomena and noise-derived information, and point the way towards yet uncharted territory.
@@ -12,9 +21,6 @@ In this paper, I provide a brief synthesis of ecological research in stochastic 
 <!-- Our state variables don't "exist" except as averages of a lower level process -->
 
 Where does noise come from?  It is important to bear in mind that whenever stochasticity is introduced into a model, it is only as a simplification or summary of the effects of a large number of other processes, often occuring at different scales.  Simply put, *noise is all that we leave out of our model*.  While ecologists will sometimes assert that stochasticity is inherent: birth and death are inherently stochastic events; or the environment is inherently stochastic, these are only assertions at a particular scale.  Obviously events such as births and deaths are themselves the results of mechanistic processes, just as fluctuations in rainfall and temperature are the result of deterministic laws of physics and not fundamentally random forces.  In all of science, only quantum mechanics claims a fundamentally probabilistic view of events, and then at such scales that have no relevance to ecology.  The term "noise" itself reflects this emergent rather than fundamental origin: the combination of hundreds of voices and sounds each individually distinct blends together into a background of noise.  
-
-
-
 
 ## Sources of noise
 
@@ -70,6 +76,10 @@ Figure: schematic showing types of noise
 
 ## Noise the nuisance: Noise can obscure patterns
 
+Stochasticity is most often thought of as something which obscures patterns we are trying to infer.  This is a simple consequence of modeling: as discussed above, variables of interest to the processes in question are modeled explicitly (e.g. change in population density as it depends on the current density), while anything else known to also impact 
+
+<!-- blah blah fixed effects vs random effects -->
+
 - deterministic skeletons, 
 - signal-to-noise ratio, 
 - model fitting
@@ -82,13 +92,24 @@ Figure: Lynx-hare data
 
 Stochasticity can give rise to a wide array of interesting phenomena that are often at odds with our intuition. 
 
-**Inflation**
-
 
 **Quasi-cycles**
 
 
-Understanding the origin of sustained oscillations has long been a central question in ecology [@Hastings1996].  The simple Lotka Volterra model produces only neutrally stable centers, while the more realistic model that introduces carrying capacity for prey as they compete for resources results in a model that produces damped oscillations, eventually returning to a stable  
+Understanding the origin of sustained oscillations has long been a central question in ecology [@Hastings1996].  The simple Lotka Volterra model produces only neutrally stable centers, while the more realistic model that introduces carrying capacity for prey as they compete for resources results in a model that produces only damped oscillations, eventually settling into a stable state (Figure 1a).
+
+
+```{r}
+read_csv("appendix/quasicycles.csv") %>%
+  gather(species, pop, -t, -sigma) %>%
+  ggplot(aes(t, pop, col=species)) + geom_line() + 
+  facet_wrap(~sigma) + scale_color_ipsum() + 
+  labs(x="Time", 
+       y="Population density",
+       title="Quasi-cycles created by stochastic resonance",
+       subtitle="Left panel: neglible  noise results only in damped oscillations.
+                 Right panel: small noise creates sustained oscillations.")
+```
 
 
 
@@ -96,6 +117,10 @@ Understanding the origin of sustained oscillations has long been a central quest
 
 [@Black2010] 
 [@Blarer1999]
+
+
+**Inflation**
+
 
 - population inflation / deflation
 
@@ -121,7 +146,6 @@ One of the most interesting aspects of noise is as a source of additional inform
 
 - Measuring stability
 - Early warning signals
-- maximum entropy methods
 
 Figure: 
 

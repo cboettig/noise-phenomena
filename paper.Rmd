@@ -11,6 +11,36 @@ ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
 ```
 
 
+<!--
+
+We hope that these papers will combine a mix of synthetic reviews of the current state of an area, as well as insights into how the field has developed during the last twenty years, discussion of current important questions, and developments and insights that would significantly advance the field. Although certainly not necessary, if there are any past Ecology Letters papers that have had a profound impact on the development of an area – be it beneficial or not – a brief discussion of that impact would be appropriate. We also hope that articles will be written in a thoughtful style, but also provocative if appropriate.
+
+
+Key questions
+
+Key advances
+
+
+
+Shift from noise as nuiance to noise as opportunity
+Stochastic phenomena outside of theory -- early warning signals
+
+Need for greater tanslation
+
+
+
+Population-level vs ABM vs IBM
+
+
+
+Discuss out of scope:  
+ - behavior
+ - evolutionary dynamics examples?? 
+
+-->
+
+
+
 
 # Outline
 
@@ -98,6 +128,9 @@ Stochasticity can give rise to a wide array of interesting phenomena that are of
 
 Understanding the origin of sustained oscillations has long been a central question in ecology [@Hastings1996].  The simple Lotka Volterra model produces only neutrally stable centers, while the more realistic model that introduces carrying capacity for prey as they compete for resources results in a model that produces only damped oscillations, eventually settling into a stable state (Figure 1a).
 
+$$x_{t+1} = x_t + x_t r \left(1 - \frac{x_t}{K}\right) - b x_t  y_t + \epsilon_t$$
+$$y_{t+1} = y_t + c  x_t  y_t - d  y_t+ \xi_t $$
+
 
 ```{r}
 read_csv("appendix/quasicycles.csv") %>%
@@ -107,22 +140,47 @@ read_csv("appendix/quasicycles.csv") %>%
   labs(x="Time", 
        y="Population density",
        title="Quasi-cycles created by stochastic resonance",
-       subtitle="Left panel: neglible  noise results only in damped oscillations.
-                 Right panel: small noise creates sustained oscillations.")
+       caption="Left panel: neglible  noise results only in damped oscillations.\nRight panel: small noise creates sustained oscillations.")
 ```
 
 
+- Disease models
 
-- Oscillations (parametric oscillator, stochastic resonance)
+- Power spectrum
 
 [@Black2010] 
 [@Blarer1999]
 
 
+**Stochastic switching**
+
+Stochastic fluctuations can also drive spontaneous shifts between alternative stable states.  
+
+```{r}
+read_csv("appendix/noisy_switch.csv")  %>% ggplot(aes(t,x)) + 
+  geom_line() + 
+  labs(title="Stochastic switching", 
+       subtitle = "Noise drives transitions between alternative stable states")
+```
+
+
+- transition probabilities, waiting times
+
 **Inflation**
 
+Stochasticity can 
 
-- population inflation / deflation
+
+```{r}
+read_csv("appendix/inflation.csv") %>% 
+  ggplot(aes(t,value, col=moment)) + geom_line() + 
+  geom_hline(aes(yintercept = equib))
+```
+
+**Bet hedging**
+
+**Further examples**
+
 
 @Read2007 <!-- Stochasticity generates an evolutionary instability for infectious disease -->
 

@@ -82,8 +82,13 @@ Figure: Lynx-hare data
 
 Stochasticity can give rise to a wide array of interesting phenomena that are often at odds with our intuition. 
 
+**Inflation**
+
 
 **Quasi-cycles**
+
+
+Understanding the origin of sustained oscillations has long been a central question in ecology [@Hastings1996].  The simple Lotka Volterra model produces only neutrally stable centers, while the more realistic model that introduces carrying capacity for prey as they compete for resources results in a model that produces damped oscillations, eventually returning to a stable  
 
 
 

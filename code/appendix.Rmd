@@ -30,7 +30,7 @@ logistic  <- nimble::nimbleCode({
   
 })
 
-p <- list(r = .4, K = 1, sigma = .2, N = 500)
+p <- list(r = .4, K = 1, sigma = .15, N = 500)
 
 model <- 
 nimbleModel(logistic,
@@ -46,12 +46,25 @@ df <- map_dfr(1:10000,
               },
               .id = "rep")
 
+df %>% 
+  filter(x > 0) %>% 
+  group_by(t) %>%
+  summarise(ave = mean(x), sd = sd(x)) %>%
+  write_csv("inflation.csv")
+
+
+
 ```
+
+Analytical predicted population size, as a fraction of $K$, is:
 
 
 ```{r}
-(p$K + sqrt(p$K^2 - 8 * p$sigma^2) )/ 2
+(1 + sqrt(1 - 8 * p$sigma^2/p$K^2) )/ 2
 ```
+Note this is independent of $r$, and increases with $\sigma/K$, the larger the noise $\sigma_g$ as a fraction of the carrying capacity $K$.  Population sizes can also be inflated relative to their deterministic equilibrium whenever the second derivative is positive (as in the lower equilibrium in the May model of alternative stable states, considered below.)  Stronger nonlinearities (in particular, a larger second derivative at the equilibrium) can drive larger inflationary effects.  
+
+
 
 ```{r}
 df %>% filter(t > 20, x > 0) %>%  summarize(mean(x))
@@ -70,13 +83,33 @@ df %>%
 ```
 
 
+
+
+
+```{r}
+p <- list(r = .5, K = 2.1, Q = 5, H = .4, sigma = .04, a = 0.27, N = 1e4)
+
+f <- function(x) x * p$r * (1 - x / p$K)
+g <- function(x) p$a * x ^ p$Q / (x^p$Q + p$H^p$Q)
+
+x <- seq(0,2, length.out = 100)
+df <- data.frame(x, f = f(x), g = g(x)) 
+
+ggplot(df, aes(x)) + geom_line(aes(y = f)) + geom_line(aes(y = g), col="red") 
+
+ggplot(df, aes(x)) + geom_line(aes(y = f-g)) + 
+  geom_hline(aes(yintercept=0), lty=2) +
+  coord_cartesian(xlim = c(0,1.5), ylim=c(-.1,.1))  
+```
+
+
 ------------
 
 
 
 # Quasi-cycles
 
-Understanding the origin of sustained oscillations has long been a central question in ecology [@Hastings]
+Understanding the origin of sustained oscillations has long been a central question in ecology [@Hastings1996]
 
 
 ```{r}
@@ -110,19 +143,19 @@ f <- function(constants){
   tibble(t = seq_along(model$x), x = model$x, y = model$y, sigma = constants$sigma_x)
 }
 
-df <- p %>% rowwise() %>% do(f(.))        
+quasicycle_df <- p %>% rowwise() %>% do(f(.))        
+write_csv(quasicycle_df, "quasicycles.csv")
 
-```
-
-
-```{r}
-df %>%
+quasicycle_df %>%
   gather(species, pop, -t, -sigma) %>%
   ggplot(aes(t, pop, col=species)) + geom_line() + facet_wrap(~sigma)
 ```
 
 
 # Stochastic oscillator
+
+May's model
+
 
 ```{r}
 p <- list(r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 1e4)
@@ -139,7 +172,7 @@ data.frame(x, f = f(x), g = g(x)) %>%
 ```
 
 ```{r}
-system.time({
+
 may  <- nimble::nimbleCode({
   
   x[1] <- x0
@@ -154,13 +187,10 @@ may  <- nimble::nimbleCode({
 model <- nimbleModel(may,constants = p, inits = list(x0 = 1.2))
 cmodel <- compileNimble(model)
 set.seed(123)
-
 simulate(cmodel)
-df <- tibble(t = seq_along(cmodel$x), x = cmodel$x)
-})
 
-
-df  %>% ggplot(aes(t,x)) + geom_line()
+tibble(t = seq_along(cmodel$x), x = cmodel$x) %>% write_csv("noisy_switch.csv")
+read_csv("noisy_switch.csv")  %>% ggplot(aes(t,x)) + geom_line()
 ```
 
 
@@ -187,14 +217,11 @@ p <- list(r = .2, K = 1, A = 0.2, sigma = .01, N = 500, h = seq(0,.03,length=500
 model <- nimbleModel(tip,constants = p, inits = list(x0 = 1))
 cmodel <- compileNimble(model)
 set.seed(123)
-
 simulate(cmodel)
-df <- tibble(t = seq_along(cmodel$x), x = cmodel$x)
 
-```
+tibble(t = seq_along(cmodel$x), x = cmodel$x) %>% write_csv("tipping.csv")
 
-```{r}
-df %>% ggplot(aes(t,x)) + geom_line()
+read_csv("tipping.csv") %>% ggplot(aes(t,x)) + geom_line()
 ```
 
 

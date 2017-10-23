@@ -1,6 +1,6 @@
 ---
 title: "Appendix"
-output: html_notebook
+output: pdf_document
 ---
 
 
@@ -11,6 +11,7 @@ knitr::opts_chunk$set(message=FALSE)
 ```{r}
 library(nimble)
 library(hrbrthemes)
+library(ggthemes)
 library(tidyverse)
 ggplot2::theme_set(hrbrthemes::theme_ipsum())
 ```
@@ -59,10 +60,12 @@ f <- function(constants){
 
 quasicycle_df <- p %>% rowwise() %>% do(f(.))        
 write_csv(quasicycle_df, "quasicycles.csv")
+```
 
+```{r}
 read_csv("quasicycles.csv") %>%
   gather(species, pop, -t, -sigma) %>%
-  ggplot(aes(t, pop, col=species)) + geom_line() + facet_wrap(~sigma) + scale_color_ipsum()
+  ggplot(aes(t, pop, col=species)) + geom_line() + facet_wrap(~sigma) + scale_color_ptol()
 ```
 
 
@@ -146,7 +149,10 @@ df <- map_dfr(1:10000,
                 data.frame(t = seq_along(cmodel$x), x = cmodel$x)
               },
               .id = "rep")
+```
 
+
+```{r}
 df %>% 
   filter(x > 0) %>% 
   group_by(t) %>%
@@ -161,10 +167,13 @@ df %>%
 
 
 ```{r}
-
 read_csv("inflation.csv") %>% 
-  ggplot(aes(t,value, col=moment)) + geom_line() + 
-  geom_hline(aes(yintercept = equib))
+  gather(statistic, value, -t) %>%
+  ggplot(aes(t,value, col=statistic, lty=statistic)) + 
+ # ggplot(aes(t,ave)) +
+  geom_line(lwd=1) + 
+  scale_color_ptol() + 
+  coord_cartesian(xlim=c(100,500), ylim=c(1.2, .5))
 
 ```
 
@@ -198,51 +207,102 @@ ggplot(df, aes(x)) + geom_line(aes(y = f-g)) +
 # Tipping points
 
 
+
+
+
+### Configuration for Dai model
+
+Numerically determine / illustrate tipping point location using small noise: 
+
 ```{r}
+max_days <- 1000
 
-tip  <- nimble::nimbleCode({
-  
-  x[1] <- x0
-  for(t in 1:(N-1)){
-    mu[t] <- x[t] + x[t] * r * (1 - x[t] / K) * (x[t] - A) / K - h[t]
-    y[t+1] ~ dnorm(mu[t], sd = sigma)
-    x[t+1] <- max(y[t+1],0)
-  }
-  
-})
-
-p <- list(r = .2, K = 1, A = 0.2, sigma = .01, N = 500, h = seq(0,.03,length=500))
-
-model <- nimbleModel(tip,constants = p, inits = list(x0 = 1))
-cmodel <- compileNimble(model)
+z <- y <- x <- numeric(max_days)
+z[1] <- y[1] <- x[1] <- 7e4 # 1.7e5
 set.seed(123)
-simulate(cmodel)
+for(day in 1:(max_days-1)){
+  x[day+1] <- dai(x[day], epsilon = rnorm(1,0, 0.001), DF = 1790)
+  y[day+1] <- dai(y[day], epsilon = rnorm(1,0, 0.001), DF=1799)
+  z[day+1] <- dai(z[day], epsilon = rnorm(1,0, 0.001), DF = 1800)
+  
+}
 
-tibble(t = seq_along(cmodel$x), x = cmodel$x) %>% 
-  mutate(var = RcppRoll::roll_var(x, n = 5)) %>%
-  write_csv("tipping.csv")
+df <- data.frame(t = 1:max_days, x = x, y = y, z = z) %>%
+  gather(series, pop, -t) 
+
+ggplot(df, aes(t, pop, col=series)) + 
+  geom_line() 
+
+```
+
+$$\rho = \frac{1}{n-1} \frac{\sum_{i = 1}^n \left( x_{i,t} - \textrm{E}(x_t) \right)\left( x_{i,t+1} - \textrm{E}(x_{t+1})  \right)}{\sigma_{x_{t}}  \sigma_{x_{t+1}}}$$
 
 
-
-read_csv("tipping.csv") %>% ggplot(aes(t,x)) + geom_line()
+```{r}
+roll_acor <- function(x, lag = 1, ...){
+  x_t1 = lag(x, n = lag)  
+  mu_t = roll_mean(x, ...)
+  mu_t1 = roll_mean(x_t1, ...)
+  s_t = roll_sd(x, ...)
+  s_t1 = roll_sd(x_t1, ...)
+  acor = roll_mean( (x - mu_t) * (x_t1 - mu_t1) / (s_t * s_t1),...)
+  acor
+}
 ```
 
 
-# Turing patterns?
+## Simulation of Dai model:
 
+```{r}
+# Stepwise changes
+DF <- as.numeric(sapply(seq(0, 2000, length=9), rep, 40))
 
+# continuous linear increase
+DF <- seq(1, 2000, length=2000)
+tip_time <- 1800
+max_days <- length(DF)
+y <- numeric(max_days)
 
+set.seed(1111)
+y[1] <- 1.76e5
+for(day in 1:(max_days-1)){
+  y[day+1] <- dai(y[day], DF = DF[day])
+}
 
+tip_df <- tibble(t = seq_along(y), x = y)
 
-------------
+tip_df %>% 
+  mutate(autocorrelation = roll_acor(x, n = 100, fill=NA),
+         variance = roll_var(x, n = 100, fill=NA),
+         tip_time = tip_time) %>%
+  write_csv("tipping.csv")
+```
 
 
 ```{r}
-data(lynx)
-lynx <- tibble(year = 1821:1934, lynx = as.numeric(lynx))
+tipping <- read_csv("appendix/tipping.csv") 
 
-lynx %>%
-  ggplot(aes(year,lynx)) + geom_point() + geom_line()
+p1 <- tipping %>%
+  select(-x) %>%
+  gather(series, value, -t, -tip_time) %>%
+  ggplot(aes(t, value)) + geom_line() + 
+  geom_vline(aes(xintercept = tip_time), col="red", lty=2) +
+  facet_wrap(~series, ncol = 2, scales="free_y") + theme_ipsum() + 
+  labs(title="A: Early warning signs")
+
+p2 <- tipping %>% 
+  select(t, population = x, tip_time) %>%
+  ggplot(aes(t, population)) + geom_line() + 
+  geom_vline(aes(xintercept = tip_time), col="red", lty=2) + 
+  scale_y_log10() + 
+  theme_ipsum()+ labs(title="B: Population density",
+                      caption = "Vertical red dashed line indicates tipping point location")
+
+library(cowplot)
+ggdraw() +
+  draw_plot(p2, x = 0, y = 0, width = 1, height = 0.5) +
+  draw_plot(p1, x = 0, y = .4, width = 1, height = 0.5)
+
 ```
 
 

@@ -28,10 +28,15 @@ output: rticles::elsevier_article
 
 ```{r include=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
-library(hrbrthemes)
 library(ggthemes)
 library(tidyverse)
-#ggplot2::theme_set(hrbrthemes::theme_ipsum())
+library(cowplot)
+#library(hrbrthemes)
+#extrafont::loadfonts()
+#ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
+#hrbrthemes::import_roboto_condensed()
+
+ggplot2::theme_set(theme_cowplot())
 ```
 
 
@@ -127,7 +132,7 @@ sources of noise.
 
 
 **Chaos**: Deterministic chaos [@Desharnais2001] is another mechanism of introducing significant variation into a simple
-model. Chaos can a look a lot like noise: indeed, it can be observationally indistinguishable from a stochastic process [@Werndl2009].  Despite substantial interest in previous decades and the relative ease of encountering chaos in simple ecological models (particularly in differences equations), and convincing reconstructions of chaotic dynamics in laboratory manipulations [@Constantino1997] the prevelance of chaotic dynamics as a driving factor in most ecological systems remains unclear. Meanwhile, the undeniable influences of 
+model. Chaos can a look a lot like noise: indeed, it can be observationally indistinguishable from a stochastic process [@Werndl2009].  Despite substantial interest in previous decades and the relative ease of encountering chaos in simple ecological models (particularly in differences equations), and convincing reconstructions of chaotic dynamics in laboratory manipulations [@Costantino1997] the prevelance of chaotic dynamics as a driving factor in most ecological systems remains unclear. Meanwhile, the undeniable influences of 
 
 
 Figure: schematic showing types of noise
@@ -162,13 +167,15 @@ $$y_{t+1} = y_t + c  x_t  y_t - d  y_t+ \xi_t $$
 
 ```{r}
 read_csv("appendix/quasicycles.csv") %>%
-  gather(species, pop, -t, -sigma) %>%
-  ggplot(aes(t, pop, col=species)) + geom_line() + 
-  facet_wrap(~sigma) + scale_color_ptol() + 
-  labs(x="Time", 
-       y="Population density",
-       title="Stochasticicity induces quasi-cycles",
-       caption="Left panel: neglible  noise results only in damped oscillations.\nRight panel: small noise creates sustained oscillations.")
+  gather(species, population, -t, -sigma) %>%
+  rename(time = t) %>%
+  ggplot(aes(time, population, col = species)) + geom_line() + 
+  facet_wrap(~ sigma) + scale_color_ptol() #+ 
+#  labs(x="Time", 
+#       y="Population density",
+#       title="Noise induces quasi-cycles",
+#       caption="Left panel: neglible  noise results only in damped oscillations.\nRight panel: small noise creates sustained oscillations.")
+#ggsave("figures/quasicycles.pdf")
 ```
 
 
@@ -185,9 +192,11 @@ Stochastic fluctuations can also drive spontaneous shifts between alternative st
 
 ```{r}
 read_csv("appendix/noisy_switch.csv")  %>% ggplot(aes(t,x)) + 
-  geom_line() + 
-  labs(title="Stochastic switching", 
-       subtitle = "Noise drives transitions between alternative stable states")
+  geom_line() #+ 
+  #labs(title="Stochastic switching", 
+  #     subtitle = "Noise drives transitions between alternative stable states")
+#ggsave("figures/noisy_switch.pdf")
+
 ```
 
 
@@ -252,23 +261,24 @@ p1 <- tipping %>%
   gather(series, value, -t, -tip_time) %>%
   ggplot(aes(t, value)) + geom_line() + 
   geom_vline(aes(xintercept = tip_time), col="red", lty=2) +
-  facet_wrap(~series, ncol = 2, scales="free_y") +
-  #theme_ipsum() +
-  labs(title="A: Early warning signs")
+  facet_wrap(~series, ncol = 2, scales="free_y") # +
+#  theme_ipsum_rc() +
+#  labs(title="A: Early warning signs")
 
 p2 <- tipping %>% 
   select(t, population = x, tip_time) %>%
   ggplot(aes(t, population)) + geom_line() + 
-  geom_vline(aes(xintercept = tip_time), col="red", lty=2) + 
-  scale_y_log10() + 
-  #theme_ipsum() + 
-  labs(title="B: Population density",
-       caption = "Vertical red dashed line indicates tipping point location")
+  geom_vline(aes(xintercept = tip_time), col="red", lty=2) #+ 
+#  scale_y_log10() # + 
+#  theme_ipsum_rc() + 
+#  labs(title="B: Population density",
+#       caption = "Vertical red dashed line indicates tipping point location")
 
 library(cowplot)
 ggdraw() +
   draw_plot(p2, x = 0, y = 0, width = 1, height = 0.5) +
-  draw_plot(p1, x = 0, y = .4, width = 1, height = 0.5)
+  draw_plot(p1, x = 0, y = .5, width = 1, height = 0.5)
+ggsave("figures/tipping.pdf")
 ```
 
 
@@ -281,3 +291,5 @@ It is important to realize that such approaches can only ever measure local prop
 
 
 ## Conclusions
+
+## References

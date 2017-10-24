@@ -7,7 +7,7 @@ address:
   - code: a
     address: "Dept of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley CA 94720-3114, USA"
   
-
+layout: preprint
 abstract: |
   In this paper, I provide a brief synthesis of ecological research in stochastic phenomena. Noise, as the term itself suggests, is most often seen a nuisance to ecological insight, a inconvenient reality that must be acknowledged, a haystack that must be stripped away to reveal the processes of interest underneath. Yet despite this well-earned reputation, noise is often interesting in its own right: noise can induce novel phenomena that could not be understood from some underlying determinstic model alone.  Nor is all noise the same, and close examination of differences in in frequency, color or magnitude can reveal insights that would otherwise be inaccessible.  While an exhaustive review is beyond the scope of this piece, I endeavor to highlight some of the most interesting examples of both noise-induced phenomena and noise-derived information, and point the way towards yet uncharted territory.
   
@@ -27,16 +27,16 @@ output: rticles::elsevier_article
 ---
 
 ```{r include=FALSE, message=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, dev="CairoPDF", fig.width=3.5, fig.height=3.5)
 library(ggthemes)
 library(tidyverse)
 library(cowplot)
 library(hrbrthemes)
 extrafont::loadfonts()
-extrafont::font_import()
-hrbrthemes::import_roboto_condensed()
+#extrafont::font_import()                    # One-time use to set up fonts
+#hrbrthemes::import_roboto_condensed()       # One-time use to set up fonts
 ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
-#ggplot2::theme_set(theme_bw())
+#ggplot2::theme_set(theme_bw()) # simpler theme if you do not have these fonts
 ```
 
 
@@ -45,10 +45,12 @@ ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
 We hope that these papers will combine a mix of synthetic reviews of the current state of an area, as well as insights into how the field has developed during the last twenty years, discussion of current important questions, and developments and insights that would significantly advance the field. Although certainly not necessary, if there are any past Ecology Letters papers that have had a profound impact on the development of an area – be it beneficial or not – a brief discussion of that impact would be appropriate. We also hope that articles will be written in a thoughtful style, but also provocative if appropriate.
 
 
-Key questions
+- Key questions
+- Key advances
 
-Key advances
+Moving beyond "everything is important" [@Bjornstad2001; @Kingsland1985]
 
+@Bjornstad2001 future: more MCMC methods. More mechanistic models.  dealing with unobserved dynamics
 
 Noise -> informer
 
@@ -78,51 +80,42 @@ Bialek's rules
 
 
 
+<!-- Should we make explicit or only implicit reference to Ecology Letters? -->
 
-# Outline
 
-## What is noise? 
-
-<!-- Our state variables don't "exist" except as averages of a lower level process -->
-
-Where does noise come from?  It is important to bear in mind that whenever stochasticity is introduced into a model, it is only as a simplification or summary of the effects of a large number of other processes, often occuring at different scales.  Simply put, *noise is all that we leave out of our model*.  While ecologists will sometimes assert that stochasticity is inherent: birth and death are inherently stochastic events; or the environment is inherently stochastic, these are only assertions at a particular scale.  Obviously events such as births and deaths are themselves the results of mechanistic processes, just as fluctuations in rainfall and temperature are the result of deterministic laws of physics and not fundamentally random forces.  In all of science, only quantum mechanics claims a fundamentally probabilistic view of events, and then at such scales that have no relevance to ecology.  The term "noise" itself reflects this emergent rather than fundamental origin: the combination of hundreds of voices and sounds each individually distinct blends together into a background of noise.  
-
-## Noise the nuisance: Noise can obscure patterns
+# Introduction: Noise the nuisance
 
 Stochasticity is most often thought of as something which obscures patterns we are trying to infer.  This is a simple consequence of modeling: as discussed above, variables of interest to the processes in question are modeled explicitly (e.g. change in population density as it depends on the current density), everything else is just noise.  Most statistical inference in ecology is built solely to deal with this problem: pulling back the veil of noise to reveal processes of interest.  Unfortunately, given the high levels of variation and relatively limited data typical in ecological analyses, this can be a significant challenge, and even as statistical and computational advances provide more powerful and accessible inference tools, the task only gets harder.  For instance, few ecological concepts are more central than the notion of density dependence: that competition in some form or other should limit a species ability to grow without bound.  Yet establishing statistical evidence for density dependence is remarkably difficult, as illustrated by a landmark study of @Knape2011.  Using time series from the Global Population Dynamics Database (GPDD) @Knape2011 show that once one accounts for the potential for measurement error in addition to environmental stochasticity -- an unavoidable source of noise in most ecological data -- it becomes difficult to find evidence for even the simplest models of density dependence in the majority of avaialble time series.  Faced with such uncertainty, it is tempting to throw up our hands and wait until some prophesized deluge of streaming microsensors stapled to every organism provide enough signal to beat back the noise. Fortunately, this has not been the path taken.  
 
-<!-- Should we make explicit or only implicit reference to Ecology Letters? -->
 
 <!-- okay, claiming this for the last 2 decades might be overly provocative?-->
-
-Over the past twenty years, ecological theory, modelling, and methods have increasingly elucidated the role of noise not only to *obscure* patterns but to *create* them.  This period marked a transistion away from the intense focus on simple models which exhibited deterministic chaos that had enchanted much of theoretical ecology in the decade prior in favor of more complex and stochastic models.  Of particular interest has been those conceptual advances that have bridged the divide from theoretical to empirical interest -- not merely the introduction of "real data" in a theoretical paper, but rather the concepts that take on a life of their own in the larger research community.  
-
-Our first stop will be into research into the origins of noise.  This will not only let us set up definitions for terms and concepts we will encounter throughout, but also introduce some of the fundamental mathematical and computational tooling needed in our tour of noisy phenemena.  From origins of noise, we will then explore some of the phenomena that noise can create.  These examples are central to the conceptual transistion away from viewing noise only as a nusiance that obscures patterns and realize the rich set of patterns and phenomena that can emerge.  Our tour will be by no means exhaustive, but as with chaos before it, theoretical allure does not always reflect ecological releveance.  Instead, we will pivot to our third 
-
-<!-- Origins -->
-
-<!-- Phenomena --> 
-
-<!-- Applications --> 
-
-<!-- Connection to empiricists.  Not the same thing as connection to data. --> 
+Over the past twenty years, ecological theory, modelling, and methods have increasingly elucidated the role of noise not only to *obscure* patterns but to *create* them.  This period marked a transistion away from the intense focus on simple models which exhibited deterministic chaos that had enchanted much of theoretical ecology in the previous two decades [@Bjornstad2001] in favor of more complex and stochastic models.  Of particular interest has been those conceptual advances that have bridged the divide from theoretical to empirical interest -- not merely the introduction of "real data" in a theoretical paper, but rather the concepts that take on a life of their own in the larger research community.  Consequently, this paper seeks to be a bridge between two audiences: theoretical researchers already expert in noisy phenomena but in interested in reaching wider empirical application, and also primarily empirical researchers seeking an entrance into noisy phenomena.  
 
 
-## Origins of noise
+<!-- Regarding simulation examples -->
+In this spirit, each of the examples illustrated here is coupled with consise and efficent R code in the appendix to both reproduce and further explore the simulations.  While examples of noisy phenomena in natural systems are also crucial, matching the pattern does not necessarily mean we have also matched the proccess behind the data.  The examples cited from the literature here offer some of the best empirical evidence of these phenomena, but I encourage readers to also experiment with the example code provided.  Simulations permit poking and prodding of empirical investigation quickly and with little mathematical formalism in the way.  In the code provided, most stochastic models are expressed in the BUGS language, which may be more familiar to empirical readers than corresponding mathematical formulae. This also permits both efficient simulation and potential estimation of parameters given sample data using the R package, NIMBLE [@DeValpine2017]. A copy of this appendix is maintained at <https://github.com/cboettig/noise-phenomena>, and bug reports, suggestions or help requests are welcome through the issue tracker.  A second appendix provides more mathematical details for interested readers.  With these in place, we are ready to begin our tour through three major areas of noisy phenomena: Origins of noise, emergent phenomena, and noise-driven inference.
+
+<!-- MAP -->
+Our first stop will be into research into the origins of noise.  This will not only let us set up definitions for terms and concepts we will encounter throughout, but also introduce some of the fundamental mathematical and computational tooling needed in our tour of noisy phenemena.  From origins of noise, we will then explore some of the phenomena that noise can create.  These examples are central to the conceptual transistion away from viewing noise only as a nusiance that obscures patterns and realize the rich set of patterns and phenomena that can emerge.  Our tour will be by no means exhaustive, but as with chaos before it, theoretical allure does not always reflect ecological releveance.  Having looked at some of the phenomena that can be created by noise, our third stop will try to run this in reverse: using noise to infer underyling phenomena.  Examples here are rarer but potentially the most rewarding, bridging the gap from theoretical construct to empirical investigation.  The most compelling examples have come from ways in which noisy pheneomena are used to infer stability and forecast changes in resilience of populations or ecosystems. Though not without weaknesses or missteps, the resulting dialog between theoretical and empirical aspects have made this particularly a rich area of research.  We end our tour by considering what features best enable the translation and ecological relevance of noisy phenomena.  
 
 
+# Origins of noise
 
-## Sources of noise
+
+What is noise? Where does it come from?  It is important to bear in mind that whenever stochasticity is introduced into a model, it is only as a simplification or summary of the effects of a large number of other processes, often occuring at different scales.  Simply put, *noise is all that we leave out of our model*.  While ecologists will sometimes assert that stochasticity is inherent: birth and death are inherently stochastic events; or the environment is inherently stochastic, these are only assertions at a particular scale.  Obviously events such as births and deaths are themselves the results of mechanistic processes, just as fluctuations in rainfall and temperature are the result of deterministic laws of physics and not fundamentally random forces.  In all of science, only quantum mechanics claims a fundamentally probabilistic view of events, and then at such scales that have no relevance to ecology.  The term "noise" itself reflects this emergent rather than fundamental origin: the combination of hundreds of voices and sounds each individually distinct blends together into a background of noise.  
+<!-- Our state variables don't "exist" except as averages of a lower level process -->
+
+
 
 
 **Demographic stochasticity**.  Demographic stochasticity refers to fluctuations in population sizes or densities that arise from the fundamentally discrete nature of individual birth and death events.  Demographic stochasticity is a particularly instructive case for illustrating a mechanism for how noise arises as an aggregate description from a fundamentally lower-level mechanistic process.  We summarize the myriad lower-level processes that mechanistically lead to the event of a 'birth' in the population as a probability: in a population of $N$ identical individuals at time $t$, a birth occurs with probability $b_t(N_t)$ (_i.e._ a rate that can depend on both the population size $N$) and increases the population size, $N$ to $N+1$, and deaths occur with probability $d_t(N_t)$, decreasing the population size, $N$ to $N-1$.  Assuming each of these events are independent, this is a Poisson process.  
 
 <!-- Master equation transform--> 
 
-<!-- Demographic noise scaling with population size -->
 
 
-<!-- Gillespie algorithm -->
+
+<!-- Gillespie algorithm; Population level (SDE) vs agent-based vs individual  -->
 
 ![Figure 1: demographic stochasticity arises from discrete transitions  between states in in a Markov process.  Here, a simple birth-death process has transition rates determined by the current population size, _n_.](markov.png)
 
@@ -131,21 +124,25 @@ Our first stop will be into research into the origins of noise.  This will not o
 
 **Environmental stochasticity**.  Whereas demographic noise reflects processes at a lower scale (the individual, rather than the population), environmental stochasticity reflects processes operating at the same scale that we are not explicitly modelling.  
 
-[@Black2012]
+<!-- Demographic noise scaling away with population size, but not so for environmental noise -->
 
-Colored noise e.g. [@Marshall2015]
+[@Bjornstad2001] _Science_ Review of noisy fluctuations 
+
+[@Melbourne2008] Importance of demographic stochasticity and its interaction with environmental stochasticity in driving extinction risk. 
+[@Bonsall2004] Markov chain environmental and demographic noise predator-prey metapopulation model.  
+
+Colored noise:
+- [@Ripa1999]
+- [@Marshall2015]
 
 
 <!-- Identify as beyond the scope of this paper -->
 
-**Individual heterogeneity**
+<!-- non-temporal stochasticity --> 
 
-[@Hart2016]
-
-**Spatial variability**
+**Other forms of stochasticity**.  Stochasticity frequently enters our models in other ways as well.  For instance, most population-level models treat all individuals within the population, or at least within a particular age or stage class, as identical.  *Individual heterogeneity* in relevant traits (growth rates, dispersal ability) can be represented probabilistically as a distribution rather than a fixed value, making it function as another form of random varation in a model.  *Spatial heterogeneity* can likewise be reflected in stochastic parameters of a spatially implicit model, or as spatially varying environmental stochasticity in a spatially explicit model.  As with other forms of noise [@Melbourne2008; @Bonsall2004], interaction between individual or spatial variation and other sources of noise can drive patterns including the potential for persistence, coexistence, and dispersal of species [@Schreiber2010; @Hart2016; @Schreiber2017], but are beyond the scope of this paper.  
 
 
-In addition to these sources of variation, there are additional sources of variation or uncertainty in a model which we will not consider for the purpose of this review which, while related, operate in a fundamentally different way that does not give rise to the same phenomena and information.  
 
 
 **Observational error**: Observational error acts much like another form of stochasticity, arising from
@@ -172,12 +169,9 @@ Figure: schematic showing types of noise
 
 <!-- blah blah fixed effects vs random effects -->
 
-- deterministic skeletons, 
-- signal-to-noise ratio, 
-- model fitting
 
 
-## Noise the creator: Noise can induce novel phenomena
+# Noise the creator: Noise can induce novel phenomena
 
 
 
@@ -193,12 +187,12 @@ $$x_{t+1} = x_t + x_t r \left(1 - \frac{x_t}{K}\right) - b x_t  y_t + \epsilon_t
 $$y_{t+1} = y_t + c  x_t  y_t - d  y_t+ \xi_t $$
 
 
-```{r}
+```{r fig.width=7}
 read_csv("appendix/quasicycles.csv") %>%
   gather(species, population, -t, -sigma) %>%
   rename(time = t) %>%
   ggplot(aes(time, population, col = species)) + geom_line() + 
-  facet_wrap(~ sigma) + scale_color_ptol() #+ 
+  facet_wrap(~ sigma, ncol=2) + scale_color_ptol() #+ 
 #  labs(x="Time", 
 #       y="Population density",
 #       title="Noise induces quasi-cycles",
@@ -268,7 +262,7 @@ Individual heterogeneity: spatial spread? persistence?
 - Species coexistence  ([@Hart2016])
 
 
-## Noise the informer: Noise can provide novel information
+# Noise the informer: Noise can provide novel information
 
 One of the most interesting aspects of noise is as a source of additional information.  Noise can act like a miniature perturbation experiment, constantly perturbing a system away from an equilibrium to reveal it's behavior elsewhere in state space.  
 
@@ -284,7 +278,7 @@ One of the most interesting aspects of noise is as a source of additional inform
 <!-- @Holling1996 is responsible for the introduction of the unfortunate term "Engineering Resilience" to mean precisely the same thing as mathematicians and theoretical ecologists have refered to as 'stability' for decades.  Further confusion has been sown by the introduction of the energy-potential diagram into ecology, where the depth of the potential well is not a local property-->
 
 
-```{r}
+```{r fig.width=7, fig.height=7}
 tipping <- read_csv("appendix/tipping.csv") 
 
 p1 <- tipping %>%
@@ -292,23 +286,21 @@ p1 <- tipping %>%
   gather(series, value, -t, -tip_time) %>%
   ggplot(aes(t, value)) + geom_line() + 
   geom_vline(aes(xintercept = tip_time), col="red", lty=2) +
-  facet_wrap(~series, ncol = 2, scales="free_y") # +
-#  theme_ipsum_rc() +
-#  labs(title="A: Early warning signs")
-
+  facet_wrap(~series, ncol = 2, scales="free_y")  +
+  theme_ipsum_rc() 
 p2 <- tipping %>% 
   select(t, population = x, tip_time) %>%
   ggplot(aes(t, population)) + geom_line() + 
-  geom_vline(aes(xintercept = tip_time), col="red", lty=2) #+ 
-#  scale_y_log10() # + 
-#  theme_ipsum_rc() + 
-#  labs(title="B: Population density",
-#       caption = "Vertical red dashed line indicates tipping point location")
+  geom_vline(aes(xintercept = tip_time), col="red", lty=2) + 
+  #scale_y_log10()  + 
+  theme_ipsum_rc() + 
+  labs(subtitle = "Yeast population size", 
+       caption = "Vertical red dashed line indicates tipping point location")
 
 library(cowplot)
 ggdraw() +
-  draw_plot(p2, x = 0, y = 0, width = 1, height = 0.5) +
-  draw_plot(p1, x = 0, y = .5, width = 1, height = 0.5)
+  draw_plot(p1, x = 0, y = .5, width = 1, height = 0.5) +
+  draw_plot(p2, x = 0, y = 0, width = 1, height = 0.6)
 #ggsave("figures/tipping.pdf")
 ```
 
@@ -321,6 +313,6 @@ It is important to realize that such approaches can only ever measure local prop
 
 
 
-## Conclusions
+# Conclusions
 
-## References
+# References

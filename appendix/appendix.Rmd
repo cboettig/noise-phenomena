@@ -12,6 +12,8 @@ knitr::opts_chunk$set(message=FALSE)
 library(nimble)
 library(hrbrthemes)
 library(ggthemes)
+library(RcppRoll)
+library(regimeshifts) ## devtools::install_github("cboettig/regimeshifts")
 library(tidyverse)
 ggplot2::theme_set(hrbrthemes::theme_ipsum())
 ```
@@ -280,7 +282,7 @@ tip_df %>%
 
 
 ```{r}
-tipping <- read_csv("appendix/tipping.csv") 
+tipping <- read_csv("tipping.csv") 
 
 p1 <- tipping %>%
   select(-x) %>%
@@ -304,6 +306,9 @@ ggdraw() +
   draw_plot(p1, x = 0, y = .4, width = 1, height = 0.5)
 
 ```
+
+
+
 
 
 

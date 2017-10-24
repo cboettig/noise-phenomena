@@ -31,12 +31,11 @@ knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
 library(ggthemes)
 library(tidyverse)
 library(cowplot)
-#library(hrbrthemes)
-#extrafont::loadfonts()
-#ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
-#hrbrthemes::import_roboto_condensed()
-
-ggplot2::theme_set(theme_cowplot())
+library(hrbrthemes)
+hrbrthemes::import_roboto_condensed()
+extrafont::loadfonts()
+ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
+#ggplot2::theme_set(theme_cowplot())
 ```
 
 
@@ -278,7 +277,7 @@ library(cowplot)
 ggdraw() +
   draw_plot(p2, x = 0, y = 0, width = 1, height = 0.5) +
   draw_plot(p1, x = 0, y = .5, width = 1, height = 0.5)
-ggsave("figures/tipping.pdf")
+#ggsave("figures/tipping.pdf")
 ```
 
 

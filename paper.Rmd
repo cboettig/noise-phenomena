@@ -26,7 +26,7 @@ bibliography: refs.bib
 output: rticles::elsevier_article
 ---
 
-```{r include=FALSE, message=FALSE}
+```{r libraries, include=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, dev="CairoPDF", fig.width=3.5, fig.height=3.5)
 library(ggthemes)
 library(tidyverse)
@@ -96,13 +96,50 @@ Over the past twenty years, ecological theory, modelling, and methods have incre
 In this spirit, each of the examples illustrated here is coupled with consise and efficent R code in the appendix to both reproduce and further explore the simulations.  While examples of noisy phenomena in natural systems are also crucial, matching the pattern does not necessarily mean we have also matched the proccess behind the data.  The examples cited from the literature here offer some of the best empirical evidence of these phenomena, but I encourage readers to also experiment with the example code provided.  Simulations permit poking and prodding of empirical investigation quickly and with little mathematical formalism in the way.  In the code provided, most stochastic models are expressed in the BUGS language, which may be more familiar to empirical readers than corresponding mathematical formulae. This also permits both efficient simulation and potential estimation of parameters given sample data using the R package, NIMBLE [@DeValpine2017]. A copy of this appendix is maintained at <https://github.com/cboettig/noise-phenomena>, and bug reports, suggestions or help requests are welcome through the issue tracker.  A second appendix provides more mathematical details for interested readers.  With these in place, we are ready to begin our tour through three major areas of noisy phenomena: Origins of noise, emergent phenomena, and noise-driven inference.
 
 <!-- MAP -->
-Our first stop will be into research into the origins of noise.  This will not only let us set up definitions for terms and concepts we will encounter throughout, but also introduce some of the fundamental mathematical and computational tooling needed in our tour of noisy phenemena.  From origins of noise, we will then explore some of the phenomena that noise can create.  These examples are central to the conceptual transistion away from viewing noise only as a nusiance that obscures patterns and realize the rich set of patterns and phenomena that can emerge.  Our tour will be by no means exhaustive, but as with chaos before it, theoretical allure does not always reflect ecological releveance.  Having looked at some of the phenomena that can be created by noise, our third stop will try to run this in reverse: using noise to infer underyling phenomena.  Examples here are rarer but potentially the most rewarding, bridging the gap from theoretical construct to empirical investigation.  The most compelling examples have come from ways in which noisy pheneomena are used to infer stability and forecast changes in resilience of populations or ecosystems. Though not without weaknesses or missteps, the resulting dialog between theoretical and empirical aspects have made this particularly a rich area of research.  We end our tour by considering what features best enable the translation and ecological relevance of noisy phenomena.  
+Our first stop will be into research into the origins of noise.  This will not only let us set up definitions for terms and concepts we will encounter throughout, but also introduce some of the fundamental mathematical and computational tooling needed in our tour of noisy phenemena.  From origins of noise, we will then explore some of the phenomena that noise can create.  These examples are central to the conceptual transistion away from viewing noise only as a nusiance that obscures patterns and realize the rich set of patterns and phenomena that can emerge.  Our tour will be by no means exhaustive, but as with chaos before it, theoretical allure does not always reflect ecological relevance.  Having looked at some of the phenomena that can be created by noise, our third stop will try to run this in reverse: using noise to infer underyling phenomena.  Examples here are rarer but potentially the most rewarding, bridging the gap from theoretical construct to empirical investigation.  The most compelling examples have come from ways in which noisy pheneomena are used to infer stability and forecast changes in resilience of populations or ecosystems. Though not without weaknesses or missteps, the resulting dialog between theoretical and empirical aspects have made this particularly a rich area of research.  We end our tour by considering what features best enable the translation and ecological relevance of noisy phenomena.  
 
 
 # Origins of noise
 
 
-What is noise? Where does it come from?  It is important to bear in mind that whenever stochasticity is introduced into a model, it is only as a simplification or summary of the effects of a large number of other processes, often occuring at different scales.  Simply put, *noise is all that we leave out of our model*.  While ecologists will sometimes assert that stochasticity is inherent: birth and death are inherently stochastic events; or the environment is inherently stochastic, these are only assertions at a particular scale.  Obviously events such as births and deaths are themselves the results of mechanistic processes, just as fluctuations in rainfall and temperature are the result of deterministic laws of physics and not fundamentally random forces.  In all of science, only quantum mechanics claims a fundamentally probabilistic view of events, and then at such scales that have no relevance to ecology.  The term "noise" itself reflects this emergent rather than fundamental origin: the combination of hundreds of voices and sounds each individually distinct blends together into a background of noise.  
+What is noise? Where does it come from?  It is important to bear in mind that whenever stochasticity is introduced into a model, it is only as a simplification or summary of the effects of a large number of other processes, often occuring at different scales.  Simply put, *noise is all that we leave out of our model*.  Frequently, this additional noise is tacked on to the end of a model, as if as an afterthought, 
+
+$$X_{t+1} = f(X_t) + \xi_t$$
+with the assertion that $\xi$ is some normally distributed noise term reflecting the combined effects of any large array of possible factors that also influence the value of our state, $X$.  While not always wrong, this handwaving over-simplification is increasingly replaced with a more ecologically and mechanistically grounded description for the origins of noise.  With the exception of quantum machanics (and there only at scales that have no relevance to ecology), stochasticity is not an inherent property of nature but rather an emergent property of many events occurring at a different scale.  Coins and dice obey the physical laws of motion; only variation in how they are tossed (i.e. something complex we do not usually model) creates randomness.  The term "noise" itself reflects this emergent rather than fundamental origin: the combination of hundreds of voices and sounds each individually distinct blends together into a background of noise. Statistical mechanics tells us that temperature is a measure of the average speed of individual molecules in a gas -- any given molecule will experience a range of possible speeds but by itself has no notion of temperature.  Likewise, stochasticity enters our ecological models because our quantities of interest, such as the density of a population, is but an average over a lower-level, discrete process of individual births and deaths. Stochasticity that emerges directly from discrete individual events that underly the process described by our model are considered *intrinsic stochasticity*, commonly referred to as *demographic stochasticity* in ecological literature, as it usually arises in the context scaling from individual demographic events to population level discriptions. An important aspect of this demographic stochasicity is that it scales with the square root of the "system size," so that for very large populations the resulting fluctuations are relatively small. On the other hand, *extrinsic stochasticity*, usually referred to as *environmental stochasticity* in the ecological literature, arises in processes that are not described by our model, but merely impact the value of some parameter of our model; for instance, fluctuations in temperature may drive variation in a death rate, or fluctuations in rainfall drive variation in carrying capacity.  
+
+<!--
+Early ecological models were almost always formulated at the level of the population, described in terms of differential or difference equations reflecting the available tools of the time.  The advent of fast and inexpensive computing power 
+--> 
+
+@Black2010 provides an excellent review of the importance of intrinsic stochasticity and the evol
+
+Consider Levins' patch model, where $n$ individuals compete for a finite number of suitable habitats $N$.  Individuals die a constant rate $e$, and produce offspring at a constant rate $c$ who then have a probability of colonizing an open patch that is simply proportional to the fraction of available patches, $1 - n/N$.  
+
+Approximations of the so-called master equation, van Kampen system size approximation [@vanKampen1987] described in @Black2010, (rooted in the theorems of @Kurtz1977), 
+
+
+<!-- Intrinsic vs extrinisic: a matter of perspective.  demographic noise in one variable is environmental noise in another.  environmental variation usually implies the environmental variable is simply independent of the -->
+
+
+Our variables of interest themselves
+
+The behavior of our variables depends on some quantity which itself is a
+
+<!-- Stochasticity is not inherent -->
+
+<!-- 
+$$\textrm{d} X_t = \mu(X_t) \textrm{d}t + \sigma(X_t) \textrm{d}B_t$$
+
+An SDE. Note the separation of the differential elements, which reveal that this is actually shorthand for an integral equation:
+
+$$X_{t+s} - X{t}  = \int_t^{t+s} \mu(X_{\tau}, \tau) \textrm{d}\tau + int_t^{t+s} \sigma(X_{\tau}, \tau) \textrm{d}B\tau$$
+
+The first integral is the ordinary Lebesgue integral, while the second is an It\^o integral, which integrates over the stochastic process $B_t$ (Brownian motion, also termed a Weiner process). The It\^o calculus follows different rules from the classic calculus, largely due to the fact that an It\^o integral has non-zero quadratic variation. (Crudely put, $\textrm{d}x^2 \sim 0$, but $\textrm{d}B^2 ~ dx$).
+
+-->
+
+
+While ecologists will sometimes assert that stochasticity is inherent: birth and death are inherently stochastic events; or the environment is inherently stochastic, these are only assertions at a particular scale.  Obviously events such as births and deaths are themselves the results of mechanistic processes, just as fluctuations in rainfall and temperature are the result of deterministic laws of physics and not fundamentally random forces.  In all of science, only quantum mechanics claims a fundamentally probabilistic view of events, and then at such scales that have no relevance to ecology.  
 <!-- Our state variables don't "exist" except as averages of a lower level process -->
 
 
@@ -124,6 +161,12 @@ What is noise? Where does it come from?  It is important to bear in mind that wh
 
 **Environmental stochasticity**.  Whereas demographic noise reflects processes at a lower scale (the individual, rather than the population), environmental stochasticity reflects processes operating at the same scale that we are not explicitly modelling.  
 
+
+Given ecologists natural inclination towards modeling the biological rather than environmental aspects of a system, it will be no surprise that mechanistic descriptions of environmental stochasticity have remained far more fuzzy.  One step in this direction has been recognition that whatever the mechanisms, this variation is unlikely to result in purely white noise, as commonly postulated for mathematical convienence, but rather some degree of correlation, termed red noise, or possibly anti-correlation such as from seasonal or other oscillatory patterns, so called blue noise.
+
+[@Roughgarden; @Ellner] 
+
+
 <!-- Demographic noise scaling away with population size, but not so for environmental noise -->
 
 [@Bjornstad2001] _Science_ Review of noisy fluctuations 
@@ -137,57 +180,49 @@ Colored noise:
 
 
 <!-- Identify as beyond the scope of this paper -->
-
 <!-- non-temporal stochasticity --> 
 
-**Other forms of stochasticity**.  Stochasticity frequently enters our models in other ways as well.  For instance, most population-level models treat all individuals within the population, or at least within a particular age or stage class, as identical.  *Individual heterogeneity* in relevant traits (growth rates, dispersal ability) can be represented probabilistically as a distribution rather than a fixed value, making it function as another form of random varation in a model.  *Spatial heterogeneity* can likewise be reflected in stochastic parameters of a spatially implicit model, or as spatially varying environmental stochasticity in a spatially explicit model.  As with other forms of noise [@Melbourne2008; @Bonsall2004], interaction between individual or spatial variation and other sources of noise can drive patterns including the potential for persistence, coexistence, and dispersal of species [@Schreiber2010; @Hart2016; @Schreiber2017], but are beyond the scope of this paper.  
+Several additional sources of stochasticity or variation more generally fall outside these categories demographic and environmental noise.  While a detailed treament is beyond the scope of this paper, I enumerate these sources to disambiguate such phenomena from the intrinsic and extrinsic noise sources that comprise the focus here. 
 
-
-
+**Other forms of stochasticity**.  Stochasticity frequently enters our models in other ways as well.  For instance, most population-level models treat all individuals within the population, or at least within a particular age or stage class, as identical.  *Individual heterogeneity* in relevant traits (growth rates, dispersal ability) can be represented probabilistically as a distribution rather than a fixed value, making it function as another form of random varation in a model.  *Spatial heterogeneity* can likewise be reflected in stochastic parameters of a spatially implicit model, or as spatially varying environmental stochasticity in a spatially explicit model.  As with other forms of noise [@Melbourne2008; @Bonsall2004], interaction between individual or spatial variation and other sources of noise can drive patterns including the potential for persistence, coexistence, and dispersal of species [@Schreiber2010; @Hart2016; @Schreiber2017].  
 
 **Observational error**: Observational error acts much like another form of stochasticity, arising from
 sampling effects or limitations of instruments, etc. Yet unlike the sources described above, this 
 uncertainty does not impact the actual state of our system, and thus does not give rise to any
-additional phenomena or information about that process. 
+additional phenomena or information about that process, though it can obscure it [@Knape2011; @deValpine2002].
 
-### Not noise
-
-
-**Reducible uncertainty**: In constructing and estimating mathematical models of ecological processes, 
+Other forms of uncertainty common in models are not stochastic phenomena.  This includes any form of 
+**reducible uncertainty**: In constructing and estimating mathematical models of ecological processes, 
 we encounter uncertainty over our parameter estimates and possible choice of models [@Ellison2004].  In some ways, this
 uncertainty can act like the stochasticity described above: for instance, both introduce variation into
 any forecast of future outcomes. Yet unlike stochasticity, this uncertainty is reducible: with additional
 observations, we can narrow the uncertainty over parameters or candidate models, while stochasticity remains an
 inherent source of variation. We will this not consider model and parameter uncertainty, as they are not 
-sources of noise.
+sources of noise.  
+
+**Chaos**: Deterministic chaos [@Desharnais2001] is another mechanism of introducing significant variation into a simple model. Chaos can a look a lot like noise: indeed, it can be observationally indistinguishable from a stochastic process [@Werndl2009].  Despite substantial interest in previous decades and the relative ease of encountering chaos in simple ecological models (particularly in differences equations), and convincing reconstructions of chaotic dynamics in laboratory manipulations [@Costantino1997] the prevelance of chaotic dynamics as a driving factor in most ecological systems remains unclear. After all, the great variation of natural populations is hardly suprising: the undeniable influences of variation created by all those things left out of our models, all that individual detail from intrinsic, lower level processes and external environmental processes that becomes aggregated in our simple models all but begs for a stochastic description.  
 
 
-**Chaos**: Deterministic chaos [@Desharnais2001] is another mechanism of introducing significant variation into a simple model. Chaos can a look a lot like noise: indeed, it can be observationally indistinguishable from a stochastic process [@Werndl2009].  Despite substantial interest in previous decades and the relative ease of encountering chaos in simple ecological models (particularly in differences equations), and convincing reconstructions of chaotic dynamics in laboratory manipulations [@Costantino1997] the prevelance of chaotic dynamics as a driving factor in most ecological systems remains unclear. Meanwhile, the undeniable influences of 
-
-
-Figure: schematic showing types of noise
-
-<!-- blah blah fixed effects vs random effects -->
-
+Much active research continues to explore the consequences of introducing these more explicitly motivated and interacting sources of noise. With some grounding in the origins of different types of noise in place, we are ready to move to our second stop to see how this noise can drive the creation of novel phenonema on a marcroscopic level.  
 
 
 # Noise the creator: Noise can induce novel phenomena
 
-
-
-Stochasticity can give rise to a wide array of interesting phenomena that are often at odds with our intuition. 
-
+Stochasticity can give rise to a wide array of interesting phenomena that are often at odds with our intuition. Such behavior often arises through an interaction between stochastic and non-linear elements of a system, both hallmark traits of ecological processes.  In this section, I highlight several examples that have shown up frequently in the literature and prove sufficiently tractable to provide a simple intution for the mechanisms involved. 
 
 **Quasi-cycles**
 
 
-Understanding the origin of sustained oscillations has long been a central question in ecology [@Hastings1996].  The simple Lotka Volterra model produces only neutrally stable centers, while the more realistic model that introduces carrying capacity for prey as they compete for resources results in a model that produces only damped oscillations, eventually settling into a stable state (Figure 1a).
+Understanding the origin of sustained oscillations has long been a central question in ecology [@Hastings1996; @Bjornstad2001].  The simple Lotka Volterra model produces only neutrally stable centers, while the more realistic model that introduces carrying capacity for prey as they compete for resources results in a model that produces only damped oscillations, eventually settling into a stable state (Figure 1a).  However, the introduction of relatively small noise into the system can be sufficient to excite the system into sustained oscillations (Figure 1b.)  In the example shown here, a simple predator-prey system is driven by environmental white noise $\xi_t$, with prey following the equation:
 
-$$x_{t+1} = x_t + x_t r \left(1 - \frac{x_t}{K}\right) - b x_t  y_t + \epsilon_t$$
-$$y_{t+1} = y_t + c  x_t  y_t - d  y_t+ \xi_t $$
+$$x_{t+1} = x_t + x_t r \left(1 - \frac{x_t}{K}\right) - b x_t  y_t + \xi_{x,t}$$
+where $x_t$ is the prey density at time $t$, $r$ the growth rate, $K$ the carrying capacity, $b$ an encounter rate with the predator $y$, who obeys the equation:
+
+$$y_{t+1} = y_t + c  x_t  y_t - d  y_t+ \xi_{y,t} $$
+with $c$ the conversion ratio and $d$ the predator mortality rate.  Here we have assumed for the prey, $\xi_x \sim \mathcal{N(0, \sigma_x)}$, and similarly for the predator driven by $\xi_y$. Figure 1a shows examples for noise $\sigma_x = \sigma_y = 10^{-5}$, while panel 1b shows $\sigma_x = \sigma_y = 0.01$.  
 
 
-```{r fig.width=7}
+```{r quasicycles, fig.width=7}
 read_csv("appendix/quasicycles.csv") %>%
   gather(species, population, -t, -sigma) %>%
   rename(time = t) %>%
@@ -201,18 +236,25 @@ read_csv("appendix/quasicycles.csv") %>%
 ```
 
 
+Oscillations arise through the process of stochastic resonance.  The damped oscillations seen in Figure 1a are analgous to a child sitting still on a swing: friction slowly damps the magnitude of each successive oscillation, while the period of pendulum remains unchanged.  Driving the pendulum through perturbations timed to match that natural period can quickly create sustained oscillations with large magnitudes, but such perfect timing is not required.  In the model above, white noise effectively drives the pendulum at all frequencies, though at very low magnitude, since the noise is small relative to the scale of the dynamics.  However, frequencies that most closely match the natural period of the damped oscillator are amplified, resonating with the natural oscillations.  This process is sufficient to permit even small noise to drive sustained oscillations in the model indefinitely.  
 
-- Power spectrum
+The power spectrum (the squared norm of the Fourier transform, a measure of what frequencies are present; see, e.g. @Black2012) provides a convenient way to visualize the effects of these oscillations.  The power spectrum  for a deterministic limit cycle would create a perfect sinsoidal oscillation and a resulting power spectrum of a delta spike at that single frequency.  The power spectrum for the quasi-cycle instead shows a distribution of frequencies, centered at the the resonant frequency of the damped oscillator.  
 
-[@Black2010] 
-[@Blarer1999]
+Early work by @Blarer1999 identified quasi-cycles as a possible explanation for oscillations and periodic outbreaks in pest ecosystms.  @Bjornstad2004 analyzes the potential for such stochastic effects to drive cyclic behavior in population abundances of Atlantic bluefin tuna and Atlantic Cod, while @Black2010 illustrates the use of power-sepctrum approaches to examine the behavior of quasicycles in common disease outbreak models, focusing on a case where noise arises explicitly from demographic stochasticity, rather than generic environmental noise as in the model above and elsewhere.  @Pineda-Krch2007 compares patterns from these stochastically generated cycles to truely stable limit cycles they resemble.  
+
+Stochastic resonance highlights one way in which even small noise can play an important role in driving large scale patterns where we had previously only sought deterministic explanations. This example also illustrates the interplay between nonlinear dynamics and stochasticity that is the hallmark of stochastically driven phenomena.  A stable node with linear dynamics, such as an Ornstein-Ulhenbeck process, has no resonant frequency, and could not produce sustained oscillations (unless the environmental driver itself had a periodic pattern).  
+
+<!-- variable noise -->
+
+<!--autocorrelated or red noise can also drive stochastic resonance -->
+
 
 
 **Stochastic switching**
 
-Stochastic fluctuations can also drive spontaneous shifts between alternative stable states.  
+We turn from stochastic resonance to oscillations of a very different sort, which do not resemble any deterministic process:
 
-```{r}
+```{r noisy_switch}
 read_csv("appendix/noisy_switch.csv")  %>% ggplot(aes(t,x)) + 
   geom_line() #+ 
   #labs(title="Stochastic switching", 
@@ -221,6 +263,7 @@ read_csv("appendix/noisy_switch.csv")  %>% ggplot(aes(t,x)) +
 
 ```
 
+Stochastic fluctuations can also drive spontaneous shifts between alternative stable states.  
 
 - transition probabilities, waiting times
 
@@ -242,10 +285,6 @@ One of the most fundamental aspects of stochasticty are the implications for lon
 
 
 @Read2007 <!-- Stochasticity generates an evolutionary instability for infectious disease -->
-
-- Critical transitions
-
-
 
 
 [@Schreiber2008] decreasing variance before crash
@@ -278,7 +317,7 @@ One of the most interesting aspects of noise is as a source of additional inform
 <!-- @Holling1996 is responsible for the introduction of the unfortunate term "Engineering Resilience" to mean precisely the same thing as mathematicians and theoretical ecologists have refered to as 'stability' for decades.  Further confusion has been sown by the introduction of the energy-potential diagram into ecology, where the depth of the potential well is not a local property-->
 
 
-```{r fig.width=7, fig.height=7}
+```{r tipping, fig.width=7, fig.height=7}
 tipping <- read_csv("appendix/tipping.csv") 
 
 p1 <- tipping %>%

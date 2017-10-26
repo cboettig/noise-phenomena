@@ -10,15 +10,87 @@ knitr::opts_chunk$set(message=FALSE)
 
 ```{r}
 library(nimble)
-library(hrbrthemes)
-library(ggthemes)
 library(RcppRoll)
 library(regimeshifts) ## devtools::install_github("cboettig/regimeshifts")
+library(adaptivetau)
 library(tidyverse)
+
+
+## plot themes, non-essential
+library(hrbrthemes)
+library(ggthemes)
 ggplot2::theme_set(hrbrthemes::theme_ipsum())
 ```
 
+# Gillespie algorithm
 
+Levins' Patch model as an individual-based birth-death process: 
+
+$$\frac{dn}{dt} = \underbrace{c n \left(1 - n/N \right)}_{\textrm{birth rate, } b(n)} - \underbrace{en}_{\textrm{death rate, } d(n)} $$
+
+We simulate this using the Gillespie's exact stochastic simulation algorithm (SSA), as implemented in the `adaptivetau` R package.  We declare the transition events: birth increases the state $n$ to $n+1$, and death $n$ to $n-1$, and describe the rates associated with them:
+
+```{r}
+# indicate state variable and the change
+transitions = list(c(n = +1), # birth event
+                   c(n = -1)) # death event
+
+rateF <- function(state, params, t) {
+  c(params$c * state[["n"]] * (1 - state[["n"]] / params$N), # birth rate
+    params$e * state[["n"]])                                 # death rate
+}
+
+```
+
+
+We compare the stochastic simulation with identical parameters, $c=1$, $e=0.2$ except for the total number of available sites.  In our "small" system scenario, we have a total of $N=100$ sites, while in the "large" system we have $N=1000$ sites.  
+
+The theory predicts an equilibrium population size $\bar n$ at $b(\hat n) = d(\hat n)$, or
+
+$$\left(1 - \tfrac{e}{c}\right) N,$$ 
+and a variance of 
+
+$$\left. \frac{b(n) + d (n)}{2 d'(n) - b'(n)} \right\rvert_{n = \hat n} = \tfrac{e}{c}N$$
+
+```{r gillespie}
+set.seed(1234) # set random number generator seed to be reproducible
+
+e <- 0.2
+c <- 1
+
+sim_small <- adaptivetau::ssa.exact(init.values = c(n = 50),
+                       transitions, rateF,
+                       params = list(c=c, e=e, N=100),
+                       tf=30) %>% as_tibble()
+
+sim_large <- adaptivetau::ssa.exact(init.values = c(n = 500),
+                       transitions, rateF,
+                       params = list(c=c, e=e, N=1000),
+                       tf=30) %>% as_tibble()
+
+theory <- 
+list(small = 100,large = 1000) %>%
+  map_dfr(function(N){
+    data.frame(mean = N * (1-e/c)) %>%
+    mutate(plus_sd = mean + sqrt(N * e / c),
+           minus_sd = mean - sqrt(N * e / c))
+  }, .id = "system_size")
+
+gillespie <- bind_rows("large"=sim_large, 
+                       "small"=sim_small,  
+                       .id = "system_size") %>% bind_rows(theory)
+write_csv(gillespie, "gillespie.csv")
+
+
+read_csv("gillespie.csv", col_types = "cdiddd")  %>% 
+  ggplot(aes(x = time)) + 
+  geom_hline(aes(yintercept = mean), lty=2) + 
+  geom_hline(aes(yintercept = minus_sd), lty=2) + 
+  geom_hline(aes(yintercept = plus_sd), lty=2) + 
+  geom_line(aes(y = n), col="red") +
+  facet_wrap(~system_size, scales = "free_y") + 
+  labs(caption = "theoretical predictions for mean and plus/minus one standard \n deviation shown in horizontal black dashed lines.")
+```
 
 ------------
 
@@ -49,9 +121,6 @@ p <-
   data.frame(
   data.frame(r = .1, K = 5,  b = .1, c = .1, d = .1, N = 800),
   data.frame(sigma_x = c(.00001,0.01),  sigma_y = c(.00001,0.01)))
-
-
-
 
 f <- function(constants){
   model <- compileNimble(nimbleModel(quasicycle, constants = constants, inits = list(x0 = 1, y0 = 1)))

@@ -147,14 +147,27 @@ While ecologists will sometimes assert that stochasticity is inherent: birth and
 
 **Demographic stochasticity**.  Demographic stochasticity refers to fluctuations in population sizes or densities that arise from the fundamentally discrete nature of individual birth and death events.  Demographic stochasticity is a particularly instructive case for illustrating a mechanism for how noise arises as an aggregate description from a fundamentally lower-level mechanistic process.  We summarize the myriad lower-level processes that mechanistically lead to the event of a 'birth' in the population as a probability: in a population of $N$ identical individuals at time $t$, a birth occurs with probability $b_t(N_t)$ (_i.e._ a rate that can depend on both the population size $N$) and increases the population size, $N$ to $N+1$, and deaths occur with probability $d_t(N_t)$, decreasing the population size, $N$ to $N-1$.  Assuming each of these events are independent, this is a Poisson process.  
 
-<!-- Master equation transform--> 
+<!-- Master equation solution of birth-death model, from appendix--> 
+
+<!-- Gillespie algorithm; Population level (SDE) vs agent-based vs individual. Show figure with small and large N  -->
 
 
+```{r warning=FALSE}
+read_csv("appendix/gillespie.csv", col_types = "cdiddd")  %>% 
+  ggplot(aes(x = time)) + 
+  geom_hline(aes(yintercept = mean), lty=2) + 
+  geom_hline(aes(yintercept = minus_sd), lty=2) + 
+  geom_hline(aes(yintercept = plus_sd), lty=2) + 
+  geom_line(aes(y = n), col="red") +
+  facet_wrap(~system_size, scales = "free_y") + 
+  labs(caption = 
+"Population dynamics from a Gillespie simulation of the Levins model with large (N=1000) 
+and small (N=100) number of sites (red) show relatively smaller effects of demographic 
+noise in the larger systme. Theoretical predictions for mean and plus/minus one standard
+deviation shown in horizontal black dashed lines.")
+```
 
 
-<!-- Gillespie algorithm; Population level (SDE) vs agent-based vs individual  -->
-
-![Figure 1: demographic stochasticity arises from discrete transitions  between states in in a Markov process.  Here, a simple birth-death process has transition rates determined by the current population size, _n_.](markov.png)
 
 
 [@Black2012]

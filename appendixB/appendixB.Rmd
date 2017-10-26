@@ -183,7 +183,7 @@ Eq \eqref{fluc} is particularly instructive.  Note that $\alpha_2(\phi)$ is alwa
 \langle \xi^2 \rangle = \frac{-\alpha_2(\phi)}{2 \alpha_1'(\phi)} \label{fluctuation dissipation}
 \end{align}
 
-However, $\alpha_1'(\phi)$ need not be negative everywhere.  This is easy to see by plotting the macroscopic growth rate $\tfrac{\ud \phi}{\ud t} = \alpha_1(\phi)$ against $\phi$, as in Fig~\ref{levins a1}, where $\alpha_1'$ is simply the slope.  Equilibria $\phi_s$ occur wherever this curve crosses zero.  If it does so with a negative slope, $\alpha_1'(\phi^s) < 0$ then this point is stable.  Hence there will be a region around any stable point where this fluctuation-dissipation relationship given by \eqref{fluctuation dissipation} provides a good description of the fluctuations.  Consequently, for any birth-death process $b>d$ we can write down the equilibrium fluctuations as:
+However, $\alpha_1'(\phi)$ need not be negative everywhere, but will be negative for any stable point, $\alpha_1'(\phi^s) < 0$.  Hence there will be a region around any stable point where this fluctuation-dissipation relationship given by \eqref{fluctuation dissipation} provides a good description of the fluctuations.  Consequently, for any birth-death process $b>d$ we can write down the equilibrium fluctuations as:
 
 \begin{equation}
 \sigma^2 = \frac{b+d}{2 [d' - b']} \label{fluc diss} 

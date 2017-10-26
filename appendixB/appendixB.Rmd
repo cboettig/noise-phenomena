@@ -1,0 +1,269 @@
+---
+title: "Appendix B: System size expansion of the master equation for demographic noise"
+author: 
+  name: "Carl Boettiger"
+  affiliation: a
+address:
+  - code: a
+    address: "Dept of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley CA 94720-3114, USA"
+#layout: 5p  
+bibliography: canonical.bib
+output: 
+  rticles::elsevier_article:
+    includes:
+      in_header: header.tex
+      
+
+---
+
+<!--
+## The Poisson process description
+
+The Poisson process is a common description of demographic noise.  It arises as the limit of a binomial process (coin flipping) when the events are rare and the population large.  This model is commonly applied as follows.  Consider a model of the form:
+
+\begin{align}
+N_{t+1} = f(N_t)
+\end{align}
+
+
+This approach chooses with probability $P$ the number in the next generation $N_{t+1}$ at random from a Poisson distribution with mean $f(N)$:
+
+\begin{align}
+P(N_t)_{t+1} = \text{Poisson}(N, f(N_t)), 
+\end{align}
+
+while the variance of the Poisson distribution will also be $f(N)$.  If the population has some equilibrium size $N^* \neq 0$ such that $f(N^*) = N^*$, then at equilibrium the population will have size $N^*$ and fluctuate around that value with standard deviation $\sqrt{N^*}$.  In the continuous time limit this approaches a Gaussian with the same mean and variance.  Observe that $P(0) > 0$ for any $N$, hence a population can always go extinct.  Further, if we naturally assume the population is isolated, then $f(0) = 0$, and extinction is the only long-term stable state.  This description provides a first pass at describing demographic noise, and captures some of its important phenomena:
+
+- Finite populations fluctuate around their quasi-equilibrium.
+- Any isolated population that cannot grow without bound will eventually go extinct.
+-  The magnitude of the steady-state fluctuations relative to the equilibrium decreases with increasing population size (as $\sqrt{N^*}/N^*$), decreasing the extinction risk of larger populations proportionally.  
+
+While we have started to capture one aspect of demographic noise (populations are finite), we have ignored the second (population dynamics come from birth and death processes).  Too often we stop at this description of demographic noise.  By using only $f(N)$, we have not specified births and deaths separately.  This is quite common in population models, where the choice of $f(N)$ does not obviously suggest which are the birth and which are the death terms.  Our second introductory example illustrates the importance of doing so.  
+-->
+
+
+Consider a population that is of size $n$ with probability $p_n$, with birth and death rates given by $b_n$ and $d_n$ respectively, diagrammed in Fig~\ref{markov}  This representation is known as a single step Markov process.  The rate of transitions to the $n+1$ state $b_n$, the rate of transitions to $n-1$ is $d_n$.  Both of these are transitions away from the state $p_n$, hence the decrease the probability of $p_n$.  The probability $p_n$ increases by transitions into the state $n$, from either side: births enter from the state below at rate $b_{n-1}$ and deaths from the state above, $d_{n+1}$.  Hence the rate of change in $p_n$ is given by
+
+
+\begin{align}
+\dot p_n = b_{n-1} p_{n-1} + p_{n+1} d_{n+1} - [b_n + d_n]p_n
+\end{align}
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=.25\textwidth]{markov}
+\caption{The birth-death process as a Markov process.}\label{markov}
+\end{center}
+\end{figure}
+
+This probability balance is known for historical reasons as a master equation. This equation will form the center of our treatment.  Master equations of this form can be written more concisely by introducing the step operator, $\mathbb E^k$ such that $\mathbb E^k f_n = f_{n+k}$, giving us
+
+
+\begin{align}
+\frac{\ud p_n}{\ud t} = (\mathbb E^{-1} - 1) b_n p_n + (\mathbb E -1) d_n p_n \label{master1}
+\end{align}
+
+which for historical reasons is known as a master equation. From this we can directly calculate the mean and variance for this process by multiplying by $n$ or $n^2$ and summing over all $n$. These calculations are greatly simplified by observing the following property of the step operator: for any pair of test functions $f_n$, $g_n$, 
+\begin{align}
+\sum_{n=0}^{N-1}  g_n \mathbb E f_n = \sum_{n=1}^N f_n \mathbb E^{-1} g_n \nonumber
+\end{align}
+
+For example, the mean is:
+
+\begin{align}
+\frac{\ud }{\ud t} \langle n \rangle &= \sum n (\mathbb E^{-1} - 1) b_n p_n + \sum n (\mathbb E -1) d_n p_n \nonumber \\ 
+&= \sum  b_n p_n(\mathbb E - 1)n  + \sum d_n p_n(\mathbb E^{-1} -1) n \nonumber \\
+&= - \langle d_n \rangle +  \langle b_n \rangle \label{mean} \\
+\intertext{and similarly}
+\frac{\ud }{\ud t} \langle n^2 \rangle &= 2 \langle n (b_n - d_n) \rangle + \langle b_n+d_n \rangle \label{var}
+\end{align}
+
+The key observation here is that the variance includes the sum of birth and death, not just the difference.  Intuitively we would expect a population with large numbers of births and deaths that average to a small difference to fluctuate much more than one in which this difference is very small.  Despite this simple observation, countless models purporting to include demographic noise ignore this distinction.  While all moments can be derived as above, it is often impossible to solve these equations for nonlinear models.  Instead, we introduce an approximation of Eq \eqref{master1} that is physically motivated and intuitive.  The method is based on derivation presented by the van Kampen [@vanKampen], though a formal proof can be found in earlier work of Thomas Kurtz [@Kurtz1970; @Kurtz1971; @Kurtz1972].  
+
+# The system size expansion for a birth-death process
+
+## Introduction, a change of variables
+
+In this approximation, we expand the master equation \eqref{master1} in terms of a measure of the system size, $\Omega$.  The heart of this approximation is a change of variables, the rest is simply book-keeping.  We begin by explaining this change of variables, which replaces $n$ by some average value $\phi$ and some fluctuations $\xi$.   
+
+Observe that \eqref{master1} is written in terms of discrete individuals, represented by the integer $n$.  Many population models permit real-valued variables for the population, usually interpreted as the density of individuals, for which fractional values have meaning.  If we go out to the field and mark off a very large area and count all the individuals within it, we can expect to get the population density, $\phi$.  Over some appropriate region, we expect the population density to be independent of our survey area.  Knowing the density, we can predict how many individuals we'd expect to find in any given area $\Omega$, simply $\phi \Omega$.  We also know that the larger the area, the more accurate our prediction.  We call $\phi$ a macroscopic variable -- it describes what we expect to see over an entire population (the macroscopic level) on average, rather than at the individual level.  It is an intensive (bulk) variable, because it does not depend on the area surveyed, while number $n$ will depend on the area $\Omega$ considered.  We expect $n$ to deviate around an average value of $\phi \Omega$ by some amount that depends on the system size.  For several reasons (such as the error term we found in the simple Poisson process), we will guess that the size of the fluctuations $\xi$ scale with system size as $\Omega^{1/2}$.  Mathematically, 
+
+\begin{align}
+n = \Omega \phi(t) + \Omega^{1/2} \xi \label{n}
+\end{align}
+
+
+We will change Eq \eqref{master1} into the variables $\phi$ and $\xi$.   We begin with the step operator, which can be approximated by a Taylor expansion.To formulate a Taylor expansion of the step operator (where $k$ can be a positive or negative integer), first consider the steop operator under the original discrete variable $n$:
+
+\begin{align}
+\intertext{Take as the definition}
+\mathbb E^k f(n) &= f(n+k) \nonumber \\
+\intertext{Then}
+\mathbb E^k n &=  n+k \nonumber \\
+\mathbb E^k n^2 &= \mathbb E^k n n = (n+k)(n+k) = n^2+2kn + k^2 \nonumber \\
+\intertext{This suggests we can approximate the step operator by a Taylor series}
+\mathbb E^k &= 1+ k\frac{\partial}{\partial n} + \frac{k^2}{2} \frac{\partial^2}{\partial n^2} + \ldots \label{En}
+\end{align}
+To change variables, recall the chain rule,
+\begin{align}
+&\frac{\partial}{\partial \xi} f(n(\xi)) =  \frac{\partial n}{\partial \xi} \frac{\partial}{\partial n} f(n(\xi)) \nonumber \\
+\intertext{hence} 
+&\frac{\partial}{\partial n} =  \left(\frac{\partial n}{\partial \xi}\right)^{-1} \frac{\partial}{\partial \xi} \nonumber 
+\end{align}
+Making this substitution to \eqref{En} we find:  
+
+
+\begin{align}
+& \mathbb E^k = 1+ \Omega^{-1/2} k\frac{\partial}{\partial \xi} + \Omega^{-1} \frac{k^2}{2} \frac{\partial^2}{\partial \xi^2} + \ldots \label{taylor}
+\end{align}
+
+Taking $P(n,t) = \Pi(\xi, t)$, we can rewrite the time derivative.  First, note that the derivative of the probability distribution in the master equation, $\tfrac{\partial}{\partial t} P(n,t)$ is taken with $n$ held constant,
+
+\begin{align}
+\frac{\ud n}{\ud t} &= \Omega \frac{\ud \phi(t)}{\ud t}  + \Omega^{1/2}\frac{\ud \xi}{\ud t} = 0, \nonumber \\
+\intertext{therefore}
+\frac{\ud \xi}{\ud t} &= -\Omega^{1/2}\frac{\ud \phi(t)}{\ud t}. \label{dxidt}
+\end{align}
+
+Also by the chain rule, we have
+\begin{align}
+\frac{\partial}{\partial t} P(n,t) &= \frac{\partial \Pi}{\partial t}  + \frac{\partial \Pi}{\partial \xi}\frac{\ud \xi}{\ud t} 
+\end{align}
+Substituting in \eqref{dxidt}, we find:  
+
+\begin{align}
+\frac{\partial}{\partial t} P(n,t) &= \frac{\partial \Pi}{\partial t}  - \Omega^{1/2}\frac{\ud \phi}{\ud t}\frac{\partial \Pi}{\partial \xi} \label{Pi}
+\end{align}
+
+To complete the transformation, we put \eqref{Pi} on the left side, replace all the $\mathbb E$'s in \eqref{master1} with \eqref{taylor}, and all the $n$'s appearing in the functions $b_n$ and $d_n$ with \eqref{n}:
+
+\begin{align}
+&\frac{\partial \Pi(\xi, t)}{\partial t}  - \Omega^{1/2}\frac{\ud \phi}{\ud t}\frac{\partial \Pi}{\partial \xi}  = \nonumber \\
+&\quad \left( -\Omega^{-1/2} \frac{\partial}{\partial \xi} +  \frac{\Omega^{-1}}{2} \frac{\partial^2}{\partial \xi^2} + \ldots\right)b(\phi\Omega+\xi\Omega^{1/2})\Pi(\xi, t)\nonumber \\
++&\quad \left( \Omega^{-1/2} \frac{\partial}{\partial \xi} +  \frac{\Omega^{-1}}{2} \frac{\partial^2}{\partial \xi^2} + \ldots\right)d(\phi\Omega+\xi\Omega^{1/2})\Pi(\xi, t)\end{align}
+
+
+Collecting terms of order $\Omega^{1/2}$ on both sides, we have:
+
+\begin{align}
+\frac{\ud \phi(t)}{\ud t} = b(\phi)-d(\phi) = \alpha_1(\phi) \label{macroscopic}
+\end{align}
+
+Where we have the part of the birth and death functions that depend on the macroscopic variable $\phi$ alone.  This is known as the macroscopic equation, and corresponds to the density equations commonly written down.  We call this difference $\alpha_1(\phi)$ as a shorthand\footnote{This notation suggests it is the first jump moment, defined as first moment of the transition rate between states in a Markov process.  It so happens this term will give the macroscopic law for any Markov process, not only a birth-death process.  The second moment of the transition rates, $a_2$, will be for us simply the sum of the birth and death rates.  We use this notation as it generalizes to processes that have a different master equation from \eqref{master1}.}   
+
+
+Collecting terms of order $\Omega^0$ we recover the diffusion equation:
+
+\begin{align}
+\frac{\partial \Pi}{\partial t} = - \alpha'_{1,0}(\phi) \frac{\partial}{\partial \xi} \xi \Pi + \tfrac{1}{2}\alpha_{2,0}(\phi) \frac{\partial^2}{\partial \xi^2} \Pi \label{FP}
+\end{align}
+
+Where we define $\alpha_2(\phi) = b(\phi)+d(\phi)$ as an analogous short hand.  From this it is a straight forward exercise to calculate the moments of the distribution (multiply by $\xi$, $\xi^2$ and integrate),
+
+\begin{align}
+\partial_t \langle \xi \rangle &= \alpha'_{1,0}(\phi) \langle \xi \rangle \\
+\partial_t  \langle \xi^2 \rangle &= 2\alpha'_{1,0}(\phi) \langle \xi \rangle + \alpha_{2,0}(\phi) \label{fluc} 
+\end{align}
+
+The variance $\sigma_{\xi}^2 = \langle \xi^2 \rangle - \langle \xi \rangle^2$ obeys the same relation as the second moment. These equations must be solved using $\phi(t)$ from the macroscopic solution, solved with the appropriate initial condition $n_0$.  Then we can transform back to the original variables:
+
+\begin{align}
+\langle n \rangle &= \phi(t | n_0) \Omega + \Omega^{1/2} \langle \xi \rangle \label{n mean}\\
+\sigma^2 &= \Omega \sigma_{\xi}^2 \label{n var}
+\end{align}
+
+It is possible to prove that any solution to \eqref{FP} must be Gaussian [@Kurtz1970; @Kurtz1971].  Consequently, knowing these two moments completely determines the distribution of $n$.  This is often assumed for demographic noise.  We have justified this common Gaussian noise assumption by showing it is simply a consequence of expanding the master equation to linear order, $\mathcal O(\Omega^{0})$.  From \eqref{n mean} we can also conclude that the macroscopic (average) variable obeys the deterministic law. 
+
+## Fluctuation dissipation theorem
+
+Eq \eqref{fluc} is particularly instructive.  Note that $\alpha_2(\phi)$ is always positive, and hence will try to increase the fluctuations $\langle \xi^2 \rangle$.  As this term increases, it increases the influence of its coefficient $\alpha_1'(\phi)$.  If this term is negative (as it must be near a stable equilibrium) then it serves to dissipate these fluctuations.  Note the dissipation comes from the macroscopic behavior alone, and does not depend on knowing $b$ and $d$ separately.  Since this dissipation is strongest for large fluctuations and small for very small fluctuations, $\xi^2$ will exponentially approach an equilibrium:
+
+\begin{align}
+\langle \xi^2 \rangle = \frac{-\alpha_2(\phi)}{2 \alpha_1'(\phi)} \label{fluctuation dissipation}
+\end{align}
+
+However, $\alpha_1'(\phi)$ need not be negative everywhere.  This is easy to see by plotting the macroscopic growth rate $\tfrac{\ud \phi}{\ud t} = \alpha_1(\phi)$ against $\phi$, as in Fig~\ref{levins a1}, where $\alpha_1'$ is simply the slope.  Equilibria $\phi_s$ occur wherever this curve crosses zero.  If it does so with a negative slope, $\alpha_1'(\phi^s) < 0$ then this point is stable.  Hence there will be a region around any stable point where this fluctuation-dissipation relationship given by \eqref{fluctuation dissipation} provides a good description of the fluctuations.  Consequently, for any birth-death process $b>d$ we can write down the equilibrium fluctuations as:
+
+\begin{equation}
+\sigma^2 = \frac{b+d}{2 [d' - b']} \label{fluc diss} 
+\end{equation}
+
+
+This expression has the wonderful properties of being both simple and general.  
+
+
+## Example: The Levins patch model
+
+The Levins meta-population model is given by
+
+\begin{align}
+\dot n = c n \left(1 - \frac{n}{N}\right) - e n \label{levins}
+\end{align}
+
+where $n$ is the number of occupied patches, $N$ the total number of patches, $c$ is the colonization rate, and $e$ the extinction rate.  The colonization term provides our birth rate function and the extinction rate the death rate function.  The total number of patches $N$ is an obvious choice for the system size $\Omega$.  From this we can immediately apply the above theory.  The jump moments written in the macroscopic variable are:
+
+\begin{align}
+\alpha_1(\phi) &= c \phi(1- \phi) - e\phi \\
+\alpha_2(\phi) &= c \phi(1-\phi) + e\phi
+\end{align}
+
+From which the macroscopic equation \eqref{macroscopic}, the fluctuations \eqref{fluc} can be solved.  According to \eqref{FP} the distribution is simply the Gaussian with the mean given by \eqref{n mean} and variance \eqref{n var}. The equilibrium of the macroscopic equation is:
+
+\begin{align}
+\langle n\rangle_s = N\left(1-\frac{e}{c}\right)
+\end{align}
+while the steady-state fluctuations are given by \eqref{fluctuation dissipation}, \eqref{n var}:
+\begin{align}
+\sigma_n^2 = N\frac{e}{c}
+\end{align}
+
+
+### Comparison to other models:
+
+Note that the macroscopic equation for Levins' patch model has the same mathematical formulation as the familiar logistic equation, 
+
+$$\frac{\ud n}{\ud t} = r n \left( 1 - \frac{n}{K} \right)$$
+though the partition into birth and death rates is not explicit.  Different ways of dividing this equation between birth and death can therefore create different fluctuation patterns, even as the macroscopic average remains unchanged.  For instance, taking $b = rn$ and $d = rn^2/K$ and  we can calculate the fluctuations of the logistic equation around its equilibrium $n^* = K$ as:
+
+\begin{align}
+\sigma^2 = \frac{rn^* + rn^{*2}/K}{2(2rn^*/K - r)} = K \nonumber
+\end{align}
+
+Which agrees with calculations elsewhere [@NisbetGurney]. 
+
+
+# Alternate derivation: the diffusion approximation
+
+A somewhat different approach to deriving a diffusion equation predominates in the literature.  This approach does not make system size explicit, but instead hinges on taking a simultaneous limit of both short time and small step size.  I prefer the van Kampen derivation, since it appeals to system size rather than an arbitrary small parameter going to zero.  It also provides a more natural treatment for nonlinear systems, for which the diffusion equation requires extra care.  With these notes in mind, the diffusion derivation usually goes as follows:  
+
+Consider small steps $x = \epsilon n$, and hence $p_n = \epsilon P_x$, where $\epsilon \ll 1$.  To keep the process from slowing down we consequently have to scale up the rates by $\epsilon$ as well:
+
+\begin{align}
+	b_n - d_n = \frac{A_x}{\epsilon}
+\end{align}
+
+Where $A$ is independent of $\epsilon$.  Similarly we have to scale the sum, which being proportional to the variance must be scaled by
+\begin{align}
+b_n + d_n = \frac{B_x}{\epsilon^2}
+\end{align}
+
+We Taylor expand the step operator $\mathbb E$ in the new variable:
+\begin{align}
+\mathbb E^k &= 1+ \epsilon k\frac{\partial}{\partial x} + \frac{\epsilon^2 k^2}{2} \frac{\partial^2}{\partial x^2} + \ldots
+\end{align}
+
+Then \eqref{master1} becomes:
+\begin{align}
+\frac{\partial P(x,t)}{\partial t} &= \left( \epsilon \frac{\partial }{\partial x} + \epsilon^2 \tfrac{1}{2}\frac{\partial^2 }{\partial x^2} + \ldots \right)\left(\frac{B_x}{2\epsilon^2}-\frac{A_x}{2\epsilon} \right)P \nonumber \\
++&\left(- \epsilon \frac{\partial }{\partial x} + \epsilon^2 \tfrac{1}{2}\frac{\partial^2 }{\partial x^2} - \ldots \right) \left( \frac{B_x}{2\epsilon^2} + \frac{A_x}{2\epsilon} \right)P 
+\intertext{Collecting terms of common order $\epsilon$, }
+& = - \frac{\partial A_x P}{\partial x} + \tfrac{1}{2} \frac{\partial^2 B_x P }{\partial x^2} + \mathcal O(\epsilon^2)\label{FP1}
+\end{align}
+
+For small $\epsilon$ we can ignore the terms of $\mathcal O(\epsilon^2)$, and we have recovered the diffusion approximation.  Unfortunately, nature does not give us a parameter $\epsilon$ that goes to zero.  We expect that larger populations will have relatively smaller fluctuations (recall the introductory example) and hence this limit should have something to do with increasing the system size.  We make these notions more precise by expanding equation \eqref{master1} explicitly in terms of the system size.  This will lead us to a much richer and more satisfying description of demographic noise than the mathematical limit above.  
+
+
+
+
+# References

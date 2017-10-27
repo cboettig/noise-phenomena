@@ -2,4 +2,4 @@ Package: compendium
 Version: 0.1.0
 Depends: RcppRoll, rmarkdown, adaptivetau, nimble, tidyverse, ggthemes
 Suggests: ggthemes, hrbrthemes
-Remotes: cboettig/regimeshifts@0.0.1 
+Remotes: cboettig/regimeshifts@v0.0.1

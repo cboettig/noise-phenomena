@@ -14,10 +14,10 @@ abstract: |
 
 
 keywords:
-  - Stochasticity
-  - Demographic noise
-  - Environmental noise
-  - Colored noise
+  - stochasticity
+  - demographic noise
+  - environmental noise
+  - colored noise
   - quasi-cycles
 
 lineno: true
@@ -27,7 +27,7 @@ output: rticles::elsevier_article
 ---
 
 ```{r libraries, include=FALSE, message=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, dev="CairoPDF", fig.width=3.5, fig.height=3.5)
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, dev="CairoPDF", fig.width=7, fig.height=3.5)
 library(ggthemes)
 library(tidyverse)
 library(cowplot)
@@ -37,6 +37,7 @@ extrafont::loadfonts()
 #hrbrthemes::import_roboto_condensed()       # One-time use to set up fonts
 ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
 #ggplot2::theme_set(theme_bw()) # simpler theme if you do not have these fonts
+colours <- ptol_pal()(2)
 ```
 
 
@@ -105,7 +106,7 @@ Early ecological models were almost always formulated at the level of the popula
 
 Consider Levins' patch model, where $n$ individuals compete for a finite number of suitable habitats $N$.  Individuals die a constant rate $e$, and produce offspring at a constant rate $c$ who then have a probability of colonizing an open patch that is simply proportional to the fraction of available patches, $1 - n/N$.  
 
-Approximations of the so-called master equation, van Kampen system size approximation [@vanKampen1987] described in @Black2010, (rooted in the theorems of @Kurtz1977), 
+Approximations of the so-called master equation, van Kampen system size approximation [@vanKampen2007] described in @Black2010, (rooted in the theorems of [@Kurtz1970; @Kurtz1971]), 
 
 
 <!-- Intrinsic vs extrinisic: a matter of perspective.  demographic noise in one variable is environmental noise in another.  environmental variation usually implies the environmental variable is simply independent of the -->
@@ -141,21 +142,16 @@ While ecologists will sometimes assert that stochasticity is inherent: birth and
 
 <!-- Gillespie algorithm; Population level (SDE) vs agent-based vs individual. Show figure with small and large N  -->
 
-
-```{r warning=FALSE}
-read_csv("appendix/gillespie.csv", col_types = "cdiddd")  %>% 
+<!-- Figure 1: Gillespie simulations -->
+```{r gillespie, warning=FALSE, fig.width=7, fig.cap="Population dynamics from a Gillespie simulation of the Levins model with large (N=1000, panel A) and small (N=100, panel B) number of sites (blue) show relatively weaker effects of demographic noise in the bigger system. Models are otherwise identical, with e = 0.2 and c = 1 (code in appendix A). Theoretical predictions for mean and plus/minus one standard deviation shown in horizontal re dashed lines."}
+read_csv("appendixA/gillespie.csv", col_types = "cdiddd")  %>% 
+  mutate(system_size = recode(system_size, large = "A. 1000 total sites", small= "B. 100 total sites")) %>%
   ggplot(aes(x = time)) + 
-  geom_hline(aes(yintercept = mean), lty=2) + 
-  geom_hline(aes(yintercept = minus_sd), lty=2) + 
-  geom_hline(aes(yintercept = plus_sd), lty=2) + 
-  geom_line(aes(y = n), col="red") +
-  facet_wrap(~system_size, scales = "free_y") + 
-  labs(caption = 
-"Population dynamics from a Gillespie simulation of the Levins model with large (N=1000) 
-and small (N=100) number of sites (red) show relatively smaller effects of demographic 
-noise in the larger systme. Models are otherwise identical, with e = 0.2 and c = 1 (code
-in appendix A). Theoretical predictions for mean and plus/minus one standard deviation 
-shown in horizontal black dashed lines.")
+  geom_hline(aes(yintercept = mean), lty=2, col=colours[[2]]) + 
+  geom_hline(aes(yintercept = minus_sd), lty=2, col=colours[[2]]) + 
+  geom_hline(aes(yintercept = plus_sd), lty=2, col=colours[[2]]) + 
+  geom_line(aes(y = n), col=colours[[1]]) +
+  facet_wrap(~system_size, scales = "free_y") 
 ```
 
 
@@ -214,21 +210,22 @@ Much active research continues to explore the consequences of introducing these 
 
 Stochasticity can give rise to a wide array of interesting phenomena that are often at odds with our intuition. Such behavior often arises through an interaction between stochastic and non-linear elements of a system, both hallmark traits of ecological processes.  In this section, I highlight several examples that have shown up frequently in the literature and prove sufficiently tractable to provide a simple intuition for the mechanisms involved. 
 
-**Quasi-cycles**
+## Quasi-cycles 
 
-
-Understanding the origin of sustained oscillations has long been a central question in ecology [@Hastings1996; @Bjornstad2001].  The simple Lotka Volterra model produces only neutrally stable centers, while the more realistic model that introduces carrying capacity for prey as they compete for resources results in a model that produces only damped oscillations, eventually settling into a stable state (Figure 1a).  However, the introduction of relatively small noise into the system can be sufficient to excite the system into sustained oscillations (Figure 1b.)  In the example shown here, a simple predator-prey system is driven by environmental white noise $\xi_t$, with prey following the equation:
+Understanding the origin of sustained oscillations has long been a central question in ecology [@Hastings1996; @Bjornstad2001].  The simple Lotka Volterra model produces only neutrally stable centers, while the more realistic model that introduces carrying capacity for prey as they compete for resources results in a model that produces only damped oscillations, eventually settling into a stable state (Figure 1A).  However, the introduction of relatively small noise into the system can be sufficient to excite the system into sustained oscillations (Figure 1B).  In the example shown here, a simple predator-prey system is driven by environmental white noise $\xi_t$, with prey following the equation:
 
 $$x_{t+1} = x_t + x_t r \left(1 - \frac{x_t}{K}\right) - b x_t  y_t + \xi_{x,t}$$
 where $x_t$ is the prey density at time $t$, $r$ the growth rate, $K$ the carrying capacity, $b$ an encounter rate with the predator $y$, who obeys the equation:
 
 $$y_{t+1} = y_t + c  x_t  y_t - d  y_t+ \xi_{y,t} $$
-with $c$ the conversion ratio and $d$ the predator mortality rate.  Here we have assumed for the prey, $\xi_x \sim \mathcal{N(0, \sigma_x)}$, and similarly for the predator driven by $\xi_y$. Figure 1a shows examples for noise $\sigma_x = \sigma_y = 10^{-5}$, while panel 1b shows $\sigma_x = \sigma_y = 0.01$.  
+with $c$ the conversion ratio and $d$ the predator mortality rate.  Here we have assumed for the prey, $\xi_x \sim \mathcal{N(0, \sigma_x)}$, and similarly for the predator driven by $\xi_y$. Figure 1A shows examples for noise $\sigma_x = \sigma_y = 10^{-5}$, while Figure 1B shows $\sigma_x = \sigma_y = 0.01$.  
 
-
-```{r quasicycles, fig.width=7}
-read_csv("appendix/quasicycles.csv") %>%
+<!-- Figure 2: Quasi-cycles -->
+```{r quasicycles, fig.width=7, fig.cap="Panel A: under negligible environmental noise, the introduction of a carrying capacity damps Lotka-Volterra oscillations which eventually settle to a stable state.  Panel B: small noise induces quasi-cycles in the same model: sustained long-term oscillations predominately around the natural frequency of the original damped oscillations. Parameters for models shown are r = .1, K = 5,  b = .1, c = .1, d = .1, N = 800; code in Appendix A."}
+read_csv("appendixA/quasicycles.csv") %>%
   gather(species, population, -t, -sigma) %>%
+  mutate(sigma = as.factor(sigma)) %>%
+  mutate(sigma = recode(sigma, "1e-05" = "A.", "0.01" = "B.")) %>%
   rename(time = t) %>%
   ggplot(aes(time, population, col = species)) + geom_line() + 
   facet_wrap(~ sigma, ncol=2) + scale_color_ptol() #+ 
@@ -236,7 +233,6 @@ read_csv("appendix/quasicycles.csv") %>%
 #       y="Population density",
 #       title="Noise induces quasi-cycles",
 #       caption="Left panel: neglible  noise results only in damped oscillations.\nRight panel: small noise creates sustained oscillations.")
-#ggsave("figures/quasicycles.pdf")
 ```
 
 
@@ -254,20 +250,50 @@ Stochastic resonance highlights one way in which even small noise can play an im
 
 
 
-**Stochastic switching**
+## Stochastic switching
 
-We turn from stochastic resonance to oscillations of a very different sort, which do not resemble any deterministic process:
+We turn from stochastic resonance to oscillations of a very different sort, which do not resemble any deterministic process, as seen in Figure 3.
 
-```{r noisy_switch}
-read_csv("appendix/noisy_switch.csv")  %>% ggplot(aes(t,x)) + 
-  geom_line() #+ 
-  #labs(title="Stochastic switching", 
-  #     subtitle = "Noise drives transitions between alternative stable states")
-#ggsave("figures/noisy_switch.pdf")
+<!--Figure 3: Noisy switch -->
+```{r noisy_switch, fig.width=7, fig.cap="Stochastic switiching in May's model of alternative stable state dynamics.  r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 10000"}
 
+panel1 <- read_csv("appendixA/noisy_switch.csv")  %>%
+  ggplot(aes(t,x)) + 
+  geom_line(lwd=.1, col=colours[[1]]) +
+  labs(subtitle = bquote(bold(A.)))
+
+p <- list(r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 1e4)
+f <- function(x) x * p$r * (1 - x / p$K)
+g <- function(x) p$a * x ^ p$Q / (x^p$Q + p$H^p$Q)
+x <- seq(0,2, length.out = 100)
+
+panel2 <- data.frame(x, f = f(x), g = g(x)) %>%
+  ggplot(aes(x, y)) + 
+  geom_line(aes(y = f), col=colours[1], lwd=1) +
+  geom_line(aes(y = g), col=colours[2], lwd=1) + 
+  labs(x = bquote(X[t]), y = bquote(X[t+1]), subtitle= bquote(bold(B.)))
+
+library(gtable)
+library(grid) # low-level grid functions are required
+g1 <- ggplotGrob(panel1)
+g2 <- ggplotGrob(panel2)
+g <- cbind(g1, g2, size="first") # stack the two plots
+#g$widths <- unit.pmax(g1$widths, g2$widths) # use the largest widths
+grid.newpage()
+grid.draw(g)
 ```
 
+
+This pattern is characterized by long stretches during which fluctuations in the state variable remain concentrated around a high average value followed by sudden, rapid transistions into fluctuations concentrated around a lower value.  This behavior arises through the interaction of stochasticity and alternative stable state dynamics.  The simulation shown in Figure 3 is based on an herbivore consumption model first proposed by @May1977 as one of the early examples of the potential for alternative stable state dynamics, to which I have simply introduced an additional environmental noise term:
+
+$$X_{t+1} = X_t + \underbrace{X_t r \left(1 -\frac{X_t}{K} \right)}_{\textrm{Vegitation growth}}  - \underbrace{\frac{a X_t ^ Q}{X_t^ Q + H ^ Q}}_{\textrm{Vegitation consumption}} + \xi_t,$$
+where $\xi_t$ is normally distributed environmental variation with mean zero and standard deviation $\sigma$.  
+
 Stochastic fluctuations can also drive spontaneous shifts between alternative stable states.  
+
+[@Boettiger2012]
+
+[@Drake2013]
 
 - transition probabilities, waiting times
 
@@ -320,31 +346,31 @@ One of the most interesting aspects of noise is as a source of additional inform
 
 <!-- @Holling1996 is responsible for the introduction of the unfortunate term "Engineering Resilience" to mean precisely the same thing as mathematicians and theoretical ecologists have refered to as 'stability' for decades.  Further confusion has been sown by the introduction of the energy-potential diagram into ecology, where the depth of the potential well is not a local property-->
 
-
+<!-- Figure 4: Early warning signals -->
 ```{r tipping, fig.width=7, fig.height=7}
-tipping <- read_csv("appendix/tipping.csv") 
+tipping <- read_csv("appendixA/tipping.csv") 
 
 p1 <- tipping %>%
   select(-x) %>%
+  rename("A. autocorrelation" = autocorrelation, "B. variance" = variance) %>%
   gather(series, value, -t, -tip_time) %>%
-  ggplot(aes(t, value)) + geom_line() + 
-  geom_vline(aes(xintercept = tip_time), col="red", lty=2) +
+  ggplot(aes(t, value)) + geom_line(col=colours[[1]]) + 
+  geom_vline(aes(xintercept = tip_time), col=colours[[2]], lty=2) +
   facet_wrap(~series, ncol = 2, scales="free_y")  +
   theme_ipsum_rc() 
 p2 <- tipping %>% 
   select(t, population = x, tip_time) %>%
-  ggplot(aes(t, population)) + geom_line() + 
-  geom_vline(aes(xintercept = tip_time), col="red", lty=2) + 
+  ggplot(aes(t, population)) + geom_line(col=colours[[1]]) + 
+  geom_vline(aes(xintercept = tip_time), col=colours[[2]], lty=2) + 
   #scale_y_log10()  + 
   theme_ipsum_rc() + 
-  labs(subtitle = "Yeast population size", 
+  labs(subtitle = "C. Yeast population size", 
        caption = "Vertical red dashed line indicates tipping point location")
 
 library(cowplot)
 ggdraw() +
   draw_plot(p1, x = 0, y = .5, width = 1, height = 0.5) +
   draw_plot(p2, x = 0, y = 0, width = 1, height = 0.6)
-#ggsave("figures/tipping.pdf")
 ```
 
 

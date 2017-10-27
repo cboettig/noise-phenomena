@@ -17,6 +17,7 @@ library(tidyverse)
 
 ## plot themes, non-essential
 library(ggthemes)
+library(gridExtra)
 #library(hrbrthemes)
 #ggplot2::theme_set(hrbrthemes::theme_ipsum())
 ggplot2::theme_set(theme_bw())
@@ -154,19 +155,24 @@ May's model:
 
 $$X_{t+1} = X_t + \underbrace{X_t r \left(1 -\frac{X_t}{K} \right)}_{\textrm{Vegitation growth}}  - \underbrace{\frac{a X_t ^ Q}{X_t^ Q + H ^ Q}}_{\textrm{Vegitation consumption}} + \xi_t,$$
 
+
 ```{r}
+
 p <- list(r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 1e4)
 f <- function(x) x * p$r * (1 - x / p$K)
 g <- function(x) p$a * x ^ p$Q / (x^p$Q + p$H^p$Q)
 x <- seq(0,2, length.out = 100)
 
-p2 <- data.frame(x, f = f(x), g = g(x)) %>%
-  ggplot(aes(x, y)) + 
-  geom_line(aes(y = f), col=colours[1], lwd=1) +
-  geom_line(aes(y = g), col=colours[2], lwd=1) + labs(x = bquote(X[t]), y = bquote(X[t+1]))
 
 
+data.frame(x, growth = f(x), consumption = g(x)) %>%
+  gather(curve, y, -x) %>%
+  ggplot(aes(x, y, col=curve)) +
+  geom_line(lwd=1) + 
+  scale_color_ptol() + 
+  labs(x = bquote(X[t]), y = bquote(X[t+1]), subtitle= bquote(bold(B.)))
 ```
+
 
 ```{r}
 
@@ -367,7 +373,8 @@ p1 <- tipping %>%
   gather(series, value, -t, -tip_time) %>%
   ggplot(aes(t, value)) + geom_line() + 
   geom_vline(aes(xintercept = tip_time), col="red", lty=2) +
-  facet_wrap(~series, ncol = 2, scales="free_y") + theme_ipsum() + 
+  facet_wrap(~series, ncol = 2, scales="free_y") +
+  #theme_ipsum() + 
   labs(title="A: Early warning signs")
 
 p2 <- tipping %>% 
@@ -375,8 +382,9 @@ p2 <- tipping %>%
   ggplot(aes(t, population)) + geom_line() + 
   geom_vline(aes(xintercept = tip_time), col="red", lty=2) + 
   scale_y_log10() + 
-  theme_ipsum()+ labs(title="B: Population density",
-                      caption = "Vertical red dashed line indicates tipping point location")
+#  theme_ipsum() + 
+  labs(title="B: Population density",
+              caption = "Vertical red dashed line indicates tipping point location")
 
 library(cowplot)
 ggdraw() +

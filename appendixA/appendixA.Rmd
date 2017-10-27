@@ -70,7 +70,9 @@ sim_large <- adaptivetau::ssa.exact(init.values = c(n = 500),
                        transitions, rateF,
                        params = list(c=c, e=e, N=1000),
                        tf=30) %>% as_tibble()
+```
 
+```{r}
 theory <- 
 list(small = 100,large = 1000) %>%
   map_dfr(function(N){
@@ -78,13 +80,19 @@ list(small = 100,large = 1000) %>%
     mutate(plus_sd = mean + sqrt(N * e / c),
            minus_sd = mean - sqrt(N * e / c))
   }, .id = "system_size")
+```
 
+
+```{r}
+## Bind together both simulation results and theory results
 gillespie <- bind_rows("large"=sim_large, 
                        "small"=sim_small,  
                        .id = "system_size") %>% bind_rows(theory)
 write_csv(gillespie, "gillespie.csv")
+```
 
 
+```{r}
 read_csv("gillespie.csv", col_types = "cdiddd")  %>% 
   ggplot(aes(x = time)) + 
   geom_hline(aes(yintercept = mean), lty=2) + 
@@ -237,7 +245,6 @@ df <- map_dfr(1:10000,
               .id = "rep")
 ```
 
-
 ```{r}
 df %>% 
   filter(x > 0) %>% 
@@ -245,12 +252,7 @@ df %>%
   summarise(ave = mean(x), sd = sd(x)) %>%
   mutate(equib = equib) %>%
   write_csv("inflation.csv")
-
-
-
 ```
-
-
 
 ```{r}
 read_csv("inflation.csv") %>% 
@@ -260,27 +262,6 @@ read_csv("inflation.csv") %>%
   geom_line(lwd=1) + 
   scale_color_ptol() + 
   coord_cartesian(xlim=c(100,500), ylim=c(1.2, .5))
-
-```
-
-
-
-
-
-```{r}
-p <- list(r = .5, K = 2.1, Q = 5, H = .4, sigma = .04, a = 0.27, N = 1e4)
-
-f <- function(x) x * p$r * (1 - x / p$K)
-g <- function(x) p$a * x ^ p$Q / (x^p$Q + p$H^p$Q)
-
-x <- seq(0,2, length.out = 100)
-df <- data.frame(x, f = f(x), g = g(x)) 
-
-ggplot(df, aes(x)) + geom_line(aes(y = f)) + geom_line(aes(y = g), col="red") 
-
-ggplot(df, aes(x)) + geom_line(aes(y = f-g)) + 
-  geom_hline(aes(yintercept=0), lty=2) +
-  coord_cartesian(xlim = c(0,1.5), ylim=c(-.1,.1))  
 ```
 
 
@@ -291,9 +272,6 @@ ggplot(df, aes(x)) + geom_line(aes(y = f-g)) +
 
 
 # Tipping points
-
-
-
 
 
 ### Configuration for Dai model
@@ -386,10 +364,7 @@ p2 <- tipping %>%
   labs(title="B: Population density",
               caption = "Vertical red dashed line indicates tipping point location")
 
-library(cowplot)
-ggdraw() +
-  draw_plot(p2, x = 0, y = 0, width = 1, height = 0.5) +
-  draw_plot(p1, x = 0, y = .4, width = 1, height = 0.5)
+gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1), c(2,2)))
 
 ```
 

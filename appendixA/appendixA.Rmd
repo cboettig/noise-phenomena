@@ -15,11 +15,11 @@ library(regimeshifts) ## devtools::install_github("cboettig/regimeshifts")
 library(adaptivetau)
 library(tidyverse)
 
-
 ## plot themes, non-essential
-library(hrbrthemes)
 library(ggthemes)
-ggplot2::theme_set(hrbrthemes::theme_ipsum())
+#library(hrbrthemes)
+#ggplot2::theme_set(hrbrthemes::theme_ipsum())
+ggplot2::theme_set(hrbrthemes::theme_bw())
 colours <- ptol_pal()(2)
 
 ```

@@ -19,7 +19,7 @@ library(tidyverse)
 library(ggthemes)
 #library(hrbrthemes)
 #ggplot2::theme_set(hrbrthemes::theme_ipsum())
-ggplot2::theme_set(hrbrthemes::theme_bw())
+ggplot2::theme_set(theme_bw())
 colours <- ptol_pal()(2)
 
 ```

@@ -5,6 +5,6 @@ pipeline:
       - apt-get update && apt-get -y install fonts-roboto
       - R -e "devtools::install()"
       - R -e 'rmarkdown::render("appendixA/appendix.Rmd")'
-        #      - R -e 'lapply(list.files(pattern=".*\\.Rmd", recursive=TRUE), rmarkdown::render)'
+        ##      - R -e 'lapply(list.files(pattern=".*\\.Rmd", recursive=TRUE), rmarkdown::render)'
 
 

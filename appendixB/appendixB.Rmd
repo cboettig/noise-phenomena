@@ -198,7 +198,7 @@ This expression has the wonderful properties of being both simple and general.
 The Levins meta-population model is given by
 
 \begin{align}
-\dot n = c n \left(1 - \frac{n}{N}\right) - e n \label{levins}
+\frac{\ud n}{\ud t} = c n \left(1 - \frac{n}{N}\right) - e n \label{levins}
 \end{align}
 
 where $n$ is the number of occupied patches, $N$ the total number of patches, $c$ is the colonization rate, and $e$ the extinction rate.  The colonization term provides our birth rate function and the extinction rate the death rate function.  The total number of patches $N$ is an obvious choice for the system size $\Omega$.  From this we can immediately apply the above theory.  The jump moments written in the macroscopic variable are:

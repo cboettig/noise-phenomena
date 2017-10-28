@@ -9,7 +9,8 @@ address:
   
 layout: preprint
 abstract: |
-  In this paper, I provide a brief synthesis of ecological research in stochastic phenomena. Noise, as the term itself suggests, is most often seen a nuisance to ecological insight, a inconvenient reality that must be acknowledged, a haystack that must be stripped away to reveal the processes of interest underneath. Yet despite this well-earned reputation, noise is often interesting in its own right: noise can induce novel phenomena that could not be understood from some underlying determinstic model alone.  Nor is all noise the same, and close examination of differences in in frequency, color or magnitude can reveal insights that would otherwise be inaccessible.  While an exhaustive review is beyond the scope of this piece, I endeavor to highlight some of the most interesting examples of both noise-induced phenomena and noise-derived information, and point the way towards yet uncharted territory.
+  In this paper, I provide a brief synthesis of ecological research in stochastic phenomena. Noise, as the term itself suggests, is most often seen a nuisance to ecological insight, a inconvenient reality that must be acknowledged, a haystack that must be stripped away to reveal the processes of interest underneath. Yet despite this well-earned reputation, noise is often interesting in its own right: noise can induce novel phenomena that could not be understood from some underlying determinstic model alone.  Nor is all noise the same, and close examination of differences in in frequency, color or magnitude can reveal insights that would otherwise be inaccessible.  Yet with each aspect of stochasticity leading to some new or unexpected behavior, the time is right to move beyond the familiar refrain of "everything is important" [@Bjornstad2001].  Stochastic phenomena can suggest new ways of inferring process from pattern, and thus spark more dialog between theory and empirical perspectives that best advances the field as a whole. I highlight a few compelling examples, while observing that the study of stochastic phenomena are only beginning to make this translation into empirical inference.  There are rich opportunities at this interface in the years ahead.  
+  
   
 
 
@@ -26,18 +27,24 @@ bibliography: refs.bib
 output: rticles::elsevier_article
 ---
 
-```{r libraries, include=FALSE, message=FALSE}
+```{r libraries, include=FALSE, message=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, dev="CairoPDF", fig.width=7, fig.height=3.5)
-library(ggthemes)
 library(tidyverse)
-library(cowplot)
-library(hrbrthemes)
-extrafont::loadfonts()
-#extrafont::font_import()                    # One-time use to set up fonts
-#hrbrthemes::import_roboto_condensed()       # One-time use to set up fonts
-ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
-#ggplot2::theme_set(theme_bw()) # simpler theme if you do not have these fonts
+library(gridExtra)
+library(ggthemes)
 colours <- ptol_pal()(2)
+```
+
+```{r suggested_libs}
+library(hrbrthemes)
+library(extrafont)
+
+##extrafont::font_import(prompt=FALSE)    # One-time use to set up fonts, can be slow.
+hrbrthemes::import_roboto_condensed()   # One-time use to set up fonts 
+extrafont::loadfonts()
+ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
+
+#ggplot2::theme_set(theme_bw()) # simpler theme if you do not have these fonts
 ```
 
 
@@ -46,24 +53,14 @@ colours <- ptol_pal()(2)
 We hope that these papers will combine a mix of synthetic reviews of the current state of an area, as well as insights into how the field has developed during the last twenty years, discussion of current important questions, and developments and insights that would significantly advance the field. Although certainly not necessary, if there are any past Ecology Letters papers that have had a profound impact on the development of an area – be it beneficial or not – a brief discussion of that impact would be appropriate. We also hope that articles will be written in a thoughtful style, but also provocative if appropriate.
 
 
-- Key questions
-- Key advances
-
+Highlight *key questions* & *key advances*
 Moving beyond "everything is important" [@Bjornstad2001; @Kingsland1985]
 
-@Bjornstad2001 future: more MCMC methods. More mechanistic models.  dealing with unobserved dynamics
-
-Noise -> informer
-
+(@Bjornstad2001 future: more MCMC methods. More mechanistic models.  dealing with unobserved dynamics)
 
 Shift from noise as nuiance to noise as opportunity
 Stochastic phenomena outside of theory -- early warning signals
 
-Need for greater tanslation
-
-Discuss out of scope:  
- - behavior
- - evolutionary dynamics examples?? 
 
 
 Bialek's rules
@@ -96,6 +93,7 @@ Our first stop will be into research into the origins of noise.  This will not o
 What is noise? Where does it come from?  It is important to bear in mind that whenever stochasticity is introduced into a model, it is only as a simplification or summary of the effects of a large number of other processes, often occurring at different scales.  Simply put, *noise is all that we leave out of our model*.  Frequently, this additional noise is tacked on to the end of a model, as if as an afterthought, 
 
 $$X_{t+1} = f(X_t) + \xi_t$$
+
 with the assertion that $\xi$ is some normally distributed noise term reflecting the combined effects of any large array of possible factors that also influence the value of our state, $X$.  While not always wrong, this hand-waving over-simplification is increasingly replaced with a more ecologically and mechanistically grounded description for the origins of noise.  With the exception of quantum mechanics (and there only at scales that have no relevance to ecology), stochasticity is not an inherent property of nature but rather an emergent property of many events occurring at a different scale.  Coins and dice obey the physical laws of motion; only variation in how they are tossed (i.e. something complex we do not usually model) creates randomness.  The term "noise" itself reflects this emergent rather than fundamental origin: the combination of hundreds of voices and sounds each individually distinct blends together into a background of noise. Statistical mechanics tells us that temperature is a measure of the average speed of individual molecules in a gas -- any given molecule will experience a range of possible speeds but by itself has no notion of temperature.  Likewise, stochasticity enters our ecological models because our quantities of interest, such as the density of a population, is but an average over a lower-level, discrete process of individual births and deaths. Stochasticity that emerges directly from discrete individual events that underlie the process described by our model are considered *intrinsic stochasticity*, commonly referred to as *demographic stochasticity* in ecological literature, as it usually arises in the context scaling from individual demographic events to population level descriptions. An important aspect of this demographic stochasicity is that it scales with the square root of the "system size," so that for very large populations the resulting fluctuations are relatively small. On the other hand, *extrinsic stochasticity*, usually referred to as *environmental stochasticity* in the ecological literature, arises in processes that are not described by our model, but merely impact the value of some parameter of our model; for instance, fluctuations in temperature may drive variation in a death rate, or fluctuations in rainfall drive variation in carrying capacity.  
 
 <!--
@@ -109,16 +107,15 @@ Consider Levins' patch model, where $n$ individuals compete for a finite number 
 Approximations of the so-called master equation, van Kampen system size approximation [@vanKampen2007] described in @Black2010, (rooted in the theorems of [@Kurtz1970; @Kurtz1971]), 
 
 
-<!-- Intrinsic vs extrinisic: a matter of perspective.  demographic noise in one variable is environmental noise in another.  environmental variation usually implies the environmental variable is simply independent of the -->
+$$\frac{\mathrm{d} \langle n \rangle }{dt}  = b(\langle n \rangle) - d(\langle n \rangle)$$
+$$\frac{\mathrm{d} \sigma^2 }{dt}  = 2 \left( \frac{\partial b(n) }{\partial n} - \frac{\partial d(n) }{\partial n}\right) \sigma^2 + b(n) + d(n) $$
 
 
-Our variables of interest themselves
 
-The behavior of our variables depends on some quantity which itself is a
-
-<!-- Stochasticity is not inherent -->
 
 <!-- 
+SDE notation
+
 $$\textrm{d} X_t = \mu(X_t) \textrm{d}t + \sigma(X_t) \textrm{d}B_t$$
 
 An SDE. Note the separation of the differential elements, which reveal that this is actually shorthand for an integral equation:
@@ -147,10 +144,10 @@ While ecologists will sometimes assert that stochasticity is inherent: birth and
 read_csv("appendixA/gillespie.csv", col_types = "cdiddd")  %>% 
   mutate(system_size = recode(system_size, large = "A. 1000 total sites", small= "B. 100 total sites")) %>%
   ggplot(aes(x = time)) + 
-  geom_hline(aes(yintercept = mean), lty=2, col=colours[[2]]) + 
-  geom_hline(aes(yintercept = minus_sd), lty=2, col=colours[[2]]) + 
-  geom_hline(aes(yintercept = plus_sd), lty=2, col=colours[[2]]) + 
-  geom_line(aes(y = n), col=colours[[1]]) +
+  geom_hline(aes(yintercept = mean), lty=2, col=colours[2]) + 
+  geom_hline(aes(yintercept = minus_sd), lty=2, col=colours[2]) + 
+  geom_hline(aes(yintercept = plus_sd), lty=2, col=colours[2]) + 
+  geom_line(aes(y = n), col=colours[1]) +
   facet_wrap(~system_size, scales = "free_y") 
 ```
 
@@ -206,9 +203,35 @@ sources of noise.
 Much active research continues to explore the consequences of introducing these more explicitly motivated and interacting sources of noise. With some grounding in the origins of different types of noise in place, we are ready to move to our second stop to see how this noise can drive the creation of novel phenomena on a macroscopic level.  
 
 
+
 # Noise the creator: Noise can induce novel phenomena
 
 Stochasticity can give rise to a wide array of interesting phenomena that are often at odds with our intuition. Such behavior often arises through an interaction between stochastic and non-linear elements of a system, both hallmark traits of ecological processes.  In this section, I highlight several examples that have shown up frequently in the literature and prove sufficiently tractable to provide a simple intuition for the mechanisms involved. 
+
+<!-- Say something about how small noise; particularly demographic noise which is usually small, seems like it should thus be negligible,
+
+**Noise need not be large to be important**.
+-->
+
+**Persistence and coexistence**.  A natural focus of much research into stochastic ecological systems has been on understanding the implications for persistence of individual and coexistence of interacting species. Demographic noise in particular has fundamental implications for the long-term equilibrium: any finite population, however big, is guarenteed to eventually go extinct under demographic noise.  While extinction is certainly a phenonomenon that stands in stark contrast to the long-term behavior of the corresponding deterministic equation, this result is not particularly useful: "eventually" could be longer than the existence of the planet itself. Rather, it is a reminder that we must be careful about how we describe the 'long-term' behavior of a model.  In place of the mathematical notion of a stationary distribution to describe the long-term behavior of a stochastic model, analysis of demographic stochasticity focuses on the concept of quasi-stationary distributions, which in many cases correspond more closely to the equilibria of their deterministic counterparts [@Schreiber2017]. 
+
+
+<!--
+[@Schreiber2008] complex life histories
+- Species coexistence  ([@Hart2016])
+-->
+
+
+**Bet hedging**
+
+
+**Inflation**
+
+Stochasticity can 
+
+<!-- two concurrent flat lines makes for a poor figure -->
+
+
 
 ## Quasi-cycles 
 
@@ -252,84 +275,71 @@ Stochastic resonance highlights one way in which even small noise can play an im
 
 ## Stochastic switching
 
-We turn from stochastic resonance to oscillations of a very different sort, which do not resemble any deterministic process, as seen in Figure 3.
+We turn from stochastic resonance to oscillations of a very different sort, which do not resemble any deterministic process, as seen in Figure 3A.
 
 <!--Figure 3: Noisy switch -->
 ```{r noisy_switch, fig.width=7, fig.cap="Stochastic switiching in May's model of alternative stable state dynamics.  r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 10000"}
 
-panel1 <- read_csv("appendixA/noisy_switch.csv")  %>%
+p <- list(r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 1e4)
+
+theory <- 
+  tibble(x= seq(0,2, length.out = 100)) %>%
+  mutate(growth = x * p$r * (1 - x / p$K), 
+         consumption = p$a * x ^ p$Q / (x^p$Q + p$H^p$Q)) %>%
+  mutate(potential = - cumsum(growth - consumption)) %>%
+  gather(curve, y, -x, -potential) 
+
+
+p1 <- read_csv("appendixA/noisy_switch.csv")  %>%
   ggplot(aes(t,x)) + 
   geom_line(lwd=.1, col=colours[[1]]) +
   labs(subtitle = bquote(bold(A.)))
 
-p <- list(r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 1e4)
-f <- function(x) x * p$r * (1 - x / p$K)
-g <- function(x) p$a * x ^ p$Q / (x^p$Q + p$H^p$Q)
-x <- seq(0,2, length.out = 100)
-
-panel2 <- data.frame(x, f = f(x), g = g(x)) %>%
-  ggplot(aes(x, y)) + 
-  geom_line(aes(y = f), col=colours[1], lwd=1) +
-  geom_line(aes(y = g), col=colours[2], lwd=1) + 
+p2 <-  theory %>%
+  ggplot(aes(x, y, col=curve)) +
+  geom_line(lwd=1) + 
+  scale_color_ptol() + 
   labs(x = bquote(X[t]), y = bquote(X[t+1]), subtitle= bquote(bold(B.)))
 
-library(gtable)
-library(grid) # low-level grid functions are required
-g1 <- ggplotGrob(panel1)
-g2 <- ggplotGrob(panel2)
-g <- cbind(g1, g2, size="first") # stack the two plots
+p3 <-  theory %>%
+  ggplot(aes(x, potential)) + 
+  geom_line(col=colours[1], lwd=1) + 
+  coord_cartesian(xlim=c(0,1.6), ylim=c(-1.15,-0.9)) + 
+  labs(subtitle = bquote(bold(C.)))
+
+
+gridExtra::grid.arrange(p1,p2,p3, layout_matrix = rbind(c(1,1), c(2,3)))
+
 #g$widths <- unit.pmax(g1$widths, g2$widths) # use the largest widths
-grid.newpage()
-grid.draw(g)
+#grid.newpage()
+#grid.draw(g)
 ```
 
 
-This pattern is characterized by long stretches during which fluctuations in the state variable remain concentrated around a high average value followed by sudden, rapid transistions into fluctuations concentrated around a lower value.  This behavior arises through the interaction of stochasticity and alternative stable state dynamics.  The simulation shown in Figure 3 is based on an herbivore consumption model first proposed by @May1977 as one of the early examples of the potential for alternative stable state dynamics, to which I have simply introduced an additional environmental noise term:
+This pattern is characterized by long stretches during which fluctuations in the state variable remain concentrated around a high average value followed by sudden, rapid transistions into fluctuations concentrated around a lower value.  This behavior arises through the interaction of stochasticity and alternative stable state dynamics.  The simulation shown in Figure 3A is based on an herbivore consumption model first proposed by @May1977 as one of the early examples of the potential for alternative stable state dynamics, to which I have simply introduced an additional environmental noise term:
 
-$$X_{t+1} = X_t + \underbrace{X_t r \left(1 -\frac{X_t}{K} \right)}_{\textrm{Vegitation growth}}  - \underbrace{\frac{a X_t ^ Q}{X_t^ Q + H ^ Q}}_{\textrm{Vegitation consumption}} + \xi_t,$$
-where $\xi_t$ is normally distributed environmental variation with mean zero and standard deviation $\sigma$.  
+$$X_{t+1} = X_t + \underbrace{X_t r \left(1 -\frac{X_t}{K} \right)}_{\textrm{Vegitation growth, } g(X_t)}  - \underbrace{\frac{a X_t ^ Q}{X_t^ Q + H ^ Q}}_{\textrm{Vegitation consumption, } c(X_t)} + \xi_t,$$
+where $\xi_t$ is normally distributed environmental variation with mean zero and standard deviation $\sigma$. Figure 3B shows separate curves corresponding the parts of the model describing vegetation growth and vegetation consumption, using the same parameters as shown in the simulation panel, 3A.  Equilibria exist whenever growth balances consumption.  For the parameters shown, the S-shaped curve of the Type-III consumption pattern crosses the quadratic curve of logistic growth at four separate locations.  When growth is larger than consumption before the crossing, and thus smaller after, the point is stable, otherwise it is unstable.  Consequently, we can see two stable points, in the neighborhood of $X_t \approx 1.2$ and $X_t \approx 0.5$, closely matching the average fluctuations seen in the simulation in 3A.  Stochastic fluctuations drive spontaneous shifts between these alternative stable states.  
 
-Stochastic fluctuations can also drive spontaneous shifts between alternative stable states.  
+The concept of a potential well, Figure 3C, is often invoked when describing the behavior of alternative stable states.  The curve for the potential well, $U(x)$ is defined as the negative integral of the population growth rate,
 
-[@Boettiger2012]
+$$U(x) = -\int_0^x f(y) \textrm{d} y $$ 
+where in our model $f(y)$ is vegetation growth minus consumption, $f(y) = g(y) - c(y)$.  The motivation comes from physics, where $f$ is a force and $U$ the corresponding potential energy.  This suggests a convenient analogy to gravity, often implied by drawing a ball inside the curve and referring to this as a "ball-in-cup" diagram.  The potential function is particularly instructive for understanding stochastic switching under small noise, as in our simulation in Figure 3, where it is straight-forward to show [e.g. @Feller; @vanKampen2007] that the probability of a transition is proportional the exponential of the depth of the well from the lowest point to the separation barrier, (a result that is familiar as Arrhenius law of activation energy to grade-school students of chemistry).  This is effect is visible even in the short simulation shown in 3A, which spends longer times in the lower state which has the deeper well.  (Readers are encouraged to experiment with this by adjusting the parameters of the simulation in the included code).  Unfortunately, the literature is not always careful in describing how this potential well diagram arises, which has caused it to become a source for as least as much confusion as it is of insight.  While the curves in Figure 3B can be clearly associated with underlying mechanisms of rates: logistic growth and consumption with handling time, the same is not true of the potential: it is much harder to have a good intutition about the 'negative integral of the difference growth and consumption,' and how it would change in response to, say, a larger carrying capacity $K$ or higher consumption rate $a$.  While the x-axis of the potential diagram remains the same: the system state, the conceptual problem is clearly evident in the usual ambiguity describing the y-axis in such ball-in-cup models. 
 
-[@Drake2013]
-
-- transition probabilities, waiting times
-
-**Inflation**
-
-Stochasticity can 
-
-<!-- two concurrent flat lines makes for a poor figure -->
-
-**Persistence and coexistence**
-
-One of the most fundamental aspects of stochasticity are the implications for long-term persistence of any given population and the stable coexistence of interacting species.  
-
-**Bet hedging**
+Despite the nearly ubiquitous association of a ball-in-cup model with ecological discussions of resilience and stability, this potential well diagram (Figure 3C) is also a source of confusion on the topic.  As we have seen, the most salient feature of this diagram is the depth of each well: transistion probabilities (under small noise) depend only on the depth of the well and not the steepness of the well, the distance between the wells or between well and tipping point barrier.  However, it is important to remember that because the potential function is defined by the above integral, it in fact already combines two more elementary and mechanistically precise quantities from the growth equation: the slope of the growth rate (stability) and the distance to the tipping point (size of the basin of attraction).  Both a steeper negative slope or a longer distance to integrate over between stable and unstable points will create a deeper well. 
 
 
+Empirical evidence for stochastic switching in ecological timeseries is limited by the long time scale usually required. Because a single stochastic transisition between alternative stable states appears as such a dramatic deviation from the previous pattern (as illustrated in Figure 3A), it is often tempting to assume the change could only be the result of some sudden external force or change in the environment, so it is worth remembering that given long enough, these transitions can happen entirely by chance stochasticity [@Boettiger2012; @Drake2013]. However, these transistions are most likely to observed in systems with relatively shallow potential wells.  This is mostly likely to occur of some external change is slowly making the potential well shallower and thus transitions more likely -- a phenomenon that has become to be known as "flickering" and suggested as a potential early warning sign of an approaching transition [@Brock2010].  Examples of flickering between alternative stable states have been suggested in data ranging from geological timescales at the end of glaciation in the Pleistocene [@Taylor1993] to ecological scales over a few decades in lake ecosystems [@Wang2012].  Stochastic transitions between bistable states are thought to play an important role in genetic switches, where among other phenomena this mechanism can explain the emergence of two alternative phenotypes in clonally reproducing microbial populations, which can act to buffer the population in a changing environment  [@Balaban2004]. 
+
+<!--
 
 **Further examples**
 
 
-@Read2007 <!-- Stochasticity generates an evolutionary instability for infectious disease -->
+- @Read2007  Stochasticity generates an evolutionary instability for infectious disease 
+- Spatial pattern formation: Turning patterns found in plankton-herbivore dynamics [@Levin1976]
 
-
-[@Schreiber2008] decreasing variance before crash
-
-- Spatial pattern formation 
-
-Turning patterns found in plankton-herbivore dynamics [@Levin1976]
-
-- Population persistence (bet-hedging)
-
-
-Individual heterogeneity: spatial spread? persistence? 
-
-- Species coexistence  ([@Hart2016])
-
+-->
 
 # Noise the informer: Noise can provide novel information
 
@@ -360,18 +370,17 @@ p1 <- tipping %>%
   theme_ipsum_rc() 
 p2 <- tipping %>% 
   select(t, population = x, tip_time) %>%
-  ggplot(aes(t, population)) + geom_line(col=colours[[1]]) + 
-  geom_vline(aes(xintercept = tip_time), col=colours[[2]], lty=2) + 
+  ggplot(aes(t, population)) + geom_line(col=colours[1]) + 
+  geom_vline(aes(xintercept = tip_time), col=colours[2], lty=2) + 
   #scale_y_log10()  + 
   theme_ipsum_rc() + 
   labs(subtitle = "C. Yeast population size", 
        caption = "Vertical red dashed line indicates tipping point location")
 
-library(cowplot)
-ggdraw() +
-  draw_plot(p1, x = 0, y = .5, width = 1, height = 0.5) +
-  draw_plot(p2, x = 0, y = 0, width = 1, height = 0.6)
+gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1), c(2,2)))
+
 ```
+
 
 
 Challenges remain in distinguishing these patterns from other causes [@Boettiger2013a] which will ultimately require more domain-specific information  [@Boettiger2013b]. 

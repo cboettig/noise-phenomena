@@ -2,15 +2,21 @@
 title: "From noise to knowledge: how randomness generates novel phenomena and information"
 author:
   - name: "Carl Boettiger"
-    affiliation: a, 1
+    affiliation: a
+    email: "cboettig@berkeley.edu"
+
 address:
   - code: a
     address: "Dept of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley CA 94720-3114, USA"
-  
-layout: preprint
+
+csl: ecology-letters.csl
+bibliography: refs.bib
+output: rticles::elsevier_article  
+layout:  5p # review = doublespace, 3p = singlespace, 5p = two-column
+#preamble: "\\usepackage[nomarkers]{endfloat}"
+
 abstract: |
   In this paper, I provide a brief synthesis of ecological research in stochastic phenomena. Noise, as the term itself suggests, is most often seen a nuisance to ecological insight, a inconvenient reality that must be acknowledged, a haystack that must be stripped away to reveal the processes of interest underneath. Yet despite this well-earned reputation, noise is often interesting in its own right: noise can induce novel phenomena that could not be understood from some underlying determinstic model alone.  Nor is all noise the same, and close examination of differences in in frequency, color or magnitude can reveal insights that would otherwise be inaccessible.  Yet with each aspect of stochasticity leading to some new or unexpected behavior, the time is right to move beyond the familiar refrain of "everything is important" [@Bjornstad2001].  Stochastic phenomena can suggest new ways of inferring process from pattern, and thus spark more dialog between theory and empirical perspectives that best advances the field as a whole. I highlight a few compelling examples, while observing that the study of stochastic phenomena are only beginning to make this translation into empirical inference.  There are rich opportunities at this interface in the years ahead.  
-  
   
 
 
@@ -21,10 +27,6 @@ keywords:
   - colored noise
   - quasi-cycles
 
-lineno: true
-
-bibliography: refs.bib
-output: rticles::elsevier_article
 ---
 
 ```{r libraries, include=FALSE, message=FALSE, warning=FALSE}
@@ -61,8 +63,6 @@ Moving beyond "everything is important" [@Bjornstad2001; @Kingsland1985]
 Shift from noise as nuiance to noise as opportunity
 Stochastic phenomena outside of theory -- early warning signals
 
-
-
 Bialek's rules
 1. Noise isn't negligible: photon counting, chemotaxis, 
 2. No fine tuning: developmental patterning? ion channels/ stochastic switches? 
@@ -75,13 +75,11 @@ Bialek's rules
 
 Stochasticity is most often thought of as something which obscures patterns we are trying to infer.  This is a simple consequence of modeling: as discussed above, variables of interest to the processes in question are modeled explicitly (e.g. change in population density as it depends on the current density), everything else is just noise.  Most statistical inference in ecology is built solely to deal with this problem: pulling back the veil of noise to reveal processes of interest.  Unfortunately, given the high levels of variation and relatively limited data typical in ecological analyses, this can be a significant challenge, and even as statistical and computational advances provide more powerful and accessible inference tools, the task only gets harder.  For instance, few ecological concepts are more central than the notion of density dependence: that competition in some form or other should limit a species ability to grow without bound.  Yet establishing statistical evidence for density dependence is remarkably difficult, as illustrated by a landmark study of @Knape2011.  Using time series from the Global Population Dynamics Database (GPDD) @Knape2011 show that once one accounts for the potential for measurement error in addition to environmental stochasticity -- an unavoidable source of noise in most ecological data -- it becomes difficult to find evidence for even the simplest models of density dependence in the majority of available time series.  Faced with such uncertainty, it is tempting to throw up our hands and wait until some prophesied deluge of streaming micro-sensors stapled to every organism provide enough signal to beat back the noise. Fortunately, this has not been the path taken.  
 
-
 <!-- okay, claiming this for the last 2 decades might be overly provocative?-->
 Over the past twenty years, ecological theory, modelling, and methods have increasingly elucidated the role of noise not only to *obscure* patterns but to *create* them.  This period marked a transition away from the intense focus on simple models which exhibited deterministic chaos that had enchanted much of theoretical ecology in the previous two decades [@Bjornstad2001] in favor of more complex and stochastic models.  Of particular interest has been those conceptual advances that have bridged the divide from theoretical to empirical interest -- not merely the introduction of "real data" in a theoretical paper, but rather the concepts that take on a life of their own in the larger research community.  Consequently, this paper seeks to be a bridge between two audiences: theoretical researchers already expert in noisy phenomena but in interested in reaching wider empirical application, and also primarily empirical researchers seeking an entrance into noisy phenomena.  
 
-
 <!-- Regarding simulation examples -->
-In this spirit, each of the examples illustrated here is coupled with concise and efficient R code in the appendix to both reproduce and further explore the simulations.  While examples of noisy phenomena in natural systems are also crucial, matching the pattern does not necessarily mean we have also matched the process behind the data.  The examples cited from the literature here offer some of the best empirical evidence of these phenomena, but I encourage readers to also experiment with the example code provided.  Simulations permit poking and prodding of empirical investigation quickly and with little mathematical formalism in the way.  In the code provided, most stochastic models are expressed in the BUGS language, which may be more familiar to empirical readers than corresponding mathematical formulas. This also permits both efficient simulation and potential estimation of parameters given sample data using the R package, NIMBLE [@DeValpine2017]. A copy of this appendix is maintained at <https://github.com/cboettig/noise-phenomena>, and bug reports, suggestions or help requests are welcome through the issue tracker.  A second appendix provides more mathematical details for interested readers.  With these in place, we are ready to begin our tour through three major areas of noisy phenomena: Origins of noise, emergent phenomena, and noise-driven inference.
+In this spirit, each of the examples illustrated here is coupled with concise and efficient R code in the appendix to both reproduce and further explore the simulations.  While examples of noisy phenomena in natural systems are also crucial, matching the pattern does not necessarily mean we have also matched the process behind the data.  The examples cited from the literature here offer some of the best empirical evidence of these phenomena, but I encourage readers to also experiment with the example code provided.  Simulations permit poking and prodding of empirical investigation quickly and with little mathematical formalism in the way.  In the code provided, most stochastic models are expressed in the BUGS language, which may be more familiar to empirical readers than corresponding mathematical formulas. This also permits both efficient simulation and potential estimation of parameters given sample data using the R package, NIMBLE [@DeValpine2017]; allowing the deductive models illustrated here to readily function as inductive models with parameters inferred from time-series data. A copy of this appendix is maintained at <https://github.com/cboettig/noise-phenomena>, and bug reports, suggestions or help requests are welcome through the issue tracker.  A second appendix provides more mathematical details for interested readers.  With these in place, we are ready to begin our tour through three major areas of noisy phenomena: Origins of noise, emergent phenomena, and noise-driven inference.
 
 <!-- MAP -->
 Our first stop will be into research into the origins of noise.  This will not only let us set up definitions for terms and concepts we will encounter throughout, but also introduce some of the fundamental mathematical and computational tooling needed in our tour of noisy phenomena.  From origins of noise, we will then explore some of the phenomena that noise can create.  These examples are central to the conceptual transition away from viewing noise only as a nuisance that obscures patterns and realize the rich set of patterns and phenomena that can emerge.  Our tour will be by no means exhaustive, but as with chaos before it, theoretical allure does not always reflect ecological relevance.  Having looked at some of the phenomena that can be created by noise, our third stop will try to run this in reverse: using noise to infer underlying phenomena.  Examples here are rarer but potentially the most rewarding, bridging the gap from theoretical construct to empirical investigation.  The most compelling examples have come from ways in which noisy phenomena are used to infer stability and forecast changes in resilience of populations or ecosystems. Though not without weaknesses or missteps, the resulting dialog between theoretical and empirical aspects have made this particularly a rich area of research.  We end our tour by considering what features best enable the translation and ecological relevance of noisy phenomena.  
@@ -90,54 +88,46 @@ Our first stop will be into research into the origins of noise.  This will not o
 # Origins of noise
 
 
-What is noise? Where does it come from?  It is important to bear in mind that whenever stochasticity is introduced into a model, it is only as a simplification or summary of the effects of a large number of other processes, often occurring at different scales.  Simply put, *noise is all that we leave out of our model*.  Frequently, this additional noise is tacked on to the end of a model, as if as an afterthought, 
+What is noise? Where does it come from?  It is important to bear in mind that whenever stochasticity is introduced into a model,
+it is only as a simplification or summary of the effects of a large number of other processes, often occurring at different scales.
+Simply put, *noise is all that we leave out of our model*.  Early quantiative ecological models first formulated at the population level
+as differential or difference equations: deterministic models that seek to capture the essential features of a system while neglecting
+any random component as mere noise [@Coulson2004]. Advances in both theoretical understanding and the advent of widely available and
+efficient numerical methods have helped drive research towards increasingly more explicit descriptions of how stochastiticity enters
+into quantiative models [@Black2012; @Ovaskainen2010].  
 
-$$X_{t+1} = f(X_t) + \xi_t$$
-
-with the assertion that $\xi$ is some normally distributed noise term reflecting the combined effects of any large array of possible factors that also influence the value of our state, $X$.  While not always wrong, this hand-waving over-simplification is increasingly replaced with a more ecologically and mechanistically grounded description for the origins of noise.  With the exception of quantum mechanics (and there only at scales that have no relevance to ecology), stochasticity is not an inherent property of nature but rather an emergent property of many events occurring at a different scale.  Coins and dice obey the physical laws of motion; only variation in how they are tossed (i.e. something complex we do not usually model) creates randomness.  The term "noise" itself reflects this emergent rather than fundamental origin: the combination of hundreds of voices and sounds each individually distinct blends together into a background of noise. Statistical mechanics tells us that temperature is a measure of the average speed of individual molecules in a gas -- any given molecule will experience a range of possible speeds but by itself has no notion of temperature.  Likewise, stochasticity enters our ecological models because our quantities of interest, such as the density of a population, is but an average over a lower-level, discrete process of individual births and deaths. Stochasticity that emerges directly from discrete individual events that underlie the process described by our model are considered *intrinsic stochasticity*, commonly referred to as *demographic stochasticity* in ecological literature, as it usually arises in the context scaling from individual demographic events to population level descriptions. An important aspect of this demographic stochasicity is that it scales with the square root of the "system size," so that for very large populations the resulting fluctuations are relatively small. On the other hand, *extrinsic stochasticity*, usually referred to as *environmental stochasticity* in the ecological literature, arises in processes that are not described by our model, but merely impact the value of some parameter of our model; for instance, fluctuations in temperature may drive variation in a death rate, or fluctuations in rainfall drive variation in carrying capacity.  
+With the exception of quantum mechanics (and there only at scales that have no relevance to ecology), stochasticity is not an inherent
+property of nature but rather an emergent property of many events occurring at a different scale.  Coins and dice obey the physical
+laws of motion; only variation in how they are tossed (i.e. something complex we do not usually model) creates randomness.  The term
+"noise" itself reflects this emergent rather than fundamental origin: the combination of hundreds of voices and sounds each individually
+distinct blends together into a background of noise. Statistical mechanics tells us that temperature is a measure of the average speed
+of individual molecules in a gas -- any given molecule will experience a range of possible speeds but by itself has no notion of temperature.
+Likewise, stochasticity enters our ecological models because our quantities of interest, such as the density of a population, is but an
+average over a lower-level, discrete process of individual births and deaths. Stochasticity that emerges directly from discrete individual
+events that underlie the process described by our model are considered *intrinsic stochasticity*, commonly referred to as
+*demographic stochasticity* in ecological literature, as it usually arises in the context scaling from individual demographic events to
+population level descriptions. An important aspect of this demographic stochasicity is that it scales with the square root of the
+"system size," so that for very large populations the resulting fluctuations are relatively small. On the other hand, 
+*extrinsic stochasticity*, usually referred to as *environmental stochasticity* in the ecological literature, arises in processes
+that are not described by our model, but merely impact the value of some parameter of our model; for instance, fluctuations in
+temperature may drive variation in a death rate, or fluctuations in rainfall drive variation in carrying capacity.  
 
 <!--
-Early ecological models were almost always formulated at the level of the population, described in terms of differential or difference equations reflecting the available tools of the time.  The advent of fast and inexpensive computing power 
+Motivate the presentation of the van Kampen result rather than a generic review.
 --> 
 
-@Black2010 provides an excellent review of the importance of intrinsic stochasticity and the evolution
 
-Consider Levins' patch model, where $n$ individuals compete for a finite number of suitable habitats $N$.  Individuals die a constant rate $e$, and produce offspring at a constant rate $c$ who then have a probability of colonizing an open patch that is simply proportional to the fraction of available patches, $1 - n/N$.  
+## Demographic stochasticity
 
-Approximations of the so-called master equation, van Kampen system size approximation [@vanKampen2007] described in @Black2010, (rooted in the theorems of [@Kurtz1970; @Kurtz1971]), 
+Demographic stochasticity refers to fluctuations in population sizes or densities that arise from the fundamentally discrete nature of individual birth and death events.  Demographic stochasticity is a particularly instructive case for illustrating a mechanism for how noise arises as an aggregate description from a lower-level mechanistic process.  We summarize the myriad lower-level processes that mechanistically lead to the event of a 'birth' in the population as a probability: in a population of $N$ identical individuals at time $t$, a birth occurs with probability $b_t(N_t)$ (_i.e._ a rate that can depend on both the population size $N$) and increases the population size, $N$ to $N+1$, and deaths occur with probability $d_t(N_t)$, decreasing the population size, $N$ to $N-1$.  Assuming each of these events are independent, this is a state-dependent Poisson process. The change in the probability of being in state $N$ is given by the sum over the ways to enter the state, minus the ways to leave the state: a simple expression of probability balance known as the "master equation."  
 
-
-$$\frac{\mathrm{d} \langle n \rangle }{dt}  = b(\langle n \rangle) - d(\langle n \rangle)$$
-$$\frac{\mathrm{d} \sigma^2 }{dt}  = 2 \left( \frac{\partial b(n) }{\partial n} - \frac{\partial d(n) }{\partial n}\right) \sigma^2 + b(n) + d(n) $$
-
-
-
-
-<!-- 
-SDE notation
-
-$$\textrm{d} X_t = \mu(X_t) \textrm{d}t + \sigma(X_t) \textrm{d}B_t$$
-
-An SDE. Note the separation of the differential elements, which reveal that this is actually shorthand for an integral equation:
-
-$$X_{t+s} - X{t}  = \int_t^{t+s} \mu(X_{\tau}, \tau) \textrm{d}\tau + int_t^{t+s} \sigma(X_{\tau}, \tau) \textrm{d}B\tau$$
-
-The first integral is the ordinary Lebesgue integral, while the second is an It\^o integral, which integrates over the stochastic process $B_t$ (Brownian motion, also termed a Weiner process). The It\^o calculus follows different rules from the classic calculus, largely due to the fact that an It\^o integral has non-zero quadratic variation. (Crudely put, $\textrm{d}x^2 \sim 0$, but $\textrm{d}B^2 ~ dx$).
-
--->
-
-
-While ecologists will sometimes assert that stochasticity is inherent: birth and death are inherently stochastic events; or the environment is inherently stochastic, these are only assertions at a particular scale.  Obviously events such as births and deaths are themselves the results of mechanistic processes, just as fluctuations in rainfall and temperature are the result of deterministic laws of physics and not fundamentally random forces.  In all of science, only quantum mechanics claims a fundamentally probabilistic view of events, and then at such scales that have no relevance to ecology.  
-<!-- Our state variables don't "exist" except as averages of a lower level process -->
-
-
-
-
-**Demographic stochasticity**.  Demographic stochasticity refers to fluctuations in population sizes or densities that arise from the fundamentally discrete nature of individual birth and death events.  Demographic stochasticity is a particularly instructive case for illustrating a mechanism for how noise arises as an aggregate description from a fundamentally lower-level mechanistic process.  We summarize the myriad lower-level processes that mechanistically lead to the event of a 'birth' in the population as a probability: in a population of $N$ identical individuals at time $t$, a birth occurs with probability $b_t(N_t)$ (_i.e._ a rate that can depend on both the population size $N$) and increases the population size, $N$ to $N+1$, and deaths occur with probability $d_t(N_t)$, decreasing the population size, $N$ to $N-1$.  Assuming each of these events are independent, this is a Poisson process.  
-
-<!-- Master equation solution of birth-death model, from appendix--> 
-
-<!-- Gillespie algorithm; Population level (SDE) vs agent-based vs individual. Show figure with small and large N  -->
+It is possible to simulate such a process exactly using Gillespie's exact stochastic simulation algorithm [SSA; @Gillespie1977], which simulates
+each individual birth or death as a separate event.
+Consider Levins' patch model, where $n$ individuals compete for a finite number of suitable habitats $N$.
+Individuals die a constant rate $e$, and produce offspring at a constant rate $c$ who then have a probability
+of colonizing an open patch that is simply proportional to the fraction of available patches, $1 - n/N$. 
+Figure 1 shows the results of two exact SSA simulations of this model with identical parameters except for the
+total number of available sites, $N$.  
 
 <!-- Figure 1: Gillespie simulations -->
 ```{r gillespie, warning=FALSE, fig.width=7, fig.cap="Population dynamics from a Gillespie simulation of the Levins model with large (N=1000, panel A) and small (N=100, panel B) number of sites (blue) show relatively weaker effects of demographic noise in the bigger system. Models are otherwise identical, with e = 0.2 and c = 1 (code in appendix A). Theoretical predictions for mean and plus/minus one standard deviation shown in horizontal re dashed lines."}
@@ -152,17 +142,35 @@ read_csv("appendixA/gillespie.csv", col_types = "cdiddd")  %>%
 ```
 
 
+The van Kampen system size expansion provides a convenient way to explicitly approximate the "macroscopic" (i.e. population level, see @Black2012) dynamics from an individual-based description of events in a Markov process [@vanKampen2007; based on @Kurtz1970; @Kurtz1971].  In addition to illustrating how common stochastic models (in particular, Guassian noise) arise from lower-level discriptions, this result will also provide us a useful framework for interpeting the behavior of stochastic models more generally.  In Appendix B I illustrate the derivation of the following equations for the mean and expected population sizes for a generic density dependent birth-death process:
+
+\begin{align}
+\frac{\mathrm{d} x }{dt}  &= b(x) - d(x) \\
+\frac{\mathrm{d} \sigma^2 }{dt}  &= 2 \left( \frac{\partial b(x) }{\partial x} - \frac{\partial d(x) }{\partial x}\right) \sigma^2 + b(x) + d(x) \label{bd}
+\end{align}
+
+where $x = \langle n \rangle$, the average or expected population size of an ensemble of replicates.  We can solve these equations at steady-state by setting both equations zero; e.g. for our Levins' model, $b(n) = n (1 - \tfrac{n}{N})$ and $d(n) = en$, we find the average number of occupied patches $\langle n \rangle = N\tfrac{e}{c}$ with variance at steady-state of $\sigma^2_n = N \tfrac{e}{c}$.  Note that the variance scales proportionally to the system size, $N$, which explains the standard devation increases only as $\sqrt{N}$ while the steady state itself increases in direct propotion to $N$, resulting in the smaller relative size of fluctations in the larger system in Figure 1.  
 
 
-[@Black2012]
 
-**Environmental stochasticity**.  Whereas demographic noise reflects processes at a lower scale (the individual, rather than the population), environmental stochasticity reflects processes operating at the same scale that we are not explicitly modelling.  
+
+
+<!-- Master equation solution of birth-death model, from appendix--> 
+ 
+
+
+
+## Environmental stochasticity
+
+Whereas demographic noise reflects processes at a lower scale (the individual, rather than the population), environmental stochasticity reflects processes whose dynamics we are not explicitly modelling.  A population-level model 
 
 
 Given ecologists natural inclination towards modeling the biological rather than environmental aspects of a system, it will be no surprise that mechanistic descriptions of environmental stochasticity have remained far more fuzzy.  One step in this direction has been recognition that whatever the mechanisms, this variation is unlikely to result in purely white noise, as commonly postulated for mathematical convenience, but rather some degree of correlation, termed red noise, or possibly anti-correlation such as from seasonal or other oscillatory patterns, so called blue noise.
 
 [@Roughgarden; @Ellner] 
 
+
+[@Ovaskainen2010] Master equation, break-down of Fokker-Planck approximation under large noise, introduction of the WKB approximation
 
 <!-- Demographic noise scaling away with population size, but not so for environmental noise -->
 
@@ -171,67 +179,76 @@ Given ecologists natural inclination towards modeling the biological rather than
 [@Melbourne2008] Importance of demographic stochasticity and its interaction with environmental stochasticity in driving extinction risk. 
 [@Bonsall2004] Markov chain environmental and demographic noise predator-prey metapopulation model.  
 
-Colored noise:
+Colored noise: [@Lawton]
 - [@Ripa1999]
 - [@Marshall2015]
 
 
-<!-- Identify as beyond the scope of this paper -->
-<!-- non-temporal stochasticity --> 
 
-Several additional sources of stochasticity or variation more generally fall outside these categories demographic and environmental noise.  While a detailed treatment is beyond the scope of this paper, I enumerate these sources to disambiguate such phenomena from the intrinsic and extrinsic noise sources that comprise the focus here. 
+### Other forms of stochasticity
 
-**Other forms of stochasticity**.  Stochasticity frequently enters our models in other ways as well.  For instance, most population-level models treat all individuals within the population, or at least within a particular age or stage class, as identical.  *Individual heterogeneity* in relevant traits (growth rates, dispersal ability) can be represented probabilistically as a distribution rather than a fixed value, making it function as another form of random variation in a model.  *Spatial heterogeneity* can likewise be reflected in stochastic parameters of a spatially implicit model, or as spatially varying environmental stochasticity in a spatially explicit model.  As with other forms of noise [@Melbourne2008; @Bonsall2004], interaction between individual or spatial variation and other sources of noise can drive patterns including the potential for persistence, coexistence, and dispersal of species [@Schreiber2010; @Hart2016; @Schreiber2017].  
-
-**Observational error**: Observational error acts much like another form of stochasticity, arising from
+Stochasticity frequently enters our models in other ways as well.
+For instance, most population-level models treat all individuals within the population, or at least
+within a particular age or stage class, as identical.  *Individual heterogeneity* in relevant traits
+(growth rates, dispersal ability) can be represented probabilistically as a distribution rather than
+a fixed value, making it function as another form of random variation in a model [@Coulson2001; @Schreiber2010].
+*Spatial heterogeneity* can likewise be reflected in stochastic parameters of a spatially implicit
+model, or as spatially varying environmental stochasticity in a spatially explicit model.  As with
+other forms of noise [@Melbourne2008; @Bonsall2004], interaction between individual or spatial
+variation and other sources of noise can drive patterns including the potential for persistence,
+coexistence, and dispersal of species [@Schreiber2010; @Hart2016; @Schreiber2017].
+*Observational error*: Observational error acts much like another form of stochasticity, arising from
 sampling effects or limitations of instruments, etc. Yet unlike the sources described above, this 
 uncertainty does not impact the actual state of our system, and thus does not give rise to any
 additional phenomena or information about that process, though it can obscure it [@Knape2011; @deValpine2002].
 
 Other forms of uncertainty common in models are not stochastic phenomena.  This includes any form of 
-**reducible uncertainty**: In constructing and estimating mathematical models of ecological processes, 
+*reducible uncertainty*: In constructing and estimating mathematical models of ecological processes, 
 we encounter uncertainty over our parameter estimates and possible choice of models [@Ellison2004].  In some ways, this
 uncertainty can act like the stochasticity described above: for instance, both introduce variation into
 any forecast of future outcomes. Yet unlike stochasticity, this uncertainty is reducible: with additional
 observations, we can narrow the uncertainty over parameters or candidate models, while stochasticity remains an
 inherent source of variation. We will this not consider model and parameter uncertainty, as they are not 
-sources of noise.  
+sources of noise.  *Deterministic chaos* [@Desharnais2001] is another mechanism of introducing significant
+variation into a simple model. Chaos can a look a lot like noise: indeed, it can be observationally
+indistinguishable from a stochastic process [@Ellner2005; @Werndl2009].  Despite substantial interest in previous
+decades and the relative ease of encountering chaos in simple ecological models (particularly in
+differences equations), and convincing reconstructions of chaotic dynamics in laboratory manipulations
+[@Costantino1997] the prevalence of chaotic dynamics as a driving factor in most ecological systems
+remains unclear. After all, the great variation of natural populations is hardly surprising: the
+undeniable influences of variation created by all those things left out of our models, all that
+individual detail from intrinsic, lower level processes and external environmental processes that
+becomes aggregated in our simple models all but begs for a stochastic description.  
 
-**Chaos**: Deterministic chaos [@Desharnais2001] is another mechanism of introducing significant variation into a simple model. Chaos can a look a lot like noise: indeed, it can be observationally indistinguishable from a stochastic process [@Werndl2009].  Despite substantial interest in previous decades and the relative ease of encountering chaos in simple ecological models (particularly in differences equations), and convincing reconstructions of chaotic dynamics in laboratory manipulations [@Costantino1997] the prevalence of chaotic dynamics as a driving factor in most ecological systems remains unclear. After all, the great variation of natural populations is hardly surprising: the undeniable influences of variation created by all those things left out of our models, all that individual detail from intrinsic, lower level processes and external environmental processes that becomes aggregated in our simple models all but begs for a stochastic description.  
-
-
-Much active research continues to explore the consequences of introducing these more explicitly motivated and interacting sources of noise. With some grounding in the origins of different types of noise in place, we are ready to move to our second stop to see how this noise can drive the creation of novel phenomena on a macroscopic level.  
+Much active research continues to explore the consequences of introducing these more explicitly
+motivated and interacting sources of noise. With some grounding in the origins of different types
+of noise in place, we are ready to move to our second stop to see how this noise can drive the
+creation of novel phenomena on a macroscopic level.  
 
 
 
 # Noise the creator: Noise can induce novel phenomena
 
-Stochasticity can give rise to a wide array of interesting phenomena that are often at odds with our intuition. Such behavior often arises through an interaction between stochastic and non-linear elements of a system, both hallmark traits of ecological processes.  In this section, I highlight several examples that have shown up frequently in the literature and prove sufficiently tractable to provide a simple intuition for the mechanisms involved. 
+Stochasticity can give rise to a wide array of interesting phenomena that are often at odds with our intuition. As these examples will illustrate, such behavior arises through an interaction between stochastic and non-linear elements of a system, underscoring the importance of explicitly including stochasticity in ecological models [@Coulson2004; @Higgins1997].  Importantly, the noise itself does not have to be large to give rise to these phenomena. In this section, I highlight several examples that have shown up frequently in the literature and prove sufficiently tractable to provide a simple intuition for the mechanisms involved. 
 
-<!-- Say something about how small noise; particularly demographic noise which is usually small, seems like it should thus be negligible,
-
-**Noise need not be large to be important**.
+<!-- 
+Noise is "tacked on" in these models... contrasts to previous section
 -->
 
-**Persistence and coexistence**.  A natural focus of much research into stochastic ecological systems has been on understanding the implications for persistence of individual and coexistence of interacting species. Demographic noise in particular has fundamental implications for the long-term equilibrium: any finite population, however big, is guarenteed to eventually go extinct under demographic noise.  While extinction is certainly a phenonomenon that stands in stark contrast to the long-term behavior of the corresponding deterministic equation, this result is not particularly useful: "eventually" could be longer than the existence of the planet itself. Rather, it is a reminder that we must be careful about how we describe the 'long-term' behavior of a model.  In place of the mathematical notion of a stationary distribution to describe the long-term behavior of a stochastic model, analysis of demographic stochasticity focuses on the concept of quasi-stationary distributions, which in many cases correspond more closely to the equilibria of their deterministic counterparts [@Schreiber2017]. 
+## Persistence and coexistence  
+
+A natural focus of much research into stochastic ecological systems has been on understanding the implications for persistence of individual and coexistence of interacting species. Demographic noise in particular has fundamental implications for the long-term equilibrium: any finite population, however big, is guarenteed to eventually go extinct under demographic noise.  While extinction is certainly a phenonomenon that stands in stark contrast to the long-term behavior of the corresponding deterministic equation, this result is not particularly useful: "eventually" could be longer than the existence of the planet itself. Rather, it is a reminder that we must be careful about how we describe the 'long-term' behavior of a model.  In place of the mathematical notion of a stationary distribution to describe the long-term behavior of a stochastic model, analysis of demographic stochasticity focuses on the concept of quasi-stationary distributions, which in many cases correspond more closely to the equilibria of their deterministic counterparts [@Ovaskainen2010; @Schreiber2017]. 
+
 
 
 <!--
-[@Schreiber2008] complex life histories
-- Species coexistence  ([@Hart2016])
--->
 
+Insufficient space left for any treatment of these...
 
 **Bet hedging**
-
-
 **Inflation**
 
-Stochasticity can 
-
-<!-- two concurrent flat lines makes for a poor figure -->
-
-
+-->
 
 ## Quasi-cycles 
 
@@ -259,18 +276,11 @@ read_csv("appendixA/quasicycles.csv") %>%
 ```
 
 
-Oscillations arise through the process of stochastic resonance.  The damped oscillations seen in Figure 1a are analgous to a child sitting still on a swing: friction slowly damps the magnitude of each successive oscillation, while the period of pendulum remains unchanged.  Driving the pendulum through perturbations timed to match that natural period can quickly create sustained oscillations with large magnitudes, but such perfect timing is not required.  In the model above, white noise effectively drives the pendulum at all frequencies, though at very low magnitude, since the noise is small relative to the scale of the dynamics.  However, frequencies that most closely match the natural period of the damped oscillator are amplified, resonating with the natural oscillations.  This process is sufficient to permit even small noise to drive sustained oscillations in the model indefinitely.  
+Oscillations arise through the process of stochastic resonance.  The damped oscillations seen in Figure 1a are analgous to a child sitting still on a swing: friction slowly damps the magnitude of each successive oscillation, while the period of pendulum remains unchanged.  Driving the pendulum through perturbations timed to match that natural period can quickly create sustained oscillations with large magnitudes, but such perfect timing is not required.  In the model above, white noise effectively drives the pendulum at all frequencies, though at very low magnitude, since the noise is small relative to the scale of the dynamics.  However, frequencies that most closely match the natural period of the damped oscillator are amplified, resonating with the natural oscillations.  This process is sufficient to permit even small noise to drive sustained oscillations in the model indefinitely.  The power spectrum (the squared norm of the Fourier transform, a measure of what frequencies are present; see, e.g. @Black2012) provides a convenient way to visualize the effects of these oscillations.  The power spectrum  for a deterministic limit cycle would create a perfect sinusoidal oscillation and a resulting power spectrum of a delta spike at that single frequency.  The power spectrum for the quasi-cycle instead shows a distribution of frequencies, centered at the the resonant frequency of the damped oscillator.  
 
-The power spectrum (the squared norm of the Fourier transform, a measure of what frequencies are present; see, e.g. @Black2012) provides a convenient way to visualize the effects of these oscillations.  The power spectrum  for a deterministic limit cycle would create a perfect sinusoidal oscillation and a resulting power spectrum of a delta spike at that single frequency.  The power spectrum for the quasi-cycle instead shows a distribution of frequencies, centered at the the resonant frequency of the damped oscillator.  
+Early work by @Blarer1999 identified quasi-cycles as a possible explanation for oscillations and periodic outbreaks in pest ecosystems.  @Bjornstad2004 analyzes the potential for such stochastic effects to drive cyclic behavior in population abundances of Atlantic bluefin tuna and Atlantic Cod, while @Black2010 illustrates the use of power-spectrum approaches to examine the behavior of quasi-cycles in common disease outbreak models, focusing on a case where noise arises explicitly from demographic stochasticity, rather than generic environmental noise as in the model above and elsewhere.  @Pineda-Krch2007 compare patterns from these stochastically generated cycles to stable limit cycles they resemble.  Stochastic resonance highlights one way in which even small noise can play an important role in driving large scale patterns where we had previously only sought deterministic explanations. This example also illustrates the interplay between nonlinear dynamics and stochasticity that is the hallmark of stochastically driven phenomena.  A stable node with linear dynamics, such as an Ornstein-Uhlenbeck process, has no resonant frequency, and could not produce sustained oscillations (unless the environmental driver itself had a periodic pattern).  
 
-Early work by @Blarer1999 identified quasi-cycles as a possible explanation for oscillations and periodic outbreaks in pest ecosystems.  @Bjornstad2004 analyzes the potential for such stochastic effects to drive cyclic behavior in population abundances of Atlantic bluefin tuna and Atlantic Cod, while @Black2010 illustrates the use of power-spectrum approaches to examine the behavior of quasi-cycles in common disease outbreak models, focusing on a case where noise arises explicitly from demographic stochasticity, rather than generic environmental noise as in the model above and elsewhere.  @Pineda-Krch2007 compares patterns from these stochastically generated cycles to truly stable limit cycles they resemble.  
-
-Stochastic resonance highlights one way in which even small noise can play an important role in driving large scale patterns where we had previously only sought deterministic explanations. This example also illustrates the interplay between nonlinear dynamics and stochasticity that is the hallmark of stochastically driven phenomena.  A stable node with linear dynamics, such as an Ornstein-Uhlenbeck process, has no resonant frequency, and could not produce sustained oscillations (unless the environmental driver itself had a periodic pattern).  
-
-<!-- variable noise -->
-
-<!--autocorrelated or red noise can also drive stochastic resonance -->
-
+<!-- See additional citations in Coulson2004 and others that mention stochastic resonance --> 
 
 
 ## Stochastic switching
@@ -278,15 +288,15 @@ Stochastic resonance highlights one way in which even small noise can play an im
 We turn from stochastic resonance to oscillations of a very different sort, which do not resemble any deterministic process, as seen in Figure 3A.
 
 <!--Figure 3: Noisy switch -->
-```{r noisy_switch, fig.width=7, fig.cap="Stochastic switiching in May's model of alternative stable state dynamics.  r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 10000"}
+```{r noisy_switch, fig.width=7, fig.height=7, fig.cap="Stochastic switiching in May's model of alternative stable state dynamics.  r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 10000"}
 
 p <- list(r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 1e4)
 
 theory <- 
   tibble(x= seq(0,2, length.out = 100)) %>%
-  mutate(growth = x * p$r * (1 - x / p$K), 
-         consumption = p$a * x ^ p$Q / (x^p$Q + p$H^p$Q)) %>%
-  mutate(potential = - cumsum(growth - consumption)) %>%
+  mutate(g = x * p$r * (1 - x / p$K), 
+         c = p$a * x ^ p$Q / (x^p$Q + p$H^p$Q)) %>%
+  mutate(potential = - cumsum(g - c)) %>%
   gather(curve, y, -x, -potential) 
 
 
@@ -299,7 +309,8 @@ p2 <-  theory %>%
   ggplot(aes(x, y, col=curve)) +
   geom_line(lwd=1) + 
   scale_color_ptol() + 
-  labs(x = bquote(X[t]), y = bquote(X[t+1]), subtitle= bquote(bold(B.)))
+  labs(x = bquote(X[t]), y = bquote(X[t+1]), subtitle= bquote(bold(B.))) +
+  theme(legend.position="top")
 
 p3 <-  theory %>%
   ggplot(aes(x, potential)) + 
@@ -309,16 +320,12 @@ p3 <-  theory %>%
 
 
 gridExtra::grid.arrange(p1,p2,p3, layout_matrix = rbind(c(1,1), c(2,3)))
-
-#g$widths <- unit.pmax(g1$widths, g2$widths) # use the largest widths
-#grid.newpage()
-#grid.draw(g)
 ```
 
 
-This pattern is characterized by long stretches during which fluctuations in the state variable remain concentrated around a high average value followed by sudden, rapid transistions into fluctuations concentrated around a lower value.  This behavior arises through the interaction of stochasticity and alternative stable state dynamics.  The simulation shown in Figure 3A is based on an herbivore consumption model first proposed by @May1977 as one of the early examples of the potential for alternative stable state dynamics, to which I have simply introduced an additional environmental noise term:
+This pattern is characterized by long stretches during which fluctuations in the state variable remain concentrated around a high average value followed by sudden, rapid transistions into fluctuations concentrated around a lower value.  This behavior arises through the interaction of stochasticity and alternative stable state dynamics.  The simulation shown in Figure 3A for the is based on an resource consumption model first proposed by @May1977 as one of the early examples of the potential for alternative stable state dynamics.  The resource grows according to a logistic growth model and is consumed according to a Holling Type-III functional response curve, to which I have simply introduced the addition of environmental noise:
 
-$$X_{t+1} = X_t + \underbrace{X_t r \left(1 -\frac{X_t}{K} \right)}_{\textrm{Vegitation growth, } g(X_t)}  - \underbrace{\frac{a X_t ^ Q}{X_t^ Q + H ^ Q}}_{\textrm{Vegitation consumption, } c(X_t)} + \xi_t,$$
+$$X_{t+1} = X_t + \underbrace{X_t r \left(1 -\frac{X_t}{K} \right)}_{\textrm{ growth, } g(X_t)}  - \underbrace{\frac{a X_t ^ Q}{X_t^ Q + H ^ Q}}_{\textrm{consumption, } c(X_t)} + \xi_t,$$
 where $\xi_t$ is normally distributed environmental variation with mean zero and standard deviation $\sigma$. Figure 3B shows separate curves corresponding the parts of the model describing vegetation growth and vegetation consumption, using the same parameters as shown in the simulation panel, 3A.  Equilibria exist whenever growth balances consumption.  For the parameters shown, the S-shaped curve of the Type-III consumption pattern crosses the quadratic curve of logistic growth at four separate locations.  When growth is larger than consumption before the crossing, and thus smaller after, the point is stable, otherwise it is unstable.  Consequently, we can see two stable points, in the neighborhood of $X_t \approx 1.2$ and $X_t \approx 0.5$, closely matching the average fluctuations seen in the simulation in 3A.  Stochastic fluctuations drive spontaneous shifts between these alternative stable states.  
 
 The concept of a potential well, Figure 3C, is often invoked when describing the behavior of alternative stable states.  The curve for the potential well, $U(x)$ is defined as the negative integral of the population growth rate,
@@ -332,10 +339,7 @@ Despite the nearly ubiquitous association of a ball-in-cup model with ecological
 Empirical evidence for stochastic switching in ecological timeseries is limited by the long time scale usually required. Because a single stochastic transisition between alternative stable states appears as such a dramatic deviation from the previous pattern (as illustrated in Figure 3A), it is often tempting to assume the change could only be the result of some sudden external force or change in the environment, so it is worth remembering that given long enough, these transitions can happen entirely by chance stochasticity [@Boettiger2012; @Drake2013]. However, these transistions are most likely to observed in systems with relatively shallow potential wells.  This is mostly likely to occur of some external change is slowly making the potential well shallower and thus transitions more likely -- a phenomenon that has become to be known as "flickering" and suggested as a potential early warning sign of an approaching transition [@Brock2010].  Examples of flickering between alternative stable states have been suggested in data ranging from geological timescales at the end of glaciation in the Pleistocene [@Taylor1993] to ecological scales over a few decades in lake ecosystems [@Wang2012].  Stochastic transitions between bistable states are thought to play an important role in genetic switches, where among other phenomena this mechanism can explain the emergence of two alternative phenotypes in clonally reproducing microbial populations, which can act to buffer the population in a changing environment  [@Balaban2004]. 
 
 <!--
-
 **Further examples**
-
-
 - @Read2007  Stochasticity generates an evolutionary instability for infectious disease 
 - Spatial pattern formation: Turning patterns found in plankton-herbivore dynamics [@Levin1976]
 
@@ -343,21 +347,19 @@ Empirical evidence for stochastic switching in ecological timeseries is limited 
 
 # Noise the informer: Noise can provide novel information
 
-One of the most interesting aspects of noise is as a source of additional information.  Noise can act like a miniature perturbation experiment, constantly perturbing a system away from an equilibrium to reveal it's behavior elsewhere in state space.  
+One of the most interesting aspects of noise is as a source of additional information.  This can be realized in a variety of ways. For instance, in deriving expressions for the variance created by demographic noise above, we observed that different partitions of a logistic growth model can lead to the same macroscopic dynamics (same values for $b$ - $d$), while having different variance (due to different values for $b$+$d$).  This suggests that the variation observed in such a population could resolve potentially help resolve how dynamics are partitioned between individual birth and death rates (though in practice one would have to first account for any contribution of environmental noise).
 
-- Measuring stability
+<!-- fixme need more background? --> 
 
+Noise can provide novel information in other ways as well.  Stochastic fluctuations act like a continual miniature perturbation experiment, constantly pusing a system away from an equilibrium to reveal it's behavior elsewhere in state space. Observing the size and autocorrelation of these fluctuations thus provides insight on the stability of an equilibrium point, (as can be seen, for instance in the fluctuation-disspation result we found for generic birth death models).  This observation has been exploited with particular success as a potential *early warning sign* that a system is loosing stability; possibly due to an approaching catastrophic transition or saddle-node bifucation.  This pattern, known as critical slowing down (in reference to the autocorrelation time in the physics literature) was first proposed an an early warning sign for ecological systems by @Wissel1984, but has recieved considerable empirical as well as theoretical attention only more recently [@Scheffer2009; @Scheffer2015].  Increases in two of these early warning indicators, variance and autocorrelation, are illustrated along with the timeseries of a simulation of the dynamics of yeast population growth in Figure 4.  This simulation is based on a mechanistic model developed by @Dai2012 that closely matches the population dynamics they observed in serial dilutions of budding yeast _Saccharomyces cervisiae_ on a sucrose medium. Because the relevant proteins are located in the extra-cellular matrix rather than inside the cells, budding yeast break down sucrose collaboratively, creating an Allee effect below which the population is too small to sustain itself.  Increasing the serial dilution rate slowly over time drives the stable population towards a fold bifurcation, which is accompanied by the patterns of increasing variance and increasing autocorrelation seen empirically in lab populations [@Dai2012] as well as the numerical simulation shown here.  
 
-
-**Early warning signals.**  The theory of early warning signals, or critical slowing down (CSD) [@Wissel1984; @Scheffer2009] is an instructive example 
-
-
+As we saw in the equations from the system-size approximation, the variance and autocorrelation in question are technically properties of an ensemble, and should be computed over replicate simulations.  While the laboratory experiments of @Dai2012 do precisely this, conducting identical, independent replicate manipulations in separate beakers, this is not an option in natural populations.  Instead, 
 
 
 <!-- @Holling1996 is responsible for the introduction of the unfortunate term "Engineering Resilience" to mean precisely the same thing as mathematicians and theoretical ecologists have refered to as 'stability' for decades.  Further confusion has been sown by the introduction of the energy-potential diagram into ecology, where the depth of the potential well is not a local property-->
 
 <!-- Figure 4: Early warning signals -->
-```{r tipping, fig.width=7, fig.height=7}
+```{r tipping, fig.width=7, fig.height=7, fig.cap="Early warning signs of a critical transition in a simulation of increasing serial dilution of budding yeast.  Panel A: Rolling variance   autocorrelation Time series is shown in panel C. Model details and simulation parameters in Appendix A."}
 tipping <- read_csv("appendixA/tipping.csv") 
 
 p1 <- tipping %>%
@@ -366,14 +368,12 @@ p1 <- tipping %>%
   gather(series, value, -t, -tip_time) %>%
   ggplot(aes(t, value)) + geom_line(col=colours[[1]]) + 
   geom_vline(aes(xintercept = tip_time), col=colours[[2]], lty=2) +
-  facet_wrap(~series, ncol = 2, scales="free_y")  +
-  theme_ipsum_rc() 
+  facet_wrap(~series, ncol = 2, scales="free_y")  
 p2 <- tipping %>% 
   select(t, population = x, tip_time) %>%
   ggplot(aes(t, population)) + geom_line(col=colours[1]) + 
   geom_vline(aes(xintercept = tip_time), col=colours[2], lty=2) + 
   #scale_y_log10()  + 
-  theme_ipsum_rc() + 
   labs(subtitle = "C. Yeast population size", 
        caption = "Vertical red dashed line indicates tipping point location")
 
@@ -385,12 +385,36 @@ gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1), c(2,2)))
 
 Challenges remain in distinguishing these patterns from other causes [@Boettiger2013a] which will ultimately require more domain-specific information  [@Boettiger2013b]. 
 
-<!-- FIXME unclear, rambling!-->
+<!--
 It is important to realize that such approaches can only ever measure local properties such as the return time in response to local perturbation (historically termed *stability*; which @Holling1996 landmark chapter unfortunately re-brands as "engineering resilience") and not global properties such as the size of the attractor basin / distance to the nearest tipping point (*ecological resilience*, or simply *resilience*).  This is illustrated rather vividly in @Dai2015, which illustrates how a system can lose resilience before losing stability, resulting in a scenario that provides less opportunity for early warning.
 
-
-
+-->
 
 # Conclusions
 
+The past two decades have seen widespread recognition of the central role that stochasticity plays through the use of mechanistic models can have in creating and understanding ecological phenomena [@Coulson2004; @Black2012]. We have seen increasing use of master-equation approaches to individual-based models to reflect demographic stochasticity that is amenable to analytical treatment [@Black2012], and much work in understanding the importance of environmental noise, particularly the more realistic but less mathematically convienient notion of colored or auto-correlated noise on population dynamics, persistence, and coexistence [@Ovaskainen2010; @Schreiber2017].  These deductive models can generate phenomena that resemble familiar patterns such as population cycles for which we have previously sought determinstic explanations, as well as stochastic phenomena with no such analog such as stochastic switching.  Yet too many of these advances have remained limited to the domain of theory; limited to deductive models which may seek to mimic observed patterns but are rarely used to confront empirical data directly.  There is good reason for this: statistical inference of even relatively simple models with multiple sources of noise will always be difficult given limited ecological data [@Knape2011].  However, many stochastic phenomena may suggest new ways to infer rather than merely obscure underlying processes.  
+
+
+The eruption of interest in early warning signals for critical transitions [@Scheffer2009] provides an excellent illustration of this potential.  A range of stochastic phenomena have been suggested and a tested for their potential to reveal subtle signs of ecosystem change prior to a dramatic shift, and prompted a rich dialog between further theory and new experiment. Changes in stochastic properties such as variance or autocorrelation provide evidence of resilience loss that would be invisible to a determinstic model, and non-linear stochastic phenomena such as stochastic switching are observed as evidence of 'flickering' prior to a critical transistion.  In this way, our understanding of stochastic dynamics is translated into novel sources of information about a system which has sparked a wealth of emprical investigation and further theoretical work to test the potential of this approach.  The study and application of stochastic phenomena to detect ecosystem change is unlikely to be limited to this simple scenario of a critical transistion or fold bifurcation.  
+
+Precisely because most stochastic phenomena arise through their interaction with nonlinearity, the patterns that result can become a lens into better understanding those nonlinear processes and detecting how they may change.  Meanwhile, the widespread adoption of computational tools and the ability to express theoretical results in numerical algorithms can make any new approaches more readily accessible to application in empirical research. In the past two decades, we have set to rest those deterministic skeletons that see noise only as nuciance and embraced the central role noise plays as the creator of ecological phenomena. Going forward, I hope and predict that we will see greater discussion and use of stochastic phenomena to infer underlying processes in empirical patterns in similar interactions between theoretical and empirical research. 
+
+
+
 # References
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

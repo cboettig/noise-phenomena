@@ -6,40 +6,12 @@ author:
 address:
   - code: a
     address: "Dept of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley CA 94720-3114, USA"
-#layout: 5p  
+layout: 5p  
 bibliography: canonical.bib
-output: 
-  rticles::elsevier_article:
-    includes:
-      in_header: header.tex
-      
-
+output: rticles::elsevier_article
+preamble: "\\newcommand{\\ud}{\\mathrm{d}}"
 ---
 
-<!--
-## The Poisson process description
-
-The Poisson process is a common description of demographic noise.  It arises as the limit of a binomial process (coin flipping) when the events are rare and the population large.  This model is commonly applied as follows.  Consider a model of the form:
-
-\begin{align}
-N_{t+1} = f(N_t)
-\end{align}
-
-
-This approach chooses with probability $P$ the number in the next generation $N_{t+1}$ at random from a Poisson distribution with mean $f(N)$:
-
-\begin{align}
-P(N_t)_{t+1} = \text{Poisson}(N, f(N_t)), 
-\end{align}
-
-while the variance of the Poisson distribution will also be $f(N)$.  If the population has some equilibrium size $N^* \neq 0$ such that $f(N^*) = N^*$, then at equilibrium the population will have size $N^*$ and fluctuate around that value with standard deviation $\sqrt{N^*}$.  In the continuous time limit this approaches a Gaussian with the same mean and variance.  Observe that $P(0) > 0$ for any $N$, hence a population can always go extinct.  Further, if we naturally assume the population is isolated, then $f(0) = 0$, and extinction is the only long-term stable state.  This description provides a first pass at describing demographic noise, and captures some of its important phenomena:
-
-- Finite populations fluctuate around their quasi-equilibrium.
-- Any isolated population that cannot grow without bound will eventually go extinct.
--  The magnitude of the steady-state fluctuations relative to the equilibrium decreases with increasing population size (as $\sqrt{N^*}/N^*$), decreasing the extinction risk of larger populations proportionally.  
-
-While we have started to capture one aspect of demographic noise (populations are finite), we have ignored the second (population dynamics come from birth and death processes).  Too often we stop at this description of demographic noise.  By using only $f(N)$, we have not specified births and deaths separately.  This is quite common in population models, where the choice of $f(N)$ does not obviously suggest which are the birth and which are the death terms.  Our second introductory example illustrates the importance of doing so.  
--->
 
 
 Consider a population that is of size $n$ with probability $p_n$, with birth and death rates given by $b_n$ and $d_n$ respectively, diagrammed in Fig~\ref{markov}  This representation is known as a single step Markov process.  The rate of transitions to the $n+1$ state $b_n$, the rate of transitions to $n-1$ is $d_n$.  Both of these are transitions away from the state $p_n$, hence the decrease the probability of $p_n$.  The probability $p_n$ increases by transitions into the state $n$, from either side: births enter from the state below at rate $b_{n-1}$ and deaths from the state above, $d_{n+1}$.  Hence the rate of change in $p_n$ is given by
@@ -50,15 +22,16 @@ Consider a population that is of size $n$ with probability $p_n$, with birth and
 \end{align}
 
 
-\begin{figure}
-\begin{center}
-\includegraphics[width=.25\textwidth]{markov}
-\caption{The birth-death process as a Markov process.}\label{markov}
-\end{center}
-\end{figure}
 
 This probability balance is known for historical reasons as a master equation. This equation will form the center of our treatment.  Master equations of this form can be written more concisely by introducing the step operator, $\mathbb E^k$ such that $\mathbb E^k f_n = f_{n+k}$, giving us
 
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=.25\textwidth]{markov}
+\caption{Birth and death as state-dependent transition rates in a Markov process.}\label{markov}
+\end{center}
+\end{figure}
 
 \begin{align}
 \frac{\ud p_n}{\ud t} = (\mathbb E^{-1} - 1) b_n p_n + (\mathbb E -1) d_n p_n \label{master1}
@@ -75,7 +48,7 @@ For example, the mean is:
 \frac{\ud }{\ud t} \langle n \rangle &= \sum n (\mathbb E^{-1} - 1) b_n p_n + \sum n (\mathbb E -1) d_n p_n \nonumber \\ 
 &= \sum  b_n p_n(\mathbb E - 1)n  + \sum d_n p_n(\mathbb E^{-1} -1) n \nonumber \\
 &= - \langle d_n \rangle +  \langle b_n \rangle \label{mean} \\
-\intertext{and similarly}
+\intertext{and similarly the second moment is}
 \frac{\ud }{\ud t} \langle n^2 \rangle &= 2 \langle n (b_n - d_n) \rangle + \langle b_n+d_n \rangle \label{var}
 \end{align}
 
@@ -92,6 +65,10 @@ Observe that \eqref{master1} is written in terms of discrete individuals, repres
 \begin{align}
 n = \Omega \phi(t) + \Omega^{1/2} \xi \label{n}
 \end{align}
+
+
+
+
 
 
 We will change Eq \eqref{master1} into the variables $\phi$ and $\xi$.   We begin with the step operator, which can be approximated by a Taylor expansion.To formulate a Taylor expansion of the step operator (where $k$ can be a positive or negative integer), first consider the steop operator under the original discrete variable $n$:
@@ -150,7 +127,7 @@ Collecting terms of order $\Omega^{1/2}$ on both sides, we have:
 \frac{\ud \phi(t)}{\ud t} = b(\phi)-d(\phi) = \alpha_1(\phi) \label{macroscopic}
 \end{align}
 
-Where we have the part of the birth and death functions that depend on the macroscopic variable $\phi$ alone.  This is known as the macroscopic equation, and corresponds to the density equations commonly written down.  We call this difference $\alpha_1(\phi)$ as a shorthand\footnote{This notation suggests it is the first jump moment, defined as first moment of the transition rate between states in a Markov process.  It so happens this term will give the macroscopic law for any Markov process, not only a birth-death process.  The second moment of the transition rates, $a_2$, will be for us simply the sum of the birth and death rates.  We use this notation as it generalizes to processes that have a different master equation from \eqref{master1}.}   
+Where we have the part of the birth and death functions that depend on the macroscopic variable $\phi$ alone.  This is known as the macroscopic equation, and corresponds to the density equations commonly written down.  Following @vanKampen, we will call this difference $\alpha_1(\phi)$ as a shorthand\footnote{This notation suggests it is the first jump moment, defined as first moment of the transition rate between states in a Markov process.  It so happens this term will give the macroscopic law for any Markov process, not only a birth-death process.  The second moment of the transition rates, $a_2$, will be for us simply the sum of the birth and death rates.  We use this notation as it generalizes to processes that have a different master equation from \eqref{master1}.}   
 
 
 Collecting terms of order $\Omega^0$ we recover the diffusion equation:
@@ -159,7 +136,7 @@ Collecting terms of order $\Omega^0$ we recover the diffusion equation:
 \frac{\partial \Pi}{\partial t} = - \alpha'_{1,0}(\phi) \frac{\partial}{\partial \xi} \xi \Pi + \tfrac{1}{2}\alpha_{2,0}(\phi) \frac{\partial^2}{\partial \xi^2} \Pi \label{FP}
 \end{align}
 
-Where we define $\alpha_2(\phi) = b(\phi)+d(\phi)$ as an analogous short hand.  From this it is a straight forward exercise to calculate the moments of the distribution (multiply by $\xi$, $\xi^2$ and integrate),
+Where we define $\alpha_2(\phi) = b(\phi)+d(\phi)$ as an analogously.  From this it is a straight forward exercise to calculate the moments of the distribution (multiply by $\xi$, $\xi^2$ and integrate),
 
 \begin{align}
 \partial_t \langle \xi \rangle &= \alpha'_{1,0}(\phi) \langle \xi \rangle \\
@@ -174,6 +151,25 @@ The variance $\sigma_{\xi}^2 = \langle \xi^2 \rangle - \langle \xi \rangle^2$ ob
 \end{align}
 
 It is possible to prove that any solution to \eqref{FP} must be Gaussian [@Kurtz1970; @Kurtz1971].  Consequently, knowing these two moments completely determines the distribution of $n$.  This is often assumed for demographic noise.  We have justified this common Gaussian noise assumption by showing it is simply a consequence of expanding the master equation to linear order, $\mathcal O(\Omega^{0})$.  From \eqref{n mean} we can also conclude that the macroscopic (average) variable obeys the deterministic law. 
+
+
+## Stochastic Differential Equations
+
+The partial differential equation (PDE) given by \eqref{FP} is sometimes referred to as the Fokker-Planck equation. It is possible to prove this PDE is equivalent to as the stochastic differntial equation (SDE), 
+
+\begin{equation}
+\textrm{d} X_t = \mu(X_t) \textrm{d}t + \sigma(X_t) \textrm{d}B_t \label{SDE}
+\end{equation}
+
+which, despite the name, it is important to remember that this is actually an integral equation in the Itô calculus, and not a derivative. Note the separation of the differential elements, which are meant as shorthand for implicit integrals:
+
+\begin{equation}
+X_{t+s} - X{t}  = \int_t^{t+s} \mu(X_{\tau}, \tau) \textrm{d}\tau + \int_t^{t+s} \sigma(X_{\tau}, \tau) \textrm{d}B\tau
+\end{equation}
+
+
+The first integral is the ordinary Lebesgue integral, while the second is an Itô integral, which integrates over the stochastic process $B_t$ (Brownian motion, also termed a Weiner process). The Itô calculus follows different rules from the classic calculus, largely due to the fact that an Itô integral has non-zero quadratic variation. (Crudely put, $\textrm{d}x^2 \sim 0$, but $\textrm{d}B^2 \sim dx$).  Though it is common to formulate stochastic models directly as SDEs, it is worth remembering that the SDE is the result of a small noise approximation in the system size expansion, and can break down under larger deviations, even when the mean-field equation remains approximately accurate.  @Ovaskainen2010 provides an overview literature in that addresses this limit and discusses the use of the WKB^[Wentzel, Kramers & Brillouin. Naturally this is KWB in Holland, BWK in France, and JWKB in England (for Jeffreys). Note that the physicist Gregor Wentzel is not the same as the mathematician Alexander Wentzell of the Fredilin-Wentzell theorem for large deviations years later, though I believe the former's result can be derived directly from the latter's.] method to address this case. 
+
 
 ## Fluctuation dissipation theorem
 
@@ -233,7 +229,13 @@ though the partition into birth and death rates is not explicit.  Different ways
 Which agrees with calculations elsewhere [@NisbetGurney]. 
 
 
-# Alternate derivation: the diffusion approximation
+<!-- Include environmental noise example via stochastic K? -->
+
+
+
+
+
+# An alternate derivation: the diffusion approximation
 
 A somewhat different approach to deriving a diffusion equation predominates in the literature.  This approach does not make system size explicit, but instead hinges on taking a simultaneous limit of both short time and small step size.  I prefer the van Kampen derivation, since it appeals to system size rather than an arbitrary small parameter going to zero.  It also provides a more natural treatment for nonlinear systems, for which the diffusion equation requires extra care.  With these notes in mind, the diffusion derivation usually goes as follows:  
 

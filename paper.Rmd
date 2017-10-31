@@ -16,7 +16,7 @@ layout:  5p # review = doublespace, 3p = singlespace, 5p = two-column
 #preamble: "\\usepackage[nomarkers]{endfloat}"
 
 abstract: |
-  In this paper, I provide a brief synthesis of ecological research in stochastic phenomena. Noise, as the term itself suggests, is most often seen a nuisance to ecological insight, a inconvenient reality that must be acknowledged, a haystack that must be stripped away to reveal the processes of interest underneath. Yet despite this well-earned reputation, noise is often interesting in its own right: noise can induce novel phenomena that could not be understood from some underlying determinstic model alone.  Nor is all noise the same, and close examination of differences in in frequency, color or magnitude can reveal insights that would otherwise be inaccessible.  Yet with each aspect of stochasticity leading to some new or unexpected behavior, the time is right to move beyond the familiar refrain of "everything is important" [@Bjornstad2001].  Stochastic phenomena can suggest new ways of inferring process from pattern, and thus spark more dialog between theory and empirical perspectives that best advances the field as a whole. I highlight a few compelling examples, while observing that the study of stochastic phenomena are only beginning to make this translation into empirical inference.  There are rich opportunities at this interface in the years ahead.  
+  I provide a brief synthesis of ecological research in stochastic phenomena. Noise, as the term itself suggests, is most often seen a nuisance to ecological insight, a inconvenient reality that must be acknowledged, a haystack that must be stripped away to reveal the processes of interest underneath. Yet despite this well-earned reputation, noise is often interesting in its own right: noise can induce novel phenomena that could not be understood from some underlying determinstic model alone.  Nor is all noise the same, and close examination of differences in in frequency, color or magnitude can reveal insights that would otherwise be inaccessible.  Yet with each aspect of stochasticity leading to some new or unexpected behavior, the time is right to move beyond the familiar refrain of "everything is important" [@Bjornstad2001].  Stochastic phenomena can suggest new ways of inferring process from pattern, and thus spark more dialog between theory and empirical perspectives that best advances the field as a whole. I highlight a few compelling examples, while observing that the study of stochastic phenomena are only beginning to make this translation into empirical inference.  There are rich opportunities at this interface in the years ahead.  
   
 
 
@@ -167,22 +167,19 @@ Whereas demographic noise reflects processes at a lower scale (the individual, r
 
 Given ecologists natural inclination towards modeling the biological rather than environmental aspects of a system, it will be no surprise that mechanistic descriptions of environmental stochasticity have remained far more fuzzy.  One step in this direction has been recognition that whatever the mechanisms, this variation is unlikely to result in purely white noise, as commonly postulated for mathematical convenience, but rather some degree of correlation, termed red noise, or possibly anti-correlation such as from seasonal or other oscillatory patterns, so called blue noise.
 
+<!--
 [@Roughgarden; @Ellner] 
 
 
 [@Ovaskainen2010] Master equation, break-down of Fokker-Planck approximation under large noise, introduction of the WKB approximation
-
-<!-- Demographic noise scaling away with population size, but not so for environmental noise -->
-
 [@Bjornstad2001] _Science_ Review of noisy fluctuations 
 
-[@Melbourne2008] Importance of demographic stochasticity and its interaction with environmental stochasticity in driving extinction risk. 
-[@Bonsall2004] Markov chain environmental and demographic noise predator-prey metapopulation model.  
+
 
 Colored noise: [@Lawton]
 - [@Ripa1999]
 - [@Marshall2015]
-
+-->
 
 
 ### Other forms of stochasticity
@@ -238,6 +235,13 @@ Noise is "tacked on" in these models... contrasts to previous section
 ## Persistence and coexistence  
 
 A natural focus of much research into stochastic ecological systems has been on understanding the implications for persistence of individual and coexistence of interacting species. Demographic noise in particular has fundamental implications for the long-term equilibrium: any finite population, however big, is guarenteed to eventually go extinct under demographic noise.  While extinction is certainly a phenonomenon that stands in stark contrast to the long-term behavior of the corresponding deterministic equation, this result is not particularly useful: "eventually" could be longer than the existence of the planet itself. Rather, it is a reminder that we must be careful about how we describe the 'long-term' behavior of a model.  In place of the mathematical notion of a stationary distribution to describe the long-term behavior of a stochastic model, analysis of demographic stochasticity focuses on the concept of quasi-stationary distributions, which in many cases correspond more closely to the equilibria of their deterministic counterparts [@Ovaskainen2010; @Schreiber2017]. 
+
+<!-- FIXME this section is still a fragment
+
+[@Melbourne2008] Importance of demographic stochasticity and its interaction with environmental stochasticity in driving extinction risk. 
+[@Bonsall2004] Markov chain environmental and demographic noise predator-prey metapopulation model.  
+
+-->
 
 
 

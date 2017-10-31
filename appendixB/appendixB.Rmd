@@ -127,7 +127,7 @@ Collecting terms of order $\Omega^{1/2}$ on both sides, we have:
 \frac{\ud \phi(t)}{\ud t} = b(\phi)-d(\phi) = \alpha_1(\phi) \label{macroscopic}
 \end{align}
 
-Where we have the part of the birth and death functions that depend on the macroscopic variable $\phi$ alone.  This is known as the macroscopic equation, and corresponds to the density equations commonly written down.  Following @vanKampen, we will call this difference $\alpha_1(\phi)$ as a shorthand\footnote{This notation suggests it is the first jump moment, defined as first moment of the transition rate between states in a Markov process.  It so happens this term will give the macroscopic law for any Markov process, not only a birth-death process.  The second moment of the transition rates, $a_2$, will be for us simply the sum of the birth and death rates.  We use this notation as it generalizes to processes that have a different master equation from \eqref{master1}.}   
+Where we have the part of the birth and death functions that depend on the macroscopic variable $\phi$ alone.  This is known as the macroscopic equation, and corresponds to the density equations commonly written down.  Following @vanKampen, we will call this difference $\alpha_1(\phi)$ as a shorthand\footnote{This notation suggests it is the first jump moment, defined as first moment of the transition rate between states in a Markov process.  It so happens this term will give the macroscopic law for any Markov process, not only a birth-death process.  The second moment of the transition rates, $a_2$, will be for us simply the sum of the birth and death rates.  We use this notation as it generalizes to processes that have a different master equation from \eqref{master1}, to describe a transition of arbitrary step size: $\alpha_{i,j} = \int r^i \Phi_j(r) \ud r$.}   
 
 
 Collecting terms of order $\Omega^0$ we recover the diffusion equation:
@@ -265,6 +265,33 @@ Then \eqref{master1} becomes:
 
 For small $\epsilon$ we can ignore the terms of $\mathcal O(\epsilon^2)$, and we have recovered the diffusion approximation.  Unfortunately, nature does not give us a parameter $\epsilon$ that goes to zero.  We expect that larger populations will have relatively smaller fluctuations (recall the introductory example) and hence this limit should have something to do with increasing the system size.  We make these notions more precise by expanding equation \eqref{master1} explicitly in terms of the system size.  This will lead us to a much richer and more satisfying description of demographic noise than the mathematical limit above.  
 
+# System size expansion in higher-dimensional systems: environmental noise example
+
+We introduce environmental noise into the master equation by allowing the transition rates to depend explicitly on the macroscopic variable $\psi$ as well as the state variable $\phi$.  It can be helpful to think of fluctuations in $\psi$ as also arising from some lower level transitions, but we need not model these explicitly.  Following the expansion as before (see @vanKampen for details), the mean dynamics are given by the macroscopic equations:
+
+\begin{align}
+\frac{\ud \phi}{\ud t} &= \alpha_{1,0}(\phi, \psi) \\
+\frac{\ud \psi}{\ud t} &= \beta_{1,0}(\psi) \\
+\end{align}
+
+while the fluctuation dynamics are now given by three coupled differential equations:
+
+
+\begin{align}
+\frac{\ud \langle \xi^2 \rangle}{\ud t} &= 2 \frac{\partial \alpha_{1,0}}{\partial \phi} \langle \xi^2 \rangle + 2 \frac{\partial \alpha_{1,0} }{\partial \psi} \langle \xi \eta \rangle + \alpha_{2,0} \label{phivar} \\
+\frac{\ud \langle \xi \eta \rangle}{\ud t} &= \left( \frac{\partial \alpha_{1,0}}{\partial \phi} + \frac{\partial \beta_{1,0} }{\partial \psi} \right)\langle \xi \eta \rangle + \frac{\partial \alpha_{1,0} }{\partial \psi} \langle \eta^2 \rangle \label{covar}\\
+\frac{\ud \langle \eta^2 \rangle}{\ud t} &= 2 \frac{\partial \beta_{1,0}}{\partial \psi} \langle \eta^2 \rangle + \beta_{2,0} \label{psivar}
+\end{align}
+
+Without an explicit model for the environmental variation process, we can merely summarize its role in terms of the autocorrelation, $\tau_c := \tfrac{\partial \beta_{1,0}}{\partial \psi}$ and its overall variance at steady-state, $\langle \eta^2 \rangle = \tfrac{\beta_{2,0}}{-2 \partial_{\psi} \beta{1,0}}$, which we will refer to as the environmental variation $\sigma^2_e := \langle \eta^2 \rangle$.  A more detailed mechanistic description of how the environmental noise arises would permit a time-dependent solution, but the system size expansion tells us that these two summary statistics are all we need to express the steady-state solution above. 
+
+Setting the remaining equations to zero to solve for the stationary state we can write down a general formula for the variation in $\phi$:
+
+\begin{equation}
+\langle xi^2 \rangle = \frac{ \left( \partial_{\psi} \alpha_{1,0}(\phi,\psi) \right)^2}{\left( \partial_{\phi} \alpha_{1,0}(\phi,\psi) \right)^2 + \partial_{\phi} \alpha_{1,0} (x,y) \tau_c } \sigma_e^2 + \sigma^2_d
+\end{equation}
+
+From which we recover the environmental variation equation presented in the main text.  
 
 
 

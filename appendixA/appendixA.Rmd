@@ -1,11 +1,14 @@
 ---
 title: "Appendix A: Stochastic simulations of noisy phenomena"
-output: pdf_document
+output: 
+  pdf_document:
+    toc: true
+bibliography: "../paper/refs.bib"
 ---
 
 
-```{r}
-knitr::opts_chunk$set(message=FALSE, cache = TRUE)
+```{r include=FALSE}
+knitr::opts_chunk$set(message=FALSE, cache = TRUE, warning = FALSE)
 ```
 
 ```{r libraries}
@@ -14,15 +17,19 @@ library(RcppRoll)
 library(regimeshifts) ## devtools::install_github("cboettig/regimeshifts")
 library(adaptivetau)
 library(tidyverse)
-
-## plot themes, non-essential
 library(ggthemes)
 library(gridExtra)
-#library(hrbrthemes)
-#ggplot2::theme_set(hrbrthemes::theme_ipsum())
-ggplot2::theme_set(theme_bw())
 colours <- ptol_pal()(2)
+```
 
+
+```{r include=FALSE}
+## plot themes, non-essential. Comment out if theme creates trouble with fonts on your system.
+library(hrbrthemes)
+library(extrafont)
+hrbrthemes::import_roboto_condensed()   # One-time use to set up fonts 
+extrafont::loadfonts()
+ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
 ```
 
 # Gillespie algorithm
@@ -367,7 +374,7 @@ gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1), c(2,2)))
 
 
 
-
+# References
 
 
 

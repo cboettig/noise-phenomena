@@ -30,6 +30,7 @@ keywords:
   - environmental noise
   - colored noise
   - quasi-cycles
+  - tipping points
 
 ---
 
@@ -838,7 +839,7 @@ theory. A rich array of experimental and observational tests of early
 warning signals [_i.e._ @Carpenter2011; @Dai2012; and many others, _e.g._ see @Scheffer2015 review] has served no merely to illustrate these phenomena can be seen
 in laboratory and field ecosystems, but also to spark suggestions of
 additional possible indicators and surface a wide array of 
-practical [@Boettiger2013b; @Scheffer2015], statistical [e.g. @Boettiger2012d; @Boettiger2012], and theoretical [e.g. @Dai2015; @Wysham2010] challenges to such application.  This
+practical [@Boettiger2013b; @Scheffer2015], statistical [e.g. @Boettiger2012d; @Boettiger2012], and theoretical [e.g. @Dai2015; @Hastings2010] challenges to such application.  This
 creates a two-way dialog between empirical and theoretical work that does
 much to advance the field as a whole.
 

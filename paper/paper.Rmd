@@ -244,7 +244,7 @@ $N$.
 
 <!-- Figure 1: Gillespie simulations -->
 ```{r gillespie, warning=FALSE, fig.width=7, fig.cap="Population dynamics from a Gillespie simulation of the Levins model with large (N=1000, panel A) and small (N=100, panel B) number of sites (blue) show relatively weaker effects of demographic noise in the bigger system. Models are otherwise identical, with e = 0.2 and c = 1 (code in appendix A). Theoretical predictions for mean and plus/minus one standard deviation shown in horizontal re dashed lines."}
-read_csv("appendixA/gillespie.csv", col_types = "cdiddd")  %>% 
+read_csv("../appendixA/gillespie.csv", col_types = "cdiddd")  %>% 
   mutate(system_size = recode(system_size, large = "A. 1000 total sites", small= "B. 100 total sites")) %>%
   ggplot(aes(x = time)) + 
   geom_hline(aes(yintercept = mean), lty=2, col=colours[2]) + 
@@ -483,7 +483,7 @@ Permenance, robust permenance
 
 <!-- Figure 2: Quasi-cycles -->
 ```{r quasicycles, fig.width=7, fig.cap="Panel A: under negligible environmental noise, the introduction of a carrying capacity damps Lotka-Volterra oscillations which eventually settle to a stable state.  Panel B: small noise induces quasi-cycles in the same model: sustained long-term oscillations predominately around the natural frequency of the original damped oscillations. Parameters for models shown are r = .1, K = 5,  b = .1, c = .1, d = .1, N = 800; code in Appendix A."}
-read_csv("appendixA/quasicycles.csv") %>%
+read_csv("../appendixA/quasicycles.csv") %>%
   gather(species, population, -t, -sigma) %>%
   mutate(sigma = as.factor(sigma)) %>%
   mutate(sigma = recode(sigma, "1e-05" = "A.", "0.01" = "B.")) %>%
@@ -645,7 +645,7 @@ theory <-
   gather(curve, y, -x, -potential) 
 
 
-p1 <- read_csv("appendixA/noisy_switch.csv")  %>%
+p1 <- read_csv("../appendixA/noisy_switch.csv")  %>%
   ggplot(aes(t,x)) + 
   geom_line(lwd=.1, col=colours[[1]]) +
   labs(subtitle = bquote(bold(A.)))
@@ -734,7 +734,7 @@ contribution of environmental noise).
 
 <!-- Figure 4: Early warning signals -->
 ```{r tipping, fig.width=7, fig.height=7, fig.cap="Early warning signs of a critical transition in a simulation of increasing serial dilution of budding yeast.  Panel A: Rolling variance   autocorrelation Time series is shown in panel C. Model details and simulation parameters in Appendix A."}
-tipping <- read_csv("appendixA/tipping.csv") 
+tipping <- read_csv("../appendixA/tipping.csv") 
 
 p1 <- tipping %>%
   select(-x) %>%

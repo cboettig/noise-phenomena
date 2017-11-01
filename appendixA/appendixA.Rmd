@@ -5,10 +5,10 @@ output: pdf_document
 
 
 ```{r}
-knitr::opts_chunk$set(message=FALSE)
+knitr::opts_chunk$set(message=FALSE, cache = TRUE)
 ```
 
-```{r}
+```{r libraries}
 library(nimble)
 library(RcppRoll)
 library(regimeshifts) ## devtools::install_github("cboettig/regimeshifts")
@@ -103,7 +103,6 @@ read_csv("gillespie.csv", col_types = "cdiddd")  %>%
   labs(caption = "theoretical predictions for mean and plus/minus one standard \n deviation shown in horizontal black dashed lines.")
 ```
 
-------------
 
 
 
@@ -208,13 +207,15 @@ read_csv("noisy_switch.csv")  %>% ggplot(aes(t,x)) + geom_line()
 
 
 
-## Stochastic inflation
+# Stochastic inflation
 
 
-Analytical predicted population size, as a fraction of $K$, is $\tfrac{1}{2} + \tfrac{1}{2} \sqrt{1- 8\sigma^2/K^2}$.  Note this is independent of $r$, and increases with $\sigma/K$, the larger the noise $\sigma_g$ as a fraction of the carrying capacity $K$.  Population sizes can also be inflated relative to their deterministic equilibrium whenever the second derivative is positive (as in the lower equilibrium in the May model of alternative stable states, considered below.)  Stronger nonlinearities (in particular, a larger second derivative at the equilibrium) can drive larger inflationary effects.  
+Analytical predicted population size, as a fraction of $K$, is $\tfrac{1}{2} + \tfrac{1}{2} \sqrt{1- 8\sigma^2/K^2}$.  Note this is independent of $r$, and increases with $\sigma/K$, the larger the noise $\sigma_g$ as a fraction of the carrying capacity $K$.  Population sizes can also be inflated relative to their deterministic equilibrium whenever the second derivative is positive (as in the lower equilibrium in the May model of alternative stable states, considered below.)  As predicted by the system size expansion, the deviation from the deterministic result is of order $N^{-1}$.  
+
+Because a substantial number of replicate simulations are required to derive a precise mean state, this example will be significantly slower to run than others.  
 
 
-```{r}
+```{r eval=FALSE}
 p <- list(r = .4, K = 1, sigma = .15, N = 500)
 equib <- (1 + sqrt(1 - 8 * p$sigma^2/p$K^2) )/ 2
 
@@ -237,15 +238,15 @@ nimbleModel(logistic,
 cmodel <- compileNimble(model)
 set.seed(123)
 
+## Perform the simulations
 df <- map_dfr(1:10000, 
               function(rep){
                 simulate(cmodel)
                 data.frame(t = seq_along(cmodel$x), x = cmodel$x)
               },
               .id = "rep")
-```
 
-```{r}
+# Tidy up the result data and write to file, along with analytic prediction for equilibrium
 df %>% 
   filter(x > 0) %>% 
   group_by(t) %>%
@@ -263,11 +264,6 @@ read_csv("inflation.csv") %>%
   scale_color_ptol() + 
   coord_cartesian(xlim=c(100,500), ylim=c(1.2, .5))
 ```
-
-
-
-----
-
 
 
 

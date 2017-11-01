@@ -73,7 +73,9 @@ processes of interest.  Unfortunately, given the high levels of
 variation and relatively limited data typical in ecological analyses,
 this can be a significant challenge, and even as statistical and
 computational advances provide more powerful and accessible inference
-tools, the task only gets harder.  For instance, few ecological
+tools, the task only gets harder.  
+
+For instance, few ecological
 concepts are more central than the notion of density dependence:
 that competition in some form or other should limit a species ability
 to grow without bound.  Yet establishing statistical evidence for
@@ -228,8 +230,10 @@ known as the "master equation."
 
 It is possible to simulate such a process exactly using Gillespie's
 exact stochastic simulation algorithm [SSA; @Gillespie1977], which
-simulates each individual birth or death as a separate event.
-Consider Levins' patch model, where $n$ individuals compete for a
+simulates each individual birth or death as a separate event. Figure 1
+uses this algorithm to compare simulations of the Levins' patch model;
+see Appendix A for example code.  In the Levins'  model,
+$n$ individuals compete for a
 finite number of suitable habitats $N$.  Individuals die a constant
 rate $e$, and produce offspring at a constant rate $c$ who then
 have a probability of colonizing an open patch that is simply
@@ -728,6 +732,32 @@ contribution of environmental noise).
 
 <!-- fixme need more background? --> 
 
+
+<!-- Figure 4: Early warning signals -->
+```{r tipping, fig.width=7, fig.height=7, fig.cap="Early warning signs of a critical transition in a simulation of increasing serial dilution of budding yeast.  Panel A: Rolling variance   autocorrelation Time series is shown in panel C. Model details and simulation parameters in Appendix A."}
+tipping <- read_csv("appendixA/tipping.csv") 
+
+p1 <- tipping %>%
+  select(-x) %>%
+  rename("A. autocorrelation" = autocorrelation, "B. variance" = variance) %>%
+  gather(series, value, -t, -tip_time) %>%
+  ggplot(aes(t, value)) + geom_line(col=colours[[1]]) + 
+  geom_vline(aes(xintercept = tip_time), col=colours[[2]], lty=2) +
+  facet_wrap(~series, ncol = 2, scales="free_y")  
+p2 <- tipping %>% 
+  select(t, population = x, tip_time) %>%
+  ggplot(aes(t, population)) + geom_line(col=colours[1]) + 
+  geom_vline(aes(xintercept = tip_time), col=colours[2], lty=2) + 
+  #scale_y_log10()  + 
+  labs(subtitle = "C. Yeast population size", 
+       caption = "Vertical red dashed line indicates tipping point location")
+
+gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1), c(2,2)))
+
+```
+
+
+
 Noise can provide novel information in other ways as well.  Stochastic
 fluctuations act like a continual miniature perturbation experiment,
 constantly pushing a system away from an equilibrium to reveal its
@@ -759,6 +789,8 @@ by the patterns of increasing variance and increasing auto-correlation
 seen empirically in lab populations [@Dai2012] as well as the
 numerical simulation shown here.
 
+
+
 As we saw in the equations from the system-size approximation, the
 variance and auto-correlation in question are technically properties
 of an ensemble, and should be computed over replicate simulations.
@@ -773,29 +805,6 @@ of replicates.
 
 
 <!-- @Holling1996 is responsible for the introduction of the unfortunate term "Engineering Resilience" to mean precisely the same thing as mathematicians and theoretical ecologists have refered to as 'stability' for decades.  Further confusion has been sown by the introduction of the energy-potential diagram into ecology, where the depth of the potential well is not a local property-->
-
-<!-- Figure 4: Early warning signals -->
-```{r tipping, fig.width=7, fig.height=7, fig.cap="Early warning signs of a critical transition in a simulation of increasing serial dilution of budding yeast.  Panel A: Rolling variance   autocorrelation Time series is shown in panel C. Model details and simulation parameters in Appendix A."}
-tipping <- read_csv("appendixA/tipping.csv") 
-
-p1 <- tipping %>%
-  select(-x) %>%
-  rename("A. autocorrelation" = autocorrelation, "B. variance" = variance) %>%
-  gather(series, value, -t, -tip_time) %>%
-  ggplot(aes(t, value)) + geom_line(col=colours[[1]]) + 
-  geom_vline(aes(xintercept = tip_time), col=colours[[2]], lty=2) +
-  facet_wrap(~series, ncol = 2, scales="free_y")  
-p2 <- tipping %>% 
-  select(t, population = x, tip_time) %>%
-  ggplot(aes(t, population)) + geom_line(col=colours[1]) + 
-  geom_vline(aes(xintercept = tip_time), col=colours[2], lty=2) + 
-  #scale_y_log10()  + 
-  labs(subtitle = "C. Yeast population size", 
-       caption = "Vertical red dashed line indicates tipping point location")
-
-gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1), c(2,2)))
-
-```
 
 
 

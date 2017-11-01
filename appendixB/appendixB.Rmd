@@ -104,9 +104,9 @@ Taking $P(n,t) = \Pi(\xi, t)$, we can rewrite the time derivative.  First, note 
 \end{align}
 
 Also by the chain rule, we have
-\begin{align}
+\begin{align*}
 \frac{\partial}{\partial t} P(n,t) &= \frac{\partial \Pi}{\partial t}  + \frac{\partial \Pi}{\partial \xi}\frac{\ud \xi}{\ud t} 
-\end{align}
+\end{align*}
 Substituting in \eqref{dxidt}, we find:  
 
 \begin{align}
@@ -118,7 +118,8 @@ To complete the transformation, we put \eqref{Pi} on the left side, replace all 
 \begin{align}
 &\frac{\partial \Pi(\xi, t)}{\partial t}  - \Omega^{1/2}\frac{\ud \phi}{\ud t}\frac{\partial \Pi}{\partial \xi}  = \nonumber \\
 &\quad \left( -\Omega^{-1/2} \frac{\partial}{\partial \xi} +  \frac{\Omega^{-1}}{2} \frac{\partial^2}{\partial \xi^2} + \ldots\right)b(\phi\Omega+\xi\Omega^{1/2})\Pi(\xi, t)\nonumber \\
-+&\quad \left( \Omega^{-1/2} \frac{\partial}{\partial \xi} +  \frac{\Omega^{-1}}{2} \frac{\partial^2}{\partial \xi^2} + \ldots\right)d(\phi\Omega+\xi\Omega^{1/2})\Pi(\xi, t)\end{align}
++&\quad \left( \Omega^{-1/2} \frac{\partial}{\partial \xi} +  \frac{\Omega^{-1}}{2} \frac{\partial^2}{\partial \xi^2} + \ldots\right)d(\phi\Omega+\xi\Omega^{1/2})\Pi(\xi, t)
+\end{align}
 
 
 Collecting terms of order $\Omega^{1/2}$ on both sides, we have:
@@ -206,13 +207,13 @@ where $n$ is the number of occupied patches, $N$ the total number of patches, $c
 
 From which the macroscopic equation \eqref{macroscopic}, the fluctuations \eqref{fluc} can be solved.  According to \eqref{FP} the distribution is simply the Gaussian with the mean given by \eqref{n mean} and variance \eqref{n var}. The equilibrium of the macroscopic equation is:
 
-\begin{align}
+\begin{align*}
 \langle n\rangle_s = N\left(1-\frac{e}{c}\right)
-\end{align}
+\end{align*}
 while the steady-state fluctuations are given by \eqref{fluctuation dissipation}, \eqref{n var}:
-\begin{align}
+\begin{align*}
 \sigma_n^2 = N\frac{e}{c}
-\end{align}
+\end{align*}
 
 
 ### Comparison to other models:
@@ -241,19 +242,19 @@ A somewhat different approach to deriving a diffusion equation predominates in t
 
 Consider small steps $x = \epsilon n$, and hence $p_n = \epsilon P_x$, where $\epsilon \ll 1$.  To keep the process from slowing down we consequently have to scale up the rates by $\epsilon$ as well:
 
-\begin{align}
+\begin{align*}
 	b_n - d_n = \frac{A_x}{\epsilon}
-\end{align}
+\end{align*}
 
 Where $A$ is independent of $\epsilon$.  Similarly we have to scale the sum, which being proportional to the variance must be scaled by
-\begin{align}
+\begin{align*}
 b_n + d_n = \frac{B_x}{\epsilon^2}
-\end{align}
+\end{align*}
 
 We Taylor expand the step operator $\mathbb E$ in the new variable:
-\begin{align}
+\begin{align*}
 \mathbb E^k &= 1+ \epsilon k\frac{\partial}{\partial x} + \frac{\epsilon^2 k^2}{2} \frac{\partial^2}{\partial x^2} + \ldots
-\end{align}
+\end{align*}
 
 Then \eqref{master1} becomes:
 \begin{align}
@@ -269,10 +270,10 @@ For small $\epsilon$ we can ignore the terms of $\mathcal O(\epsilon^2)$, and we
 
 We introduce environmental noise into the master equation by allowing the transition rates to depend explicitly on the macroscopic variable $\psi$ as well as the state variable $\phi$.  It can be helpful to think of fluctuations in $\psi$ as also arising from some lower level transitions, but we need not model these explicitly.  Following the expansion as before (see @vanKampen for details), the mean dynamics are given by the macroscopic equations:
 
-\begin{align}
+\begin{align*}
 \frac{\ud \phi}{\ud t} &= \alpha_{1,0}(\phi, \psi) \\
-\frac{\ud \psi}{\ud t} &= \beta_{1,0}(\psi) \\
-\end{align}
+\frac{\ud \psi}{\ud t} &= \beta_{1,0}(\psi) 
+\end{align*}
 
 while the fluctuation dynamics are now given by three coupled differential equations:
 
@@ -287,9 +288,9 @@ Without an explicit model for the environmental variation process, we can merely
 
 Setting the remaining equations to zero to solve for the stationary state we can write down a general formula for the variation in $\phi$:
 
-\begin{equation}
+\begin{equation*}
 \langle xi^2 \rangle = \frac{ \left( \partial_{\psi} \alpha_{1,0}(\phi,\psi) \right)^2}{\left( \partial_{\phi} \alpha_{1,0}(\phi,\psi) \right)^2 + \partial_{\phi} \alpha_{1,0} (x,y) \tau_c } \sigma_e^2 + \sigma^2_d
-\end{equation}
+\end{equation*}
 
 From which we recover the environmental variation equation presented in the main text.  
 

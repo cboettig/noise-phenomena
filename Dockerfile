@@ -9,5 +9,5 @@ COPY . /home/rstudio/noise-phenomena
 WORKDIR /home/rstudio/noise-phenomena
 
 RUN R -e "devtools::install(dep=TRUE)"
-RUN R -e "rmarkdown::render('appendixA/appendixA.Rmd')"
+#RUN R -e "rmarkdown::render('appendixA/appendixA.Rmd')"
 

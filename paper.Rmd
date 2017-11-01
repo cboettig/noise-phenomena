@@ -355,7 +355,7 @@ this approximation must be replaced with a different approach, such
 as the WKB approximation, as discussed in @Ovaskainen2010.
 
 The importance of $\tau_c$, or the degree of auto-correlation, which
-emerges from our derivation above, has also been a subject of
+emerges from our derivation above, has also been and continues to be a subject of
 significant interest in the study of stochastic population dynamics
 [e.g.@Roughgarden; @Ellner; @Lawton; @Ripa1999; @Marshall2015].
 Early work rarely often assumed environmental noise would be
@@ -368,8 +368,8 @@ of the system-size approximation is always auto-correlated to some
 degree -- if we measure our environment at consecutive times
 infinitesimally far apart, we expect nearly identical values.  At
 intervals much longer than the correlation time, consecutive
-measurements are effectively independent: auto-correlated noise is
-all about _relative_ timescales.
+measurements are effectively independent (white noise). 
+The degree of auto-correlation in  noise is all about _relative_ timescales.
 
 
 ## Other forms of stochasticity
@@ -453,31 +453,30 @@ has been on understanding the implications for persistence of
 individual and coexistence of interacting species. Demographic noise
 in particular has fundamental implications for the long-term
 equilibrium: any finite population, however big, is guaranteed to
-eventually go extinct under demographic noise.  While extinction
-is certainly a phenomenon that stands in stark contrast to the
-long-term behavior of the corresponding deterministic equation,
-this result is not particularly useful: "eventually" could be longer
-than the existence of the planet. Rather, it is a reminder that we
-must be careful about how we describe the 'long-term' behavior of
-a model.  In place of the mathematical notion of a stationary
-distribution to describe the long-term behavior of a stochastic
-model, analysis of demographic stochasticity focuses on the concept
-of quasi-stationary distributions, which in many cases correspond
-more closely to the equilibrium of their deterministic counterparts
-[@Ovaskainen2010; @Schreiber2017].
-
-<!-- FIXME this section is still a fragment
-
-[@Melbourne2008] Importance of demographic stochasticity and its interaction with environmental stochasticity in driving extinction risk. 
-[@Bonsall2004] Markov chain environmental and demographic noise predator-prey metapopulation model.  
-
--->
+eventually go extinct under demographic noise.  However, in most
+models it is possible to define a notion of quasi-stationary 
+distribution concentrated around the deterministic attractor,
+and to prove the probability of extinction decreases exponentially with 
+system size (e.g. see @Ovaskainen2010; @Schreiber2017 also reviews 
+more recent literature which has established these results more generally). 
+Generalizations about persistence and stable coexistence of interacting
+species in stochastic models are difficult due to complex interactions
+between demographic and environmental noise, population structure,
+spatial heterogeneity, magnitude of noise, degree of autocorrelation and so forth
+[e.g. @Higgins1997; @Coulson2001; @Melbourne2008; @Hart2016];
+indeed care must be taken even in defining the approriate notion of 
+persistence [e.g. @Schreiber2006].  Instead of these long-term limits,
+here we will focus on a few examples of stochastic phenomena 
+that can emerge on shorter time scales and provide some intuition for 
+how the interaction between stochastic an nonlinear dynamics can 
+create these surprising results.  
 
 <!--
 
 Insufficient space left for any treatment of these...
+Permenance, robust permenance
 
-**Bet hedging**
+**Bet hedging**, Lewontin & Cohen 1969; Levins 1969; 
 
 -->
 
@@ -787,9 +786,7 @@ Increasing the serial dilution rate slowly over time drives the
 stable population towards a fold bifurcation, which is accompanied
 by the patterns of increasing variance and increasing auto-correlation
 seen empirically in lab populations [@Dai2012] as well as the
-numerical simulation shown here.
-
-
+numerical simulation shown in Figure 4.
 
 As we saw in the equations from the system-size approximation, the
 variance and auto-correlation in question are technically properties
@@ -804,16 +801,11 @@ time window as we illustrate here, rather than across an ensemble
 of replicates.
 
 
-<!-- @Holling1996 is responsible for the introduction of the unfortunate term "Engineering Resilience" to mean precisely the same thing as mathematicians and theoretical ecologists have refered to as 'stability' for decades.  Further confusion has been sown by the introduction of the energy-potential diagram into ecology, where the depth of the potential well is not a local property-->
-
-
+<!-- FIXME Fragment, also tie back to flickering results, move some of that here-->
 
 Challenges remain in distinguishing these patterns from other causes [@Boettiger2013a] which will ultimately require more domain-specific information  [@Boettiger2013b]. 
 
-<!--
-It is important to realize that such approaches can only ever measure local properties such as the return time in response to local perturbation (historically termed *stability*; which @Holling1996 landmark chapter unfortunately re-brands as "engineering resilience") and not global properties such as the size of the attractor basin / distance to the nearest tipping point (*ecological resilience*, or simply *resilience*).  This is illustrated rather vividly in @Dai2015, which illustrates how a system can lose resilience before losing stability, resulting in a scenario that provides less opportunity for early warning.
 
--->
 
 # Conclusions
 

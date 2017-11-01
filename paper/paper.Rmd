@@ -12,8 +12,10 @@ address:
 csl: ecology-letters.csl
 bibliography: refs.bib
 output: rticles::elsevier_article  
-layout:  5p # review = doublespace, 3p = singlespace, 5p = two-column
-preamble: "\\newcommand{\\ud}{\\mathrm{d}}"
+layout:  review # review = doublespace, 3p = singlespace, 5p = two-column
+preamble: |
+  \newcommand{\ud}{\mathrm{d}}
+  \linenumbers
 
 #preamble: "\\usepackage[nomarkers]{endfloat}"
 
@@ -173,7 +175,7 @@ that seek to capture the essential features of a system while
 neglecting any random component as mere noise [@Coulson2004].
 Advances in both theoretical understanding and the advent of widely
 available and efficient numerical methods have helped drive research
-towards increasingly more explicit descriptions of how stochastiticity
+towards increasingly more explicit descriptions of how stochasticity
 enters into quantitative models [@Black2012; @Ovaskainen2010].
 
 With the exception of quantum mechanics (and there only at scales
@@ -237,8 +239,13 @@ $n$ individuals compete for a
 finite number of suitable habitats $N$.  Individuals die a constant
 rate $e$, and produce offspring at a constant rate $c$ who then
 have a probability of colonizing an open patch that is simply
-proportional to the fraction of available patches, $1 - n/N$.  Figure
-1 shows the results of two exact SSA simulations of this model with
+proportional to the fraction of available patches, $1 - n/N$.  
+
+\begin{align}
+\frac{\ud n}{\ud t} = \underbrace{c n \left(1 - \frac{n}{N}\right)}_{\textrm{birth}} - \underbrace{e n}_{\textrm{death}}, \label{levins}
+\end{align}
+
+Figure 1 shows the results of two exact SSA simulations of this model with
 identical parameters except for the total number of available sites,
 $N$.
 
@@ -275,8 +282,8 @@ dependent birth-death process:
 where $x = \langle n \rangle$, the average or expected population
 size of an ensemble of replicates, assuming the transitions (+/- 1
 in this case) are much smaller than the system size ($N$ in the
-Levins model).  Note that the dynamics for the average population
-match the population-level equation^[up to fluctuations of order
+Levins model).  The dynamics for the average population
+match the population-level equation.^[up to fluctuations of order
 $\tfrac{1}{N}$. We can actually both observe and successfully
 approximate this higher-order correction from additional terms in
 the system size expansion to recover the phenomenon of stochastic
@@ -285,15 +292,21 @@ be larger or smaller than predicted by the deterministic model --
 see Appendix A for examples in simulations compared to predictions
 of the system size expansion].
 
+The change in variance can be seen
+as a balance between the stochastic contribution, $b(x) + d(x)$
+and the deterministic contribution, $\partial_x \left(b(x) - d(x)\right)$. 
+The deterministic contribution is the slope of the macroscopic
+equation, that is, the eigenvalue indicating the stability of the
+equilibrium point.  For stable points, this value must be negative
+and precisely balance the strictly positive stochastic contribution 
+of $b(x) + d(x)$ (the greater the rate of stochastic events involved, 
+the greater the fluctuations).  This balance at steady-state is known as the
+fluctuation-dissipation theorem [@vanKampen2007], an will prove a useful
+expression in understanding stochastic dynamics.  Because Eq \eqref{bd}
+also describes the time-evolution of these fluctuations, we can similarly
+solve for the correlation between two points separated by time $\tau$.
 
-\begin{align}
-\frac{\ud n}{\ud t} = \underbrace{c n \left(1 - \frac{n}{N}\right)}_{\textrm{birth}} - \underbrace{e n}_{\textrm{death}}, \label{levins}
-\end{align}
-
-Note that like the equation for the mean, we have a dynamic equation
-for the time-evolution of the variance in Eq \eqref{bd}.  We can
-solve these equations at steady-state by setting both equations
-zero. For our Levins' model, $b(n) = n (1 - \tfrac{n}{N})$ and $d(n) = en$,
+For our Levins' model, $b(n) = n (1 - \tfrac{n}{N})$ and $d(n) = en$,
 we find the average number of occupied patches 
 $\langle n \rangle = N\tfrac{e}{c}$ with variance at steady-state of 
 $\sigma^2_n = N \tfrac{e}{c}$.  Observe that the variance scales proportionally
@@ -362,13 +375,13 @@ Early work rarely often assumed environmental noise would be
 uncorrelated as a mathematical convenience.  As the derivation of
 Eq \eqref{env_noise} makes clear, for a continuous-time process,
 the relevant metric is the timescale of auto-correlation in the
-environmental noise process relative to the timescale (auto-correlation)
+environmental noise process relative to the auto-correlation timescale
 of the population dynamics.  The Gaussian noise that emerges out
 of the system-size approximation is always auto-correlated to some
 degree -- if we measure our environment at consecutive times
 infinitesimally far apart, we expect nearly identical values.  At
 intervals much longer than the correlation time, consecutive
-measurements are effectively independent (white noise). 
+measurements are effectively independent (i.e. white noise). 
 The degree of auto-correlation in  noise is all about _relative_ timescales.
 
 
@@ -388,7 +401,7 @@ model.  As with other forms of noise [@Melbourne2008; @Bonsall2004],
 interaction between individual or spatial variation and other sources
 of noise can drive patterns including the potential for persistence,
 coexistence, and dispersal of species [@Schreiber2010; @Hart2016;
-@Schreiber2017].  *Observational error*: Observational error acts
+@Schreiber2017].  *Observational error* acts
 much like another form of stochasticity, arising from sampling
 effects or limitations of instruments, etc. Yet unlike the sources
 described above, this uncertainty does not impact the actual state
@@ -462,9 +475,9 @@ more recent literature which has established these results more generally).
 Generalizations about persistence and stable coexistence of interacting
 species in stochastic models are difficult due to complex interactions
 between demographic and environmental noise, population structure,
-spatial heterogeneity, magnitude of noise, degree of autocorrelation and so forth
+spatial heterogeneity, magnitude of noise, degree of auto-correlation and so forth
 [e.g. @Higgins1997; @Coulson2001; @Melbourne2008; @Hart2016];
-indeed care must be taken even in defining the approriate notion of 
+indeed care must be taken even in defining the appropriate notion of 
 persistence [e.g. @Schreiber2006].  Instead of these long-term limits,
 here we will focus on a few examples of stochastic phenomena 
 that can emerge on shorter time scales and provide some intuition for 
@@ -778,7 +791,7 @@ timeseries of a simulation of the dynamics of yeast population
 growth in Figure 4.  This simulation is based on a mechanistic model
 developed by @Dai2012 that closely matches the population dynamics
 they observed in serial dilutions of budding yeast _Saccharomyces
-cervisiae_ on a sucrose medium. Because the relevant proteins are
+cerevisiae_ on a sucrose medium. Because the relevant proteins are
 located in the extra-cellular matrix rather than inside the cells,
 budding yeast break down sucrose collaboratively, creating an Allee
 effect below which the population is too small to sustain itself.
@@ -800,11 +813,34 @@ over a given window in time, computing these averages over a rolling
 time window as we illustrate here, rather than across an ensemble
 of replicates.
 
+The challenge of identifying warning signs that a system is approaching
+a tipping point has proven a rich area for applications of stochastic
+processes.  We have already seen how in addition to the patterns of
+increasing variance and auto-correlation, our survey of stochastic phenomena
+has highlighted the increased potential to observe stochastic switching,
+or flickering, as the system approaches the tipping point.  Challenges remain
+in distinguishing these patterns from other causes [@Boettiger2013a].
+For instance, as we have seen, variance in a system can increase due to
+external drivers without changing the auto-correlation, and both variance
+and auto-correlation can increase if a system loses stability without
+approaching a saddle-node bifurcation, but will not show flickering.
+The greater our suite of stochastic indicators, the better our ability
+to pin down the processes involved.  Such examples suggest
+that stochastic processes could play a similar role in identifying
+other critical transitions. For instance, stochastic resonance may be 
+visible in advance of a Hopf bifurcation, in which a stable node becomes
+a limit cycle.
 
-<!-- FIXME Fragment, also tie back to flickering results, move some of that here-->
-
-Challenges remain in distinguishing these patterns from other causes [@Boettiger2013a] which will ultimately require more domain-specific information  [@Boettiger2013b]. 
-
+Most importantly, the framing of stochastic processes as indicators of 
+changes in an ecosystem that might otherwise go unnoticed has proven a
+rich catalyst for bringing these concepts beyond the realm of abstract
+theory. A rich array of experimental and observational tests of early
+warning signals [_i.e._ @Carpenter2011; @Dai2012; and many others, _e.g._ see @Scheffer2015 review] has served no merely to illustrate these phenomena can be seen
+in laboratory and field ecosystems, but also to spark suggestions of
+additional possible indicators and surface a wide array of 
+practical [@Boettiger2013b; @Scheffer2015], statistical [e.g. @Boettiger2012d; @Boettiger2012], and theoretical [e.g. @Dai2015; @Wysham2010] challenges to such application.  This
+creates a two-way dialog between empirical and theoretical work that does
+much to advance the field as a whole.
 
 
 # Conclusions

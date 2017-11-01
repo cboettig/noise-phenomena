@@ -4,7 +4,7 @@ FROM rocker/verse:3.4.2
 RUN apt-get update && \
   apt-get -y install fonts-roboto  && \
   install2.r -e nimble RcppRoll adaptivetau hrbrthemes ggthemes gridExtra && \
-  installGithub.r cboettig/regimeshifts@0.0.1
+  R -e "devtools::install_github('cboettig/regimeshifts@v0.0.1')"
 
 COPY . /home/rstudio/noise-phenomena
 WORKDIR /home/rstudio/noise-phenomena

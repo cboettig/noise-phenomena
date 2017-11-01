@@ -7,6 +7,12 @@ bibliography: "../paper/refs.bib"
 ---
 
 
+# Getting started
+
+This appendix includes the code to create all simulated data shown in the paper (and one additional example involving stochastic inflation that is not shown.)  We must first load a variety of packages we use to create and display the simulations. The `regimeshifts` package provides an example of the model of @Dai2012 and must be installed separately from GitHub,
+all other packages can be found on CRAN.  A reproducible Dockerfile for building an image containing all necessary software to run the examples is also provided in the associated GitHub repository for this paper: <https://github.com/cboettig/noise-phenomena>.  
+
+
 ```{r include=FALSE}
 knitr::opts_chunk$set(message=FALSE, cache = TRUE, warning = FALSE)
 ```
@@ -27,6 +33,7 @@ colours <- ptol_pal()(2)
 ## plot themes, non-essential. Comment out if theme creates trouble with fonts on your system.
 library(hrbrthemes)
 library(extrafont)
+extrafont::font_import(prompt=FALSE)    # One-time use to set up fonts, can be slow.
 hrbrthemes::import_roboto_condensed()   # One-time use to set up fonts 
 extrafont::loadfonts()
 ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
@@ -62,6 +69,9 @@ and a variance of
 
 $$\left. \frac{b(n) + d (n)}{2 d'(n) - b'(n)} \right\rvert_{n = \hat n} = \tfrac{e}{c}N$$
 
+
+Exact Gillespie simulations can be run efficiently in R using the `adaptivetau::ssa.exact()` function:
+
 ```{r gillespie}
 set.seed(1234) # set random number generator seed to be reproducible
 
@@ -79,6 +89,9 @@ sim_large <- adaptivetau::ssa.exact(init.values = c(n = 500),
                        tf=30) %>% as_tibble()
 ```
 
+
+We will also create a separate data frame (`tibble`) corresponding to our theoretical predictions from the system size expansion:
+
 ```{r}
 theory <- 
 list(small = 100,large = 1000) %>%
@@ -89,9 +102,10 @@ list(small = 100,large = 1000) %>%
   }, .id = "system_size")
 ```
 
+Bind together both simulation results and theory results and store output data in a plain text `.csv` file.
+
 
 ```{r}
-## Bind together both simulation results and theory results
 gillespie <- bind_rows("large"=sim_large, 
                        "small"=sim_small,  
                        .id = "system_size") %>% bind_rows(theory)
@@ -99,24 +113,24 @@ write_csv(gillespie, "gillespie.csv")
 ```
 
 
-```{r}
-read_csv("gillespie.csv", col_types = "cdiddd")  %>% 
-  ggplot(aes(x = time)) + 
-  geom_hline(aes(yintercept = mean), lty=2) + 
-  geom_hline(aes(yintercept = minus_sd), lty=2) + 
-  geom_hline(aes(yintercept = plus_sd), lty=2) + 
-  geom_line(aes(y = n), col="red") +
-  facet_wrap(~system_size, scales = "free_y") + 
-  labs(caption = "theoretical predictions for mean and plus/minus one standard \n deviation shown in horizontal black dashed lines.")
-```
+Example plotting command to generate the figure as shown in main text:
 
+```{r gillespie, warning=FALSE, fig.width=7, fig.cap="Population dynamics from a Gillespie simulation of the Levins model with large (N=1000, panel A) and small (N=100, panel B) number of sites (blue) show relatively weaker effects of demographic noise in the bigger system. Models are otherwise identical, with e = 0.2 and c = 1 (code in appendix A). Theoretical predictions for mean and plus/minus one standard deviation shown in horizontal re dashed lines."}
+read_csv("../appendixA/gillespie.csv", col_types = "cdiddd")  %>% 
+  mutate(system_size = recode(system_size, large = "A. 1000 total sites", small= "B. 100 total sites")) %>%
+  ggplot(aes(x = time)) + 
+  geom_hline(aes(yintercept = mean), lty=2, col=colours[2]) + 
+  geom_hline(aes(yintercept = minus_sd), lty=2, col=colours[2]) + 
+  geom_hline(aes(yintercept = plus_sd), lty=2, col=colours[2]) + 
+  geom_line(aes(y = n), col=colours[1]) +
+  facet_wrap(~system_size, scales = "free_y") 
+```
 
 
 
 # Quasi-cycles
 
-Understanding the origin of sustained oscillations has long been a central question in ecology [@Hastings1996]
-
+Simulations of the quasi-cycles can easily be performed in NIMBLE, which allows us to express the stochastic models in the familiar BUGS syntax.  Change the values of the model and noise parameters below to explore these results.  
 
 ```{r}
 
@@ -150,45 +164,33 @@ quasicycle_df <- p %>% rowwise() %>% do(f(.))
 write_csv(quasicycle_df, "quasicycles.csv")
 ```
 
-```{r}
+From this quasicycle simulation data we can recreate the plot shown in Figure 2 as follows:
+
+
+```{r quasicycles, fig.width=7, fig.cap="Panel A: under negligible environmental noise, the introduction of a carrying capacity damps Lotka-Volterra oscillations which eventually settle to a stable state.  Panel B: small noise induces quasi-cycles in the same model: sustained long-term oscillations predominately around the natural frequency of the original damped oscillations. Parameters for models shown are r = .1, K = 5,  b = .1, c = .1, d = .1, N = 800; code in Appendix A."}
 read_csv("quasicycles.csv") %>%
-  gather(species, pop, -t, -sigma) %>%
+  gather(species, population, -t, -sigma) %>%
   mutate(sigma = as.factor(sigma)) %>%
   mutate(sigma = recode(sigma, "1e-05" = "A.", "0.01" = "B.")) %>%
-  ggplot(aes(t, pop, col=species)) +
-  geom_line() + 
-  facet_wrap(~sigma) + 
-  scale_color_ptol()
+  rename(time = t) %>%
+  ggplot(aes(time, population, col = species)) + geom_line() + 
+  facet_wrap(~ sigma, ncol=2) + scale_color_ptol() 
 ```
+
 
 
 # Stochastic oscillator
 
-May's model:
+Our example of a stochastic osccilato is based on May's model:
 
 
 $$X_{t+1} = X_t + \underbrace{X_t r \left(1 -\frac{X_t}{K} \right)}_{\textrm{Vegitation growth}}  - \underbrace{\frac{a X_t ^ Q}{X_t^ Q + H ^ Q}}_{\textrm{Vegitation consumption}} + \xi_t,$$
 
 
-```{r}
 
+
+```{r}
 p <- list(r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 1e4)
-f <- function(x) x * p$r * (1 - x / p$K)
-g <- function(x) p$a * x ^ p$Q / (x^p$Q + p$H^p$Q)
-x <- seq(0,2, length.out = 100)
-
-
-
-data.frame(x, growth = f(x), consumption = g(x)) %>%
-  gather(curve, y, -x) %>%
-  ggplot(aes(x, y, col=curve)) +
-  geom_line(lwd=1) + 
-  scale_color_ptol() + 
-  labs(x = bquote(X[t]), y = bquote(X[t+1]), subtitle= bquote(bold(B.)))
-```
-
-
-```{r}
 
 may  <- nimble::nimbleCode({
   
@@ -206,16 +208,162 @@ cmodel <- compileNimble(model)
 set.seed(123)
 simulate(cmodel)
 
-tibble(t = seq_along(cmodel$x), x = cmodel$x) %>% write_csv("noisy_switch.csv")
-read_csv("noisy_switch.csv")  %>% ggplot(aes(t,x)) + geom_line()
+tibble(t = seq_along(cmodel$x), x = cmodel$x) %>% 
+  write_csv("noisy_switch.csv")
+```
+
+
+Seperately, we will also compute the growth and consumption curves and the potential function for comparison with theory:
+
+```{r}
+theory <- 
+  tibble(x= seq(0,2, length.out = 100)) %>%
+  mutate(g = x * p$r * (1 - x / p$K), 
+         c = p$a * x ^ p$Q / (x^p$Q + p$H^p$Q)) %>%
+  mutate(potential = - cumsum(g - c)) %>%
+  gather(curve, y, -x, -potential) 
+
+```
+
+We can now create each of the subplots shown in the paper in Figure 3:
+
+```{r noisy_switch, fig.width=7, fig.height=7, fig.cap="Stochastic switiching in May's model of alternative stable state dynamics.  r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 10000"}
+
+
+p1 <- read_csv("../appendixA/noisy_switch.csv")  %>%
+  ggplot(aes(t,x)) + 
+  geom_line(lwd=.1, col=colours[[1]]) +
+  labs(subtitle = bquote(bold(A.)))
+
+p2 <-  theory %>%
+  ggplot(aes(x, y, col=curve)) +
+  geom_line(lwd=1) + 
+  scale_color_ptol() + 
+  labs(x = bquote(X[t]), y = bquote(X[t+1]), subtitle= bquote(bold(B.))) +
+  theme(legend.position="top")
+
+p3 <-  theory %>%
+  ggplot(aes(x, potential)) + 
+  geom_line(col=colours[1], lwd=1) + 
+  coord_cartesian(xlim=c(0,1.6), ylim=c(-1.15,-0.9)) + 
+  labs(subtitle = bquote(bold(C.)))
+
+
+gridExtra::grid.arrange(p1,p2,p3, layout_matrix = rbind(c(1,1), c(2,3)))
 ```
 
 
 
 
 
+# Tipping points
+
+
+### Configuration for Dai model
+
+Though not shown in the paper, it is useful to illustrate tipping point location using very small noise in a constant environment and varying only the initial condition.  Starting just above the tipping point leads to a steady stable state, starting just below the tipping point leads to a sudden crash.  
+
+Details of the Dai model are found in the appendix of @Dai2012, my best interpretation of that description can be found in R code in the `regimeshifts` package, <https://github.com/cboettig/regimeshifts>, with archival version available at <https://doi.org/10.5281/zenodo.1013975>. 
+
+```{r}
+max_days <- 1000
+
+z <- y <- x <- numeric(max_days)
+z[1] <- y[1] <- x[1] <- 7e4 # 1.7e5
+set.seed(123)
+for(day in 1:(max_days-1)){
+  x[day+1] <- dai(x[day], epsilon = rnorm(1,0, 0.001), DF = 1790)
+  y[day+1] <- dai(y[day], epsilon = rnorm(1,0, 0.001), DF=1799)
+  z[day+1] <- dai(z[day], epsilon = rnorm(1,0, 0.001), DF = 1800)
+  
+}
+
+df <- data.frame(t = 1:max_days, x = x, y = y, z = z) %>%
+  gather(series, pop, -t) 
+
+ggplot(df, aes(t, pop, col=series)) + 
+  geom_line() 
+
+```
+
+
+We will also need a function for rolling autocorrelation for our warning sign calculation: 
+
+$$\rho = \frac{1}{n-1} \frac{\sum_{i = 1}^n \left( x_{i,t} - \textrm{E}(x_t) \right)\left( x_{i,t+1} - \textrm{E}(x_{t+1})  \right)}{\sigma_{x_{t}}  \sigma_{x_{t+1}}}$$
+
+
+```{r}
+roll_acor <- function(x, lag = 1, ...){
+  x_t1 = lag(x, n = lag)  
+  mu_t = roll_mean(x, ...)
+  mu_t1 = roll_mean(x_t1, ...)
+  s_t = roll_sd(x, ...)
+  s_t1 = roll_sd(x_t1, ...)
+  acor = roll_mean( (x - mu_t) * (x_t1 - mu_t1) / (s_t * s_t1),...)
+  acor
+}
+```
+
+
+## Simulation of Dai model:
+
+```{r}
+# Slow environmental degredation through small stepwise changes (increasing the serial dilution factor, as in the Dai et al experiment.)
+DF <- as.numeric(sapply(seq(0, 2000, length=9), rep, 40))
+
+# continuous linear increase
+DF <- seq(1, 2000, length=2000)
+tip_time <- 1800
+max_days <- length(DF)
+y <- numeric(max_days)
+
+set.seed(1111)
+y[1] <- 1.76e5
+for(day in 1:(max_days-1)){
+  y[day+1] <- dai(y[day], DF = DF[day])
+}
+
+tip_df <- tibble(t = seq_along(y), x = y)
+
+## also compute warning signs, include in single table
+tip_df %>% 
+  mutate(autocorrelation = roll_acor(x, n = 100, fill=NA),
+         variance = roll_var(x, n = 100, fill=NA),
+         tip_time = tip_time) %>%
+  write_csv("tipping.csv")
+```
+
+We are now ready to create the panels shown in Figre 4:
+
+
+```{r tipping, fig.width=7, fig.height=7, fig.cap="Early warning signs of a critical transition in a simulation of increasing serial dilution of budding yeast.  Panel A: Rolling variance   autocorrelation Time series is shown in panel C. Model details and simulation parameters in Appendix A."}
+tipping <- read_csv("../appendixA/tipping.csv") 
+
+p1 <- tipping %>%
+  select(-x) %>%
+  rename("A. autocorrelation" = autocorrelation, "B. variance" = variance) %>%
+  gather(series, value, -t, -tip_time) %>%
+  ggplot(aes(t, value)) + geom_line(col=colours[[1]]) + 
+  geom_vline(aes(xintercept = tip_time), col=colours[[2]], lty=2) +
+  facet_wrap(~series, ncol = 2, scales="free_y")  
+p2 <- tipping %>% 
+  select(t, population = x, tip_time) %>%
+  ggplot(aes(t, population)) + geom_line(col=colours[1]) + 
+  geom_vline(aes(xintercept = tip_time), col=colours[2], lty=2) + 
+  #scale_y_log10()  + 
+  labs(subtitle = "C. Yeast population size", 
+       caption = "Vertical red dashed line indicates tipping point location")
+
+gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1), c(2,2)))
+
+```
+
+
+------
+
 # Stochastic inflation
 
+While stochastic inflation is mentioned only in a footnote of the manuscript, I include this example to illustrate simulations of an ensemble of replicates, commonly needed to get a better picture of stochastic phenomena.  This example code is written for clarity rather than performance, and will take longer to run than the other examples.  
 
 Analytical predicted population size, as a fraction of $K$, is $\tfrac{1}{2} + \tfrac{1}{2} \sqrt{1- 8\sigma^2/K^2}$.  Note this is independent of $r$, and increases with $\sigma/K$, the larger the noise $\sigma_g$ as a fraction of the carrying capacity $K$.  Population sizes can also be inflated relative to their deterministic equilibrium whenever the second derivative is positive (as in the lower equilibrium in the May model of alternative stable states, considered below.)  As predicted by the system size expansion, the deviation from the deterministic result is of order $N^{-1}$.  
 
@@ -270,105 +418,6 @@ read_csv("inflation.csv") %>%
   geom_line(lwd=1) + 
   scale_color_ptol() + 
   coord_cartesian(xlim=c(100,500), ylim=c(1.2, .5))
-```
-
-
-
-# Tipping points
-
-
-### Configuration for Dai model
-
-Numerically determine / illustrate tipping point location using small noise: 
-
-```{r}
-max_days <- 1000
-
-z <- y <- x <- numeric(max_days)
-z[1] <- y[1] <- x[1] <- 7e4 # 1.7e5
-set.seed(123)
-for(day in 1:(max_days-1)){
-  x[day+1] <- dai(x[day], epsilon = rnorm(1,0, 0.001), DF = 1790)
-  y[day+1] <- dai(y[day], epsilon = rnorm(1,0, 0.001), DF=1799)
-  z[day+1] <- dai(z[day], epsilon = rnorm(1,0, 0.001), DF = 1800)
-  
-}
-
-df <- data.frame(t = 1:max_days, x = x, y = y, z = z) %>%
-  gather(series, pop, -t) 
-
-ggplot(df, aes(t, pop, col=series)) + 
-  geom_line() 
-
-```
-
-$$\rho = \frac{1}{n-1} \frac{\sum_{i = 1}^n \left( x_{i,t} - \textrm{E}(x_t) \right)\left( x_{i,t+1} - \textrm{E}(x_{t+1})  \right)}{\sigma_{x_{t}}  \sigma_{x_{t+1}}}$$
-
-
-```{r}
-roll_acor <- function(x, lag = 1, ...){
-  x_t1 = lag(x, n = lag)  
-  mu_t = roll_mean(x, ...)
-  mu_t1 = roll_mean(x_t1, ...)
-  s_t = roll_sd(x, ...)
-  s_t1 = roll_sd(x_t1, ...)
-  acor = roll_mean( (x - mu_t) * (x_t1 - mu_t1) / (s_t * s_t1),...)
-  acor
-}
-```
-
-
-## Simulation of Dai model:
-
-```{r}
-# Stepwise changes
-DF <- as.numeric(sapply(seq(0, 2000, length=9), rep, 40))
-
-# continuous linear increase
-DF <- seq(1, 2000, length=2000)
-tip_time <- 1800
-max_days <- length(DF)
-y <- numeric(max_days)
-
-set.seed(1111)
-y[1] <- 1.76e5
-for(day in 1:(max_days-1)){
-  y[day+1] <- dai(y[day], DF = DF[day])
-}
-
-tip_df <- tibble(t = seq_along(y), x = y)
-
-tip_df %>% 
-  mutate(autocorrelation = roll_acor(x, n = 100, fill=NA),
-         variance = roll_var(x, n = 100, fill=NA),
-         tip_time = tip_time) %>%
-  write_csv("tipping.csv")
-```
-
-
-```{r}
-tipping <- read_csv("tipping.csv") 
-
-p1 <- tipping %>%
-  select(-x) %>%
-  gather(series, value, -t, -tip_time) %>%
-  ggplot(aes(t, value)) + geom_line() + 
-  geom_vline(aes(xintercept = tip_time), col="red", lty=2) +
-  facet_wrap(~series, ncol = 2, scales="free_y") +
-  #theme_ipsum() + 
-  labs(title="A: Early warning signs")
-
-p2 <- tipping %>% 
-  select(t, population = x, tip_time) %>%
-  ggplot(aes(t, population)) + geom_line() + 
-  geom_vline(aes(xintercept = tip_time), col="red", lty=2) + 
-  scale_y_log10() + 
-#  theme_ipsum() + 
-  labs(title="B: Population density",
-              caption = "Vertical red dashed line indicates tipping point location")
-
-gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1), c(2,2)))
-
 ```
 
 

@@ -14,7 +14,8 @@ all other packages can be found on CRAN.  A reproducible Dockerfile for building
 
 
 ```{r include=FALSE}
-knitr::opts_chunk$set(message=FALSE, cache = TRUE, warning = FALSE)
+## note: needs library Cairo
+knitr::opts_chunk$set(message=FALSE, cache = TRUE, warning = FALSE,  dev="CairoPDF")
 ```
 
 
@@ -32,6 +33,7 @@ colours <- ptol_pal()(2)
 
 ```{r echo=FALSE}
 ## plot themes, non-essential. Comment out if theme creates trouble with fonts on your system.
+library(Cairo)
 library(hrbrthemes)
 library(extrafont)
 #extrafont::font_import(prompt=FALSE)    # One-time use to set up fonts, can be slow.
@@ -248,22 +250,21 @@ We can now create each of the subplots shown in the paper in Figure 3:
 p1 <- read_csv("../appendixA/noisy_switch.csv")  %>%
   ggplot(aes(t,x)) + 
   geom_line(lwd=.1, col=colours[[1]]) +
-  labs(subtitle = "A.")
+  labs(subtitle = bquote(bold(A.)))
 
 p2 <-  theory %>%
   ggplot(aes(x, y, col=curve)) +
   geom_line(lwd=1) + 
   scale_color_ptol() + 
- labs(
- #  x = bquote(X[t]), y = bquote(X[t+1]), 
-   subtitle= "B.") +
+  labs(x = bquote(X[t]), y = bquote(X[t+1]), subtitle= bquote(bold(B.))) +
   theme(legend.position="top")
 
 p3 <-  theory %>%
   ggplot(aes(x, potential)) + 
   geom_line(col=colours[1], lwd=1) + 
   coord_cartesian(xlim=c(0,1.6), ylim=c(-1.15,-0.9)) + 
-  labs(subtitle = "C.")
+  labs(subtitle = bquote(bold(C.)))
+
 
 
 gridExtra::grid.arrange(p1,p2,p3, layout_matrix = rbind(c(1,1), c(2,3)))

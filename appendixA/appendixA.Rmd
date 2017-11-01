@@ -14,7 +14,7 @@ all other packages can be found on CRAN.  A reproducible Dockerfile for building
 
 
 ```{r include=FALSE}
-knitr::opts_chunk$set(message=FALSE, cache = TRUE, warning = FALSE)
+knitr::opts_chunk$set(message=FALSE, cache = FALSE, warning = FALSE)
 ```
 
 ```{r echo=FALSE}
@@ -44,7 +44,9 @@ library(gridExtra)
 colours <- ptol_pal()(2)
 ```
 
-
+```{r echo=FALSE}
+ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
+```
 
 
 # Gillespie algorithm

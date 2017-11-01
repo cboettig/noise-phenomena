@@ -37,15 +37,7 @@ colours <- ptol_pal()(2)
 library(Cairo)
 library(hrbrthemes)
 library(extrafont)
-extrafont::font_import(prompt=FALSE)    # One-time use to set up fonts, can be slow.
-hrbrthemes::import_roboto_condensed()   # One-time use to set up fonts 
 
-d <- read.csv(extrafont:::fonttable_file(), stringsAsFactors = FALSE)
-d[grepl("Light", d$FontName), ]$FamilyName <- "Roboto Condensed Light"
-write.csv(d, extrafont:::fonttable_file(), row.names = FALSE)
-
-extrafont::font_import(prompt=FALSE)    # One-time use to set up fonts, can be slow.
-hrbrthemes::import_roboto_condensed()   # One-time use to set up fonts 
 extrafont::loadfonts()
 ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
 ```

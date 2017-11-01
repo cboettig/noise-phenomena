@@ -3,7 +3,7 @@ FROM rocker/verse:3.4.2
 ## Install dependencies manually
 RUN apt-get update && \
   apt-get -y install fonts-roboto  && \
-  install2.r -e nimble RcppRoll adaptivetau hrbrthemes ggthemes gridExtra && \
+  install2.r -e nimble RcppRoll adaptivetau hrbrthemes ggthemes gridExtra Cairo && \
   R -e "devtools::install_github('cboettig/regimeshifts@v0.0.1')"
 
 COPY . /home/rstudio/noise-phenomena

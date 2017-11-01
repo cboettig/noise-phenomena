@@ -15,11 +15,11 @@ all other packages can be found on CRAN.  A reproducible Dockerfile for building
 
 ```{r include=FALSE}
 ## note: needs library Cairo
-knitr::opts_chunk$set(message=FALSE, cache = TRUE, warning = FALSE,  dev="CairoPDF")
+knitr::opts_chunk$set(message=FALSE, cache = 1, warning = FALSE,  dev="CairoPDF")
 ```
 
 
-```{r libraries}
+```{r libraries, cache=FALSE}
 library(nimble)
 library(RcppRoll)
 library(regimeshifts) ## devtools::install_github("cboettig/regimeshifts")
@@ -31,7 +31,7 @@ colours <- ptol_pal()(2)
 ```
 
 
-```{r echo=FALSE}
+```{r echo=FALSE, cache=FALSE}
 ## plot themes, non-essential. Comment out if theme creates trouble with fonts on your system.
 library(Cairo)
 library(hrbrthemes)
@@ -125,7 +125,7 @@ write_csv(gillespie, "gillespie.csv")
 
 Example plotting command to generate the figure as shown in main text:
 
-```{r gillespie, warning=FALSE, fig.width=7, fig.cap="Population dynamics from a Gillespie simulation of the Levins model with large (N=1000, panel A) and small (N=100, panel B) number of sites (blue) show relatively weaker effects of demographic noise in the bigger system. Models are otherwise identical, with e = 0.2 and c = 1 (code in appendix A). Theoretical predictions for mean and plus/minus one standard deviation shown in horizontal re dashed lines."}
+```{r gillespie, warning=FALSE, fig.width=7}
 read_csv("../appendixA/gillespie.csv", col_types = "cdiddd")  %>% 
   mutate(system_size = recode(system_size, 
                               large = "A. 1000 total sites", 
@@ -184,7 +184,7 @@ write_csv(quasicycle_df, "quasicycles.csv")
 From this quasicycle simulation data we can recreate the plot shown in Figure 2 as follows:
 
 
-```{r quasicycles, fig.width=7, fig.cap="Panel A: under negligible environmental noise, the introduction of a carrying capacity damps Lotka-Volterra oscillations which eventually settle to a stable state.  Panel B: small noise induces quasi-cycles in the same model: sustained long-term oscillations predominately around the natural frequency of the original damped oscillations. Parameters for models shown are r = .1, K = 5,  b = .1, c = .1, d = .1, N = 800; code in Appendix A."}
+```{r quasicycles, fig.width=7}
 read_csv("quasicycles.csv") %>%
   gather(species, population, -t, -sigma) %>%
   mutate(sigma = as.factor(sigma)) %>%
@@ -244,7 +244,7 @@ theory <-
 
 We can now create each of the subplots shown in the paper in Figure 3:
 
-```{r noisy_switch, fig.width=7, fig.height=7, fig.cap="Stochastic switiching in May's model of alternative stable state dynamics.  r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 10000"}
+```{r noisy_switch, fig.width=7, fig.height=7}
 
 
 p1 <- read_csv("../appendixA/noisy_switch.csv")  %>%
@@ -355,7 +355,7 @@ tip_df %>%
 We are now ready to create the panels shown in Figre 4:
 
 
-```{r tipping, fig.width=7, fig.height=7, fig.cap="Early warning signs of a critical transition in a simulation of increasing serial dilution of budding yeast.  Panel A: Rolling variance   autocorrelation Time series is shown in panel C. Model details and simulation parameters in Appendix A."}
+```{r tipping, fig.width=7, fig.height=7}
 tipping <- read_csv("../appendixA/tipping.csv") 
 
 p1 <- tipping %>%

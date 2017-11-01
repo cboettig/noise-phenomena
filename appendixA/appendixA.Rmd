@@ -36,7 +36,7 @@ colours <- ptol_pal()(2)
 library(Cairo)
 library(hrbrthemes)
 library(extrafont)
-#extrafont::font_import(prompt=FALSE)    # One-time use to set up fonts, can be slow.
+extrafont::font_import(prompt=FALSE)    # One-time use to set up fonts, can be slow.
 hrbrthemes::import_roboto_condensed()   # One-time use to set up fonts 
 
 #d <- read.csv(extrafont:::fonttable_file(), stringsAsFactors = FALSE)

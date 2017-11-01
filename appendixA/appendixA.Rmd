@@ -72,7 +72,7 @@ $$\left. \frac{b(n) + d (n)}{2 d'(n) - b'(n)} \right\rvert_{n = \hat n} = \tfrac
 
 Exact Gillespie simulations can be run efficiently in R using the `adaptivetau::ssa.exact()` function:
 
-```{r gillespie}
+```{r }
 set.seed(1234) # set random number generator seed to be reproducible
 
 e <- 0.2

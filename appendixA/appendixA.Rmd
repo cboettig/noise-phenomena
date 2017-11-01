@@ -17,6 +17,22 @@ all other packages can be found on CRAN.  A reproducible Dockerfile for building
 knitr::opts_chunk$set(message=FALSE, cache = TRUE, warning = FALSE)
 ```
 
+```{r include=FALSE}
+## plot themes, non-essential. Comment out if theme creates trouble with fonts on your system.
+d <- read.csv(extrafont:::fonttable_file(), stringsAsFactors = FALSE)
+d[grepl("Light", d$FontName), ]$FamilyName <- "Roboto Condensed Light"
+write.csv(d, extrafont:::fonttable_file(), row.names = FALSE)
+extrafont::loadfonts()
+
+library(hrbrthemes)
+library(extrafont)
+extrafont::font_import(prompt=FALSE)    # One-time use to set up fonts, can be slow.
+hrbrthemes::import_roboto_condensed()   # One-time use to set up fonts 
+extrafont::loadfonts()
+ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
+```
+
+
 ```{r libraries}
 library(nimble)
 library(RcppRoll)
@@ -29,15 +45,7 @@ colours <- ptol_pal()(2)
 ```
 
 
-```{r include=FALSE}
-## plot themes, non-essential. Comment out if theme creates trouble with fonts on your system.
-library(hrbrthemes)
-library(extrafont)
-extrafont::font_import(prompt=FALSE)    # One-time use to set up fonts, can be slow.
-hrbrthemes::import_roboto_condensed()   # One-time use to set up fonts 
-extrafont::loadfonts()
-ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
-```
+
 
 # Gillespie algorithm
 
@@ -108,7 +116,8 @@ Bind together both simulation results and theory results and store output data i
 ```{r}
 gillespie <- bind_rows("large"=sim_large, 
                        "small"=sim_small,  
-                       .id = "system_size") %>% bind_rows(theory)
+                       .id = "system_size") %>% 
+  bind_rows(theory)
 write_csv(gillespie, "gillespie.csv")
 ```
 
@@ -117,7 +126,9 @@ Example plotting command to generate the figure as shown in main text:
 
 ```{r gillespie, warning=FALSE, fig.width=7, fig.cap="Population dynamics from a Gillespie simulation of the Levins model with large (N=1000, panel A) and small (N=100, panel B) number of sites (blue) show relatively weaker effects of demographic noise in the bigger system. Models are otherwise identical, with e = 0.2 and c = 1 (code in appendix A). Theoretical predictions for mean and plus/minus one standard deviation shown in horizontal re dashed lines."}
 read_csv("../appendixA/gillespie.csv", col_types = "cdiddd")  %>% 
-  mutate(system_size = recode(system_size, large = "A. 1000 total sites", small= "B. 100 total sites")) %>%
+  mutate(system_size = recode(system_size, 
+                              large = "A. 1000 total sites", 
+                              small= "B. 100 total sites")) %>%
   ggplot(aes(x = time)) + 
   geom_hline(aes(yintercept = mean), lty=2, col=colours[2]) + 
   geom_hline(aes(yintercept = minus_sd), lty=2, col=colours[2]) + 
@@ -154,10 +165,15 @@ p <-
   data.frame(sigma_x = c(.00001,0.01),  sigma_y = c(.00001,0.01)))
 
 f <- function(constants){
-  model <- compileNimble(nimbleModel(quasicycle, constants = constants, inits = list(x0 = 1, y0 = 1)))
+  model <- compileNimble(nimbleModel(quasicycle, 
+                                     constants = constants, 
+                                     inits = list(x0 = 1, y0 = 1)))
   set.seed(123)
   simulate(model)
-  tibble(t = seq_along(model$x), x = model$x, y = model$y, sigma = constants$sigma_x)
+  tibble(t = seq_along(model$x), 
+         x = model$x, 
+         y = model$y, 
+         sigma = constants$sigma_x)
 }
 
 quasicycle_df <- p %>% rowwise() %>% do(f(.))        
@@ -308,7 +324,8 @@ roll_acor <- function(x, lag = 1, ...){
 ## Simulation of Dai model:
 
 ```{r}
-# Slow environmental degredation through small stepwise changes (increasing the serial dilution factor, as in the Dai et al experiment.)
+## Slow environmental degredation through small stepwise changes
+## (increasing the serial dilution factor, as in the Dai et al experiment.)
 DF <- as.numeric(sapply(seq(0, 2000, length=9), rep, 40))
 
 # continuous linear increase
@@ -401,7 +418,8 @@ df <- map_dfr(1:10000,
               },
               .id = "rep")
 
-# Tidy up the result data and write to file, along with analytic prediction for equilibrium
+# Tidy up the result data and write to file, 
+# along with analytic prediction for equilibrium
 df %>% 
   filter(x > 0) %>% 
   group_by(t) %>%

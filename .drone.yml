@@ -3,7 +3,7 @@ pipeline:
     image: rocker/verse:3.4.2
     commands:
       - apt-get update && apt-get -y install fonts-roboto
-      - R -e 'devtools::install(); devtools::install_github("cboettig/regimeshifts@v0.0.1")'
+      - R -e 'devtools::install(dep=TRUE); devtools::install_github("cboettig/regimeshifts@v0.0.1")'
       - R -e 'rmarkdown::render("appendixA/appendixA.Rmd")'
         ##      - R -e 'lapply(list.files(pattern=".*\\.Rmd", recursive=TRUE), rmarkdown::render)'
 

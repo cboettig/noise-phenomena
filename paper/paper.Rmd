@@ -16,21 +16,38 @@ layout:  review # review = doublespace, 3p = singlespace, 5p = two-column
 preamble: |
   \newcommand{\ud}{\mathrm{d}}
   \linenumbers
+  \usepackage[nomarkers]{endfloat}
 
-#preamble: "\\usepackage[nomarkers]{endfloat}"
 
 abstract: |
+  # Article Type: Review & Synthesis
+  # Running title: Noise phenomena
+  # Figures: 4
+  # Tables: 0
+  # Word count: 7488
+  # Word count in abstract: 175
+  # Number of References: 54
+  # Archive statement:
+
+  All data (simulated data and code) is made available on GitHub (<https://github.com/cboettig/noise-phenomena>), and if accepted, will be archived with provided DOI in an appropriate scientific data repositoriy.
+
+  # Keywords: stochasticity, demographic noise, environmental noise, colored noise, quasi-cycles, tipping points
+
+  \newpage 
+    
+  # Abstract
+  
   I provide a brief synthesis of ecological research in stochastic phenomena. Noise, as the term itself suggests, is most often seen a nuisance to ecological insight, a inconvenient reality that must be acknowledged, a haystack that must be stripped away to reveal the processes of interest underneath. Yet despite this well-earned reputation, noise is often interesting in its own right: noise can induce novel phenomena that could not be understood from some underlying determinstic model alone.  Nor is all noise the same, and close examination of differences in in frequency, color or magnitude can reveal insights that would otherwise be inaccessible.  Yet with each aspect of stochasticity leading to some new or unexpected behavior, the time is right to move beyond the familiar refrain of "everything is important" [@Bjornstad2001].  Stochastic phenomena can suggest new ways of inferring process from pattern, and thus spark more dialog between theory and empirical perspectives that best advances the field as a whole. I highlight a few compelling examples, while observing that the study of stochastic phenomena are only beginning to make this translation into empirical inference.  There are rich opportunities at this interface in the years ahead.  
   
 
 
-keywords:
-  - stochasticity
-  - demographic noise
-  - environmental noise
-  - colored noise
-  - quasi-cycles
-  - tipping points
+#keywords:
+#  - stochasticity
+#  - demographic noise
+#  - environmental noise
+#  - colored noise
+#  - quasi-cycles
+#  - tipping points
 
 ---
 
@@ -61,6 +78,9 @@ Directions:
 We hope that these papers will combine a mix of synthetic reviews of the current state of an area, as well as insights into how the field has developed during the last twenty years, discussion of current important questions, and developments and insights that would significantly advance the field. Although certainly not necessary, if there are any past Ecology Letters papers that have had a profound impact on the development of an area – be it beneficial or not – a brief discussion of that impact would be appropriate. We also hope that articles will be written in a thoughtful style, but also provocative if appropriate.
 
 -->
+
+
+\newpage
 
 
 # Introduction: Noise the nuisance

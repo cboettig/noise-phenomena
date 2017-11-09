@@ -3,9 +3,8 @@ sudo: required
 services:
   - docker
 
-before_install: 
-  - docker build -t noise . 
-
 script:
-  - docker run -ti -v $(pwd):/home/rstudio/repo -w /home/rstudio/repo noise R -e "rmarkdown::render('appendixA/appendixA.Rmd')" 
+  - docker run -ti -v $(pwd):/home/rstudio/repo -w /home/rstudio/repo \
+    rocker/verse:3.4.2 \
+    R -e "rmarkdown::render('appendixA/appendixA.Rmd')" 
  

@@ -15,19 +15,21 @@ all other packages can be found on CRAN.  A reproducible Dockerfile for building
 
 ```{r include=FALSE}
 ## note: needs library Cairo
-knitr::opts_chunk$set(message=FALSE, cache = 1, warning = FALSE,  dev="CairoPDF")
+knitr::opts_chunk$set(message=FALSE, cache = 1, warning = FALSE,  dev="cairo_pdf")
 ```
 
 
 ```{r libraries, cache=FALSE}
 library(nimble)
 library(RcppRoll)
-library(regimeshifts) ## devtools::install_github("cboettig/regimeshifts")
-library(adaptivetau)
+## devtools::install_github("cboettig/regimeshifts")
+library(regimeshifts) 
+library(adaptivetau)  ## For Gillespie simulation only
 library(tidyverse)
 library(ggthemes)
 library(gridExtra)
-ggplot2::theme_set(theme_bw())
+
+## Set a default color pallete
 colours <- ptol_pal()(2)
 ```
 
@@ -40,9 +42,9 @@ library(extrafont)
 
 ## One-time setup
 hrbrthemes::import_roboto_condensed()   # One-time use to set up fonts 
-d <- read.csv(extrafont:::fonttable_file(), stringsAsFactors = FALSE)
-d[grepl("Light", d$FontName), ]$FamilyName <- "Roboto Condensed Light"
-write.csv(d, extrafont:::fonttable_file(), row.names = FALSE)
+#d <- read.csv(extrafont:::fonttable_file(), stringsAsFactors = FALSE)
+#d[grepl("Light", d$FontName), ]$FamilyName <- "Roboto Condensed Light"
+#write.csv(d, extrafont:::fonttable_file(), row.names = FALSE)
 
 ## load fonts (needed each time)
 extrafont::loadfonts()
@@ -52,11 +54,11 @@ ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
 
 # Gillespie algorithm
 
-Levins' Patch model as an individual-based birth-death process: 
+Levins' Patch model [@Levins1969] as an individual-based birth-death process: 
 
 $$\frac{dn}{dt} = \underbrace{c n \left(1 - n/N \right)}_{\textrm{birth rate, } b(n)} - \underbrace{en}_{\textrm{death rate, } d(n)} $$
 
-We simulate this using the Gillespie's exact stochastic simulation algorithm (SSA), as implemented in the `adaptivetau` R package.  We declare the transition events: birth increases the state $n$ to $n+1$, and death $n$ to $n-1$, and describe the rates associated with them:
+We simulate this using the Gillespie's exact stochastic simulation algorithm (SSA) [@Gillespie1977; see overview in @Hastings2012], as implemented in the `adaptivetau` R package.  We declare the transition events: birth increases the state $n$ to $n+1$, and death $n$ to $n-1$, and describe the rates associated with them:
 
 ```{r}
 # indicate state variable and the change
@@ -89,6 +91,7 @@ set.seed(1234) # set random number generator seed to be reproducible
 e <- 0.2
 c <- 1
 
+## Run simulations
 sim_small <- adaptivetau::ssa.exact(init.values = c(n = 50),
                        transitions, rateF,
                        params = list(c=c, e=e, N=100),
@@ -96,12 +99,16 @@ sim_small <- adaptivetau::ssa.exact(init.values = c(n = 50),
 
 sim_large <- adaptivetau::ssa.exact(init.values = c(n = 500),
                        transitions, rateF,
-                       params = list(c=c, e=e, N=1000),
+                       params = list(c = c, e = e, N = 1000),
                        tf=30) %>% as_tibble()
 ```
 
 
-We will also create a separate data frame (`tibble`) corresponding to our theoretical predictions from the system size expansion:
+We will also create a separate data frame (`tibble`) corresponding to our theoretical predictions from the system size expansion.  We use popular functions from the `tidyverse` suite of R packages for the manipulation of `data.frames`.  Below, the `mutate` function is used to add new columns for plus and minuse one standard deviation based on theoretical calculation of $\sqrt{N\tfrac{e}{c}}$, and the `map_dfr` function is used to apply this to both `small` and `large` cases.  We use `tidyverse` syntax  [see @Ross2017] instead of base R in these examples for the following reasons:
+
+- the resulting code is more concise, due to use of higher-level relational data abstractions
+- the resulting code is closer to natural semantics.  This is in part because consecutive steps are connected by pipes `%>%`rather than temporary variable assignment, and in part by the use of functions named by verbs corresponding to standard relational data concepts.
+- `tidyverse` is widely used and well documented, see <http://r4ds.had.co.nz/> for an accessible and thorough introduction.
 
 ```{r}
 theory <- 
@@ -117,10 +124,15 @@ Bind together both simulation results and theory results and store output data i
 
 
 ```{r}
-gillespie <- bind_rows("large"=sim_large, 
-                       "small"=sim_small,  
-                       .id = "system_size") %>% 
+## combine data.frames, using column called "system_size"
+## to indicate large noise or small noise simulations
+gillespie <- 
+  bind_rows("large" = sim_large, 
+            "small" = sim_small,  
+            .id = "system_size") %>% 
   bind_rows(theory)
+
+## Write data to file
 write_csv(gillespie, "gillespie.csv")
 ```
 
@@ -144,42 +156,48 @@ read_csv("../appendixA/gillespie.csv", col_types = "cdiddd")  %>%
 
 # Quasi-cycles
 
-Simulations of the quasi-cycles can easily be performed in NIMBLE, which allows us to express the stochastic models in the familiar BUGS syntax.  Change the values of the model and noise parameters below to explore these results.  
+Simulations of the quasi-cycles can easily be performed in NIMBLE, which allows us to express the stochastic models in the familiar BUGS syntax.  Change the values of the model and noise parameters below to explore these results.  While the models below can easily be implemented in base R, the BUGS syntax for expressing a stochastic model provides a more generic formulation that can easily be used in parameter estimation as well; see @nimble.  This can also imporve computational performance because @nimble compiles these models into C++ code.
 
 ```{r}
-
+## Define the BUGS model:
 quasicycle  <- nimble::nimbleCode({
-  
   x[1] <- x0
   y[1] <- y0
-  
   for(t in 1:(N-1)){
     mu_x[t] <- x[t] + x[t] * r * (1 - x[t] / K) - b * x[t] * y[t]
     x[t+1] ~ dnorm(mu_x[t], sd = sigma_x)
     mu_y[t] <- y[t] + c * x[t] * y[t] - d * y[t]
     y[t+1] ~ dnorm(mu_y[t], sd = sigma_y)
   }
-  
 })
 
+## creates a data.frame of parameter combinations for each noise level
 p <- 
   data.frame(
   data.frame(r = .1, K = 5,  b = .1, c = .1, d = .1, N = 800),
   data.frame(sigma_x = c(.00001,0.01),  sigma_y = c(.00001,0.01)))
 
+## define a function to perform a simulation given a set of parameters (constants)
 f <- function(constants){
   model <- compileNimble(nimbleModel(quasicycle, 
                                      constants = constants, 
                                      inits = list(x0 = 1, y0 = 1)))
+  ## set random seed for reproducibility
   set.seed(123)
+  ## Run the actual simulation, using nimble
   simulate(model)
+  
+  ## Assemble the results into a data.frame (tibble).  
   tibble(t = seq_along(model$x), 
          x = model$x, 
          y = model$y, 
          sigma = constants$sigma_x)
 }
 
-quasicycle_df <- p %>% rowwise() %>% do(f(.))        
+## Do this simulation for each set of parameters, given 
+quasicycle_df <- p %>% rowwise() %>% do(f(.)) 
+
+## Write results to file for later reference and plotting
 write_csv(quasicycle_df, "quasicycles.csv")
 ```
 
@@ -188,7 +206,9 @@ From this quasicycle simulation data we can recreate the plot shown in Figure 2 
 
 ```{r quasicycles, fig.width=7}
 read_csv("quasicycles.csv") %>%
+  ## Data in long from
   gather(species, population, -t, -sigma) %>%
+  ## Re-arrange and and re-lable for the plots:
   mutate(sigma = as.factor(sigma)) %>%
   mutate(sigma = recode(sigma, "1e-05" = "A.", "0.01" = "B.")) %>%
   rename(time = t) %>%
@@ -237,9 +257,12 @@ Seperately, we will also compute the growth and consumption curves and the poten
 ```{r}
 theory <- 
   tibble(x= seq(0,2, length.out = 100)) %>%
+  ## As before, we add columns with mutate
   mutate(g = x * p$r * (1 - x / p$K), 
          c = p$a * x ^ p$Q / (x^p$Q + p$H^p$Q)) %>%
   mutate(potential = - cumsum(g - c)) %>%
+  ## assemble resulting data into "long" form with the
+  ## column headings as named here:
   gather(curve, y, -x, -potential) 
 
 ```
@@ -247,7 +270,6 @@ theory <-
 We can now create each of the subplots shown in the paper in Figure 3:
 
 ```{r noisy_switch, fig.width=7, fig.height=7}
-
 
 p1 <- read_csv("../appendixA/noisy_switch.csv")  %>%
   ggplot(aes(t,x)) + 
@@ -267,8 +289,6 @@ p3 <-  theory %>%
   coord_cartesian(xlim=c(0,1.6), ylim=c(-1.15,-0.9)) + 
   labs(subtitle = bquote(bold(C.)))
 
-
-
 gridExtra::grid.arrange(p1,p2,p3, layout_matrix = rbind(c(1,1), c(2,3)))
 ```
 
@@ -287,10 +307,17 @@ Details of the Dai model are found in the appendix of @Dai2012, my best interpre
 
 ```{r}
 max_days <- 1000
+## Perform three simultaneous simulations, x,y,z, using
+## different dilution factors DF
 
+## Intialize variables
 z <- y <- x <- numeric(max_days)
 z[1] <- y[1] <- x[1] <- 7e4 # 1.7e5
+
+## set random seed for reproduciblity
 set.seed(123)
+
+## simulate for max_days
 for(day in 1:(max_days-1)){
   x[day+1] <- dai(x[day], epsilon = rnorm(1,0, 0.001), DF = 1790)
   y[day+1] <- dai(y[day], epsilon = rnorm(1,0, 0.001), DF=1799)
@@ -298,9 +325,11 @@ for(day in 1:(max_days-1)){
   
 }
 
+## gather results into long data.frame 
 df <- data.frame(t = 1:max_days, x = x, y = y, z = z) %>%
   gather(series, pop, -t) 
 
+## and plot results
 ggplot(df, aes(t, pop, col=series)) + 
   geom_line() 
 
@@ -354,7 +383,7 @@ tip_df %>%
   write_csv("tipping.csv")
 ```
 
-We are now ready to create the panels shown in Figre 4:
+We are now ready to create the panels shown in Figure 4:
 
 
 ```{r tipping, fig.width=7, fig.height=7}
@@ -392,21 +421,21 @@ Because a substantial number of replicate simulations are required to derive a p
 
 
 ```{r eval=FALSE}
+
+## Parameters
 p <- list(r = .4, K = 1, sigma = .15, N = 500)
 equib <- (1 + sqrt(1 - 8 * p$sigma^2/p$K^2) )/ 2
 
-
+## BUGS model
 logistic  <- nimble::nimbleCode({
-  
   x[1] <- x0
   for(t in 1:(N-1)){
     mu[t] <- x[t] + x[t] * r * (1 - x[t] / K)
     x[t+1] ~ dnorm(mu[t], sd = sigma)
   }
-  
 })
 
-
+## Compile and run model
 model <- 
 nimbleModel(logistic,
             constants = p,
@@ -432,11 +461,12 @@ df %>%
   write_csv("inflation.csv")
 ```
 
+
+
 ```{r}
 read_csv("inflation.csv") %>% 
   gather(statistic, value, -t) %>%
   ggplot(aes(t,value, col=statistic, lty=statistic)) + 
- # ggplot(aes(t,ave)) +
   geom_line(lwd=1) + 
   scale_color_ptol() + 
   coord_cartesian(xlim=c(100,500), ylim=c(1.2, .5))

@@ -27,9 +27,9 @@ abstract: |
   # Running title: Noise phenomena
   # Figures: 4
   # Tables: 0
-  # Word count: 7488
-  # Word count in abstract: 175
-  # Number of References: 54
+  # Word count: 
+  # Word count in abstract: 
+  # Number of References: 
   # Archive statement:
 
   All data (simulated data and code) is made available on GitHub (<https://github.com/cboettig/noise-phenomena>), and if accepted, will be archived with provided DOI in an appropriate scientific data repositoriy.
@@ -40,7 +40,7 @@ abstract: |
     
   # Abstract
   
-  I provide a brief synthesis of ecological research in stochastic phenomena.  Noise, as the term itself suggests, is most often seen a nuisance to ecological insight, a inconvenient reality that must be acknowledged, a haystack that must be stripped away to reveal the processes of interest underneath. Yet despite this well-earned reputation, noise is often interesting in its own right: noise can induce novel phenomena that could not be understood from some underlying determinstic model alone.  Nor is all noise the same, and close examination of differences in frequency, color or magnitude can reveal insights that would otherwise be inaccessible.  Yet with each aspect of stochasticity leading to some new or unexpected behavior, the time is right to move beyond the familiar refrain of "everything is important" [@Bjornstad2001].  Stochastic phenomena can suggest new ways of inferring process from pattern, and thus spark more dialog between theory and empirical perspectives that best advances the field as a whole. I highlight a few compelling examples, while observing that the study of stochastic phenomena are only beginning to make this translation into empirical inference.  There are rich opportunities at this interface in the years ahead.  
+   Noise, as the term itself suggests, is most often seen a nuisance to ecological insight, a inconvenient reality that must be acknowledged, a haystack that must be stripped away to reveal the processes of interest underneath. Yet despite this well-earned reputation, noise is often interesting in its own right: noise can induce novel phenomena that could not be understood from some underlying determinstic model alone.  Nor is all noise the same, and close examination of differences in frequency, color or magnitude can reveal insights that would otherwise be inaccessible.  Yet with each aspect of stochasticity leading to some new or unexpected behavior, the time is right to move beyond the familiar refrain of "everything is important" [@Bjornstad2001].  Stochastic phenomena can suggest new ways of inferring process from pattern, and thus spark more dialog between theory and empirical perspectives that best advances the field as a whole. I highlight a few compelling examples, while observing that the study of stochastic phenomena are only beginning to make this translation into empirical inference.  There are rich opportunities at this interface in the years ahead.  
   
 
 
@@ -98,6 +98,10 @@ variation and relatively limited data typical in ecological analyses,
 this can be a significant challenge, and even as statistical and
 computational advances provide more powerful and accessible inference
 tools, the task only gets harder.  
+
+<!-- Need concise overview of stochasticity literature --> 
+
+
 
 For instance, few ecological
 concepts are more central than the notion of density dependence:
@@ -184,6 +188,7 @@ phenomena.
 
 # Origins of noise
 
+<!-- Shorten this, more citations, more focus -->
 
 What is noise? Where does it come from?  It is important to bear
 in mind that whenever stochasticity is introduced into a model, it
@@ -851,8 +856,9 @@ The greater our suite of stochastic indicators, the better our ability
 to pin down the processes involved.  Such examples suggest
 that stochastic processes could play a similar role in identifying
 other critical transitions. For instance, stochastic resonance may be 
-visible in advance of a Hopf bifurcation, in which a stable node becomes
-a limit cycle.
+visible in advance of a Hopf bifurcation, where a stable state gives
+way to stable oscillations (limit cycle) of growing magnitude
+[e.g. @Fussman2000; @Strogatz2001].
 
 Most importantly, the framing of stochastic processes as indicators of
 changes in an ecosystem that might otherwise go unnoticed has proven a

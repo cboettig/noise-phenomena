@@ -86,67 +86,47 @@ We hope that these papers will combine a mix of synthetic reviews of the current
 
 # Introduction: Noise the nuisance
 
-Stochasticity is most often thought of as something which obscures
-patterns we are trying to infer.  This is a simple consequence of
-modeling: variables of interest to the processes
-in question are modeled explicitly (e.g. change in population density
-as it depends on the current density), everything else is just
-noise.  Most statistical inference in ecology is built solely to
-deal with this problem: pulling back the veil of noise to reveal
-processes of interest.  Unfortunately, given the high levels of
-variation and relatively limited data typical in ecological analyses,
-this can be a significant challenge, and even as statistical and
-computational advances provide more powerful and accessible inference
-tools, the task only gets harder.  
+To the empricical ecologist, stochasticity, or more simply, "noise,"
+is just that -- something which obscures patterns we are trying to infer [@Knape2011];
+and an ever richer batteries of stastical methods are developed largely in an
+attempt to strip away this undesirable randomness to reveal the patterns
+beneath [@Coulson2001].  Over the past several decades, theoretical ecology has transitioned
+from thinking of stochasticity in such terms; where noise is a nuciance
+that obscures the "deterministic skeleton" of the underlying mechanisms,
+to the recognition that stochasticity can itself be a mechanism for 
+driving many interesting phenomena.  Yet this transistion from "noise the nuisance"
+to "noise the creator" of ecological phenomena has had, with a few notable exceptions,
+relatively little impact in empricial thinking about stochasticity.  One of the
+most provocative of those exceptions has turned the classical notion of noise
+the nuisance on its head: recognizing that noise driven phenomena can become a tool
+to reveal underlying processes: to become "noise the informer."  Here I argue that
+this third shift in perspective offers an opportunity to better bridge the divide
+between respective primarily theoretical and primarily empricial communities by 
+seeing noise not as mathematical curiousity or statistical bugbear, but as a
+source for new opportunities for inference.
+I approach this synthesis in three parts.  First, I will sketch the ground-work
+for the origins of noise in any model as statistical summary of large number of
+additional processes from some lower level that are modeled only in aggregate.
+This will provide the fundamentals we need to illustrate several key examples
+of noise driven phenomena in ecological dynamics: noise the creator.  Finally,
+we will be able to invert some of these examples; instead of going from process
+to pattern, we will go from pattern to process: noise the informer.  
 
-<!-- Need concise overview of stochasticity literature --> 
 
-
-
-For instance, few ecological
-concepts are more central than the notion of density dependence:
-that competition in some form or other should limit a species ability
-to grow without bound.  Yet establishing statistical evidence for
-density dependence is remarkably difficult, as illustrated by
-@Knape2011.  Using time series from the Global Population Dynamics
-Database (GPDD) Knape & de Valpine show that once one accounts for
-the potential for measurement error in addition to environmental
-stochasticity -- an unavoidable source of noise in most ecological
-data -- it becomes difficult to find evidence for even the simplest
-models of density dependence in the majority of available time
-series.  Faced with such uncertainty, it is tempting to abandon
-any such attempts until much longer and higher resolution data 
-becomes available. Fortunately, this has not been the path taken.
-
-<!-- okay, claiming this for the last 2 decades might be overly provocative?-->
-Over the past twenty years, ecological theory, modelling, and methods
-have increasingly elucidated the role of noise not only to *obscure*
-patterns but to *create* them.  This period marked a transition
-away from the intense focus on simple models which exhibited
-deterministic chaos that had enchanted much of theoretical ecology
-in the previous two decades [@Bjornstad2001] in favor of more complex
-and stochastic models.  Of particular interest has been those
-conceptual advances that have bridged the divide from theoretical
-to empirical interest -- not merely the introduction of "real data"
-in a theoretical paper, but rather the concepts that take on a life
-of their own in the larger research community.  Consequently, this
-paper seeks to be a bridge between two audiences: theoretical
-researchers already expert in noisy phenomena but in interested in
-reaching wider empirical application, and also primarily empirical
-researchers seeking an entrance into noisy phenomena.
-
-<!-- Regarding simulation examples -->
-In this spirit, each of the examples illustrated here is coupled
-with concise and efficient R code in the appendix to both reproduce
-and further explore the simulations.  While examples of noisy
-phenomena in natural systems are also crucial, matching the pattern
-does not necessarily mean we have also matched the process behind
-the data.  The examples cited from the literature here offer some
-of the best empirical evidence of these phenomena, but I encourage
-readers to also experiment with the example code provided.  Simulations
-permit poking and prodding of empirical investigation quickly and
-with little mathematical formalism in the way.  In the code provided,
-most stochastic models are expressed in the BUGS language, which
+I will anchor each of these sections using concrete examples from simple models.
+It is easy to critique such simple models: ecology is complex, and much effort
+has been spent on illustrating the importance that complexity: age and stage
+structure, spatial structure, individual heterogeneity, evolution, non-stationary environments,
+species network interactions, and much more [e.g. @Durrett1994; @Bjornstad2001].
+While acknowledging more realistic examples and more general results where avialable,
+using specific and familiar simple models that -- just complex enough to illustrate
+the phenomenon but no more -- will provide us with a platform that is more accessible 
+to both intution and exploration and extension either through mathematical manipulation or 
+computer simulation.  In this spririt, I provide concise, detailed and commented
+code for simulating each of the models presented in Appendix A.
+Simulations permit poking and prodding of empirically-minded
+investigation unencumbered by either experimental design or mathematical formalism.
+Most stochastic models are expressed in the BUGS language, which
 may be more familiar to empirical readers than corresponding
 mathematical formulas. This also permits both efficient simulation
 and potential estimation of parameters given sample data using the
@@ -160,33 +140,15 @@ for interested readers.  With these in place, we are ready to begin
 our tour through three major areas of noisy phenomena: Origins of
 noise, emergent phenomena, and noise-driven inference.
 
-<!-- MAP -->
-Our first stop will be into research into the origins of noise.
-This will not only let us set up definitions for terms and concepts
-we will encounter throughout, but also introduce some of the
-fundamental mathematical and computational tooling needed in our
-tour of noisy phenomena.  From origins of noise, we will then explore
-some of the phenomena that noise can create.  These examples are
-central to the conceptual transition away from viewing noise only
-as a nuisance that obscures patterns and realize the rich set of
-patterns and phenomena that can emerge.  Our tour will be by no
-means exhaustive, but as with chaos before it, theoretical allure
-does not always reflect ecological relevance.  Having looked at
-some of the phenomena that can be created by noise, our third stop
-will try to run this in reverse: using noise to infer underlying
-phenomena.  Examples here are rarer but potentially the most
-rewarding, bridging the gap from theoretical construct to empirical
-investigation.  The most compelling examples have come from ways
-in which noisy phenomena are used to infer stability and forecast
-changes in resilience of populations or ecosystems. Though not
-without weaknesses or missteps, the resulting dialog between
-theoretical and empirical aspects have made this particularly a
-rich area of research.  We end our tour by considering what features
-best enable the translation and ecological relevance of noisy
-phenomena.
-
 
 # Origins of noise
+
+
+
+This does not attempt to summarize all of the literature on the origins and
+types of noise, which have been reviewed elsewhere [e.g. @Saether1997; @Coulson2004; @Ovaskienen2010; @Black2012; @Schrieber2012; @Lenormand2009]
+
+
 
 <!-- Shorten this, more citations, more focus -->
 

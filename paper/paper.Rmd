@@ -9,9 +9,13 @@ address:
   - code: a
     address: "Dept of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley CA 94720-3114, USA"
 
+## Use trends style to quickly count refs
+#csl: trendsjournals.csl
 csl: ecology-letters.csl
 bibliography: refs.bib
-output: rticles::elsevier_article  
+output: 
+  rticles::elsevier_article:
+    keep_tex: true
 layout:  3p # review = doublespace, 3p = singlespace, 5p = two-column
 preamble: |
   \newcommand{\ud}{\mathrm{d}}
@@ -55,7 +59,7 @@ abstract: |
 ---
 
 ```{r libraries, include=FALSE, message=FALSE, warning=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, dev="cairo_pdf", fig.width=7, fig.height=3.5)
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, dev="cairo_pdf", fig.width=7, fig.height=3.5, cache = TRUE)
 library(tidyverse)
 library(gridExtra)
 library(ggthemes)
@@ -130,7 +134,7 @@ Most stochastic models are expressed in the BUGS language, which
 may be more familiar to empirical readers than corresponding
 mathematical formulas. This also permits both efficient simulation
 and potential estimation of parameters given sample data using the
-R package, NIMBLE [@DeValpine2017]; allowing the deductive models
+R package, NIMBLE [@deValpine2017]; allowing the deductive models
 illustrated here to readily function as inductive models with
 parameters inferred from time-series data. A copy of this appendix
 is maintained at <https://github.com/cboettig/noise-phenomena>, and
@@ -145,18 +149,33 @@ noise, emergent phenomena, and noise-driven inference.
 
 
 
-This does not attempt to summarize all of the literature on the origins and
-types of noise, which have been reviewed elsewhere [e.g. @Saether1997; @Coulson2004; @Ovaskienen2010; @Black2012; @Schrieber2012; @Lenormand2009]
 
 
 
 <!-- Shorten this, more citations, more focus -->
 
-What is noise? Where does it come from?  It is important to bear
-in mind that whenever stochasticity is introduced into a model, it
+What is noise? Where does it come from?  Simply put, *noise is all that we leave out of our model*. 
+Whenever stochasticity is introduced into a model, it
 is only as a simplification or summary of the effects of a large
 number of other processes, often occurring at different scales.
-Simply put, *noise is all that we leave out of our model*.  Early
+A central theme of stochastic modeling research over the past
+several decades has been an emphasis on making this relationship
+between stochastic summary and underlying process more precise:
+that is, on understanding the origins of noise [@Coulson2004]. 
+
+
+
+Over the past several decades, research into stochastic modeling
+has 
+
+This does not attempt to summarize all of the literature on the origins and
+types of noise, which have been reviewed elsewhere [e.g. @Saether1997; @Coulson2004; @Ovaskainen2010; @Black2012; @Schreiber2012; @Lenormand2009]
+
+justify simple models, 
+citations adapting this to complex models:
+
+
+Early
 quantitative ecological models first formulated at the population
 level as differential or difference equations: deterministic models
 that seek to capture the essential features of a system while
@@ -449,6 +468,24 @@ simple intuition for the mechanisms involved.
 
 ## Persistence and coexistence  
 
+Few topics have recieved greater attention then the question of
+the persistence of a given species [@Kendall1949;  @Bartlett1959; @Lande1993; @Saether1998; @Coulson2001; @Schreiber2010]
+
+and coexistence of multiple species
+
+[@Caswell1978; @Tuljapurkar1980; @Chesson1981; @Chesson1982; @Chesson1985; @Chesson1989; @Melbourne2007; @Schreiber2017]
+
+
+Structured populations 
+[@Cohen1979; @Tuljapurkar1989; @Metcalf2015; @Vindenes2017b]
+
+See in particular reviews by @Ovaskainen2010 and @Schreiber2012
+
+Individual heterogeneity 
+@Vindenes2015; @Hart2016
+
+@Lee2017
+
 A natural focus of much research into stochastic ecological systems
 has been on understanding the implications for persistence of
 individual and coexistence of interacting species. Demographic noise
@@ -496,6 +533,8 @@ read_csv("../appendixA/quasicycles.csv") %>%
 
 ## Quasi-cycles 
 
+<!--  -->
+
 Understanding the origin of sustained oscillations has long been a
 central question in ecology [@Hastings1996; @Bjornstad2001].  The
 simple Lotka Volterra model produces only neutrally stable centers,
@@ -504,7 +543,9 @@ for prey as they compete for resources results in a model that
 produces only damped oscillations, eventually settling into a stable
 state (Figure \ref{quasicycles}A).  However, the introduction of relatively small
 noise into the system can be sufficient to excite the system into
-sustained oscillations (Figure \ref{quasicycles}B).  In the example shown here, a
+sustained oscillations (Figure \ref{quasicycles}B) 
+[e.g. empirical examples in @Blarer1999; @Greenman2003; @Black2010].  
+In the example shown here, a
 simple predator-prey system is driven by environmental white noise
 $\xi_t$, with prey following the equation:
 
@@ -547,8 +588,8 @@ tuna and Atlantic Cod, while @Black2010 illustrates the use of
 power-spectrum approaches to examine the behavior of quasi-cycles
 in common disease outbreak models, focusing on a case where noise
 arises explicitly from demographic stochasticity, rather than generic
-environmental noise as in the model above and elsewhere.  @Pineda-Krch2007
-compare patterns from these stochastically generated cycles to
+environmental noise as in the model above and elsewhere [@Kendall1999; @Pascual2003].  
+@Pineda-Krch2007 compare patterns from these stochastically generated cycles to
 stable limit cycles they resemble.  Stochastic resonance highlights
 one way in which even small noise can play an important role in
 driving large scale patterns where we had previously only sought
@@ -820,7 +861,7 @@ that stochastic processes could play a similar role in identifying
 other critical transitions. For instance, stochastic resonance may be 
 visible in advance of a Hopf bifurcation, where a stable state gives
 way to stable oscillations (limit cycle) of growing magnitude
-[e.g. @Fussman2000; @Strogatz2001].
+[e.g. @Fussmann2000; @Strogatz2001].
 
 Most importantly, the framing of stochastic processes as indicators of
 changes in an ecosystem that might otherwise go unnoticed has proven a

@@ -10,8 +10,8 @@ address:
     address: "Dept of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley CA 94720-3114, USA"
 
 ## Use trends style to quickly count refs
-#csl: trendsjournals.csl
-csl: ecology-letters.csl
+csl: trendsjournals.csl
+#csl: ecology-letters.csl
 bibliography: refs.bib
 output: 
   rticles::elsevier_article:
@@ -98,7 +98,7 @@ beneath [@Coulson2001].  Over the past several decades, theoretical ecology has 
 from thinking of stochasticity in such terms; where noise is a nuciance
 that obscures the "deterministic skeleton" of the underlying mechanisms,
 to the recognition that stochasticity can itself be a mechanism for 
-driving many interesting phenomena.  Yet this transistion from "noise the nuisance"
+driving many interesting phenomena [@Coulson2004].  Yet this transistion from "noise the nuisance"
 to "noise the creator" of ecological phenomena has had, with a few notable exceptions,
 relatively little impact in empricial thinking about stochasticity.  One of the
 most provocative of those exceptions has turned the classical notion of noise
@@ -107,7 +107,64 @@ to reveal underlying processes: to become "noise the informer."  Here I argue th
 this third shift in perspective offers an opportunity to better bridge the divide
 between respective primarily theoretical and primarily empricial communities by 
 seeing noise not as mathematical curiousity or statistical bugbear, but as a
-source for new opportunities for inference.
+source for new opportunities for inference.  This shift in how we think about noise
+is nonetheless easy to miss in the extensive literature 
+
+Origins of noise and motivation for studying stochastic models @Kendall1949 and @Bartlett1960
+
+
+This trend from nuisance to creator
+to informer is of course not the only or the most obvious trend in the 
+extensive literature on stochastic modeling over the past few decades, but rather,
+an instructive lens in which to draw out a lar
+
+
+
+@Bjornstad2001 @Coulson2001 @Coulson2004
+
+I will focus on examples that
+illustrate this larger arc in how we are thinking about stochasticity as the role
+it plays.  
+
+
+(e.g. see in particular
+@Couslon2004, @Ovaskainen2010 on population extinction with 
+a focus on environmental and colored noise, @Black2012 on intrinsic / demographic noise,
+
+
+
+
+
+Few topics have recieved greater attention then the question of
+the persistence of a given species [@Kendall1949;  @Bartlett1960; @Lande1993; @Saether1998; @Coulson2001; @Schreiber2010]
+
+Excellent reviews and textbook introductions 
+
+
+
+
+
+@Bartlett1960 @Bjornstad2001 @Coulson2001 @Lande2003
+
+
+
+See in particular reviews by @Ovaskainen2010 and @Schreiber2012
+
+
+
+@Lee2017
+
+
+
+
+
+The extensive literature on demographic and environmental noise has been
+frequently reviewed elsewhere [@Black2012]
+
+
+@Saether1997
+
+
 I approach this synthesis in three parts.  First, I will sketch the ground-work
 for the origins of noise in any model as statistical summary of large number of
 additional processes from some lower level that are modeled only in aggregate.
@@ -118,7 +175,27 @@ to pattern, we will go from pattern to process: noise the informer.
 
 
 I will anchor each of these sections using concrete examples from simple models.
-It is easy to critique such simple models: ecology is complex, and much effort
+It is easy to critique such simple models: after all, one might summarize decades
+of research in noting the twin observations that (1)  ecology is complex and (2)
+that complexity is important. In the stochasticty literature alone, much work 
+has been done to understand and extend fundamental results to more complex models,
+including the importance of age and stage structure [e.g. @Cohen1979; @Tuljapurkar1989;
+@Caswell2009; @Metcalf2015; @Vindenes2017b], spatial structure [e.g. @Durrett1994; @Dieckmann2000;
+@Kerr2002; @Schreiber2010], Individual heterogeneity [e.g. @Vindenes2015; @Hart2016]
+or the coexistence of multiple species [@Caswell1978; @Tuljapurkar1980; @Chesson1981;
+@Chesson1982; @Chesson1985; @Chesson1989; @Melbourne2007; @Schreiber2017]; species traits
+and the interaction of ecological and evolutionary processes [@Ozgul2009; @Lenormand2009; @Vindesens2015; @Schreiber2015],
+not to mention the extensive literature in stochastic evolution and popluation genetics
+[e.g. Ewens, @Lewontin1969]
+
+
+
+and the role of stochasticity in more complex models, particularly in structured populations (matrix models), 
+
+
+in
+
+
 has been spent on illustrating the importance that complexity: age and stage
 structure, spatial structure, individual heterogeneity, evolution, non-stationary environments,
 species network interactions, and much more [e.g. @Durrett1994; @Bjornstad2001].
@@ -147,26 +224,67 @@ noise, emergent phenomena, and noise-driven inference.
 
 # Origins of noise
 
-
-
-
-
-
-<!-- Shorten this, more citations, more focus -->
-
-What is noise? Where does it come from?  Simply put, *noise is all that we leave out of our model*. 
+What is noise? Where does it come from?  Simply put, noise is all that we leave out of our model. 
 Whenever stochasticity is introduced into a model, it
 is only as a simplification or summary of the effects of a large
 number of other processes, often occurring at different scales.
 A central theme of stochastic modeling research over the past
 several decades has been an emphasis on making this relationship
-between stochastic summary and underlying process more precise:
-that is, on understanding the origins of noise [@Coulson2004]. 
+between stochasticity and underlying processes more precise:
+that is, on the origins of noise [e.g. @Coulson2004]. This literature
+has largely divided the origins of stochasticity between 
+*intrinsic* factors: where stochasticity is introduced to reflect
+the reality that our variables of interest are intriniscally 
+statistical averages of lower-level processes, and *extrinsic*
+factors: where stochasticity reflects the impact of other variables
+we are not explicitly modeling at all [e.g. @Keeling2012].  **Demographic stochasticity**
+is the primary (though not the only) example of an intrinsic factor,
+which reflects the fact that the continuous variable we often think of a
+"population size" or "population density" is an average over a 
+lower level process of births and deaths among a finite number of 
+individuals [@Melbourne2012].  **Environmental stochasticity** is the primary example 
+of an extinsic factor, reflecting the fact that parameters we may
+treat as constants in a model in fact depend on variables such as 
+temperature or soil moisture that are not explicitly modeled by our 
+equations, but simplified into statistical summaries of those processes
+[@Ripa2012].
+
+
+The Gillespie simulation provides a simple and exact algorithm
+for simulating demographic stochasticity at an individual level.  
+Free from both the approximations and mathematical complexity of more common
+formulations using stochastic differential equations (SDEs), 
+(or their partial differential equation counterparts the Fokker-Planck equation),
+the Gillespie algorithm offers a simple and powerful approach to simulating
+stochastic phenomena that remains underutilized. 
+
+The mathematical proofs @Kurtz1970 & @Kurtz1971, popularized by
+@vanKampen's intuitive "system size" expansion, provide a far more 
+explicit framework to interpret demographic stochasticity than the
+better known diffusion approximation [@Nisbet1982 @Lande2003; 
+see @Gardiner2009].  
 
 
 
-Over the past several decades, research into stochastic modeling
-has 
+
+
+It is often suggested that stochasticity is "inherent" or "fundamental,"
+e.g. "demographic stochasticity arises because the birth of an individual is probabilistic"
+[@Melbourne2012]. It is easy to forget that this is merely an assertion about a 
+model, not an assertion about reality.  Only in quantum mechanics do we find 
+inherently probabilistic properties: births and deaths of organisms all have
+far more mechanistic explanations which we simply summarize in statistical terms:
+on average -- that is, summing over a wide range of possible mechanisms we have chosen
+not to explicitly model -- an individual death occurs at rate $\lambda$.  
+This is in fact an extrinisic factor (variables not modeled explicitly),
+which makes birth appear probabilistic; (just as we describe the toss of a coin
+as probabilistic when in fact it is a mechanistic outcome of Newton's laws).  
+Demographic stochasticity arises
+only subsequently, when we change scales from a description at the individual
+level to one at the population level.
+
+
+@Keeling2012; @Melbourne2012; @Ripa2012
 
 This does not attempt to summarize all of the literature on the origins and
 types of noise, which have been reviewed elsewhere [e.g. @Saether1997; @Coulson2004; @Ovaskainen2010; @Black2012; @Schreiber2012; @Lenormand2009]
@@ -185,36 +303,7 @@ available and efficient numerical methods have helped drive research
 towards increasingly more explicit descriptions of how stochasticity
 enters into quantitative models [@Black2012; @Ovaskainen2010].
 
-With the exception of quantum mechanics (and there only at scales
-that have no relevance to ecology), stochasticity is not an inherent
-property of nature but rather an emergent property of many events
-occurring at a different scale.  Coins and dice obey the physical
-laws of motion; only variation in how they are tossed (i.e. something
-complex we do not usually model) creates randomness.  The term
-"noise" itself reflects this emergent rather than fundamental origin:
-the combination of hundreds of voices and sounds each individually
-distinct blends together into a background of noise. Statistical
-mechanics tells us that temperature is a measure of the average
-speed of individual molecules in a gas -- any given molecule will
-experience a range of possible speeds but by itself has no notion
-of temperature.  Likewise, stochasticity enters our ecological
-models because our quantities of interest, such as the density of
-a population, is but an average over a lower-level, discrete process
-of individual births and deaths. Stochasticity that emerges directly
-from discrete individual events that underlie the process described
-by our model are considered *intrinsic stochasticity*, commonly
-referred to as *demographic stochasticity* in ecological literature,
-as it usually arises in the context scaling from individual demographic
-events to population level descriptions. An important aspect of
-this demographic stochasicity is that it scales with the square
-root of the "system size," [@vanKampen2007] so that for very large populations the
-resulting fluctuations are relatively small. On the other hand,
-*extrinsic stochasticity*, usually referred to as *environmental
-stochasticity* in the ecological literature, arises in processes
-that are not described by our model, but merely impact the value
-of some parameter of our model; for instance, fluctuations in
-temperature may drive variation in a death rate, or fluctuations
-in rainfall drive variation in carrying capacity.
+
 
 
 ## Demographic stochasticity

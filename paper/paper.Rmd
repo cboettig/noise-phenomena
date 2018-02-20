@@ -141,9 +141,6 @@ the persistence of a given species [@Kendall1949;  @Bartlett1960; @Lande1993; @S
 Excellent reviews and textbook introductions 
 
 
-
-
-
 @Bartlett1960 @Bjornstad2001 @Coulson2001 @Lande2003
 
 
@@ -183,24 +180,16 @@ including the importance of age and stage structure [e.g. @Cohen1979; @Tuljapurk
 @Caswell2009; @Metcalf2015; @Vindenes2017b], spatial structure [e.g. @Durrett1994; @Dieckmann2000;
 @Kerr2002; @Schreiber2010], Individual heterogeneity [e.g. @Vindenes2015; @Hart2016]
 or the coexistence of multiple species [@Caswell1978; @Tuljapurkar1980; @Chesson1981;
-@Chesson1982; @Chesson1985; @Chesson1989; @Melbourne2007; @Schreiber2017]; species traits
-and the interaction of ecological and evolutionary processes [@Ozgul2009; @Lenormand2009; @Vindesens2015; @Schreiber2015],
+@Chesson1982; @Chesson1985; @Chesson1989; @Melbourne2007; @Schreiber2017]; 
+correlated [@Ripa; @Ripa1999; @Petchey, @Schreiber2010; @Lee2017; @Spanio2017] or periodic
+[@Coulson2001; @Bjornstad2001; @Keeling2001] structure in environmental noise, or
+the interaction of ecological and evolutionary processes [@Saether1997; @Ozgul2009; @Lenormand2009; @Vindenes2015; @Schreiber2015],
 not to mention the extensive literature in stochastic evolution and popluation genetics
-[e.g. Ewens, @Lewontin1969]
+[e.g. @Ewens2004, @Lewontin1969].  
 
 
-
-and the role of stochasticity in more complex models, particularly in structured populations (matrix models), 
-
-
-in
-
-
-has been spent on illustrating the importance that complexity: age and stage
-structure, spatial structure, individual heterogeneity, evolution, non-stationary environments,
-species network interactions, and much more [e.g. @Durrett1994; @Bjornstad2001].
-While acknowledging more realistic examples and more general results where avialable,
-using specific and familiar simple models that -- just complex enough to illustrate
+While acknowledging more realistic examples and more general results where available,
+using specific and familiar simple models -- just complex enough to illustrate
 the phenomenon but no more -- will provide us with a platform that is more accessible 
 to both intution and exploration and extension either through mathematical manipulation or 
 computer simulation.  In this spririt, I provide concise, detailed and commented
@@ -558,7 +547,7 @@ simple intuition for the mechanisms involved.
 ## Persistence and coexistence  
 
 Few topics have recieved greater attention then the question of
-the persistence of a given species [@Kendall1949;  @Bartlett1959; @Lande1993; @Saether1998; @Coulson2001; @Schreiber2010]
+the persistence of a given species [@Kendall1949;  @Bartlett1955; @Bartlett1960; @Lande1993; @Saether1998; @Coulson2001; @Schreiber2010]
 
 and coexistence of multiple species
 

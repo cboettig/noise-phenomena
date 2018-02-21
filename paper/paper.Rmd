@@ -170,15 +170,25 @@ to pattern, we will go from pattern to process: noise the informer.
 
 # Origins of noise
 
-What is noise? Where does it come from?  Simply put, noise is all that we leave out of our model. 
-Whenever stochasticity is introduced into a model, it
-is only as a simplification or summary of the effects of a large
-number of other processes, often occurring at different scales.
+What is noise? Where does it come from? 
+Many stochastic models are not explicit about whether the noise terms
+they introduce are intended to reflect intrinsic or extrinsic factors.
+Early quantitative ecological models first formulated at the population
+level in deterministic settings. The notion of a deterministic
+"skeleton" -- responsible for the phenomena of interest -- that is obscured
+from view by the nusiance of noise has slowly given way to recognition
+that stochastic and deterministic elements not only interact in 
+interesting ways [@Coulson2004] but also share a common origin [e.g. @Black2012].
 A central theme of stochastic modeling research over the past
 several decades has been an emphasis on making this relationship
 between stochasticity and underlying processes more precise:
-that is, on the origins of noise [e.g. @Coulson2004]. This literature
-has largely divided the origins of stochasticity between 
+that is, on the origins of noise. 
+
+Simply put, noise is all that we leave out of our model. 
+Whenever stochasticity is introduced into a model, it
+is only as a simplification or summary of the effects of a large
+number of other processes, often occurring at different scales.
+This literature has largely divided the origins of stochasticity between 
 *intrinsic* factors: where stochasticity is introduced to reflect
 the reality that our variables of interest are intriniscally 
 statistical averages of lower-level processes, and *extrinsic*
@@ -195,12 +205,26 @@ temperature or soil moisture that are not explicitly modeled by our
 equations, but simplified into statistical summaries of those processes
 [@Ripa2012]. 
 
-Many stochastic models are not explicit about whether the noise terms
-they introduce are intended to reflect intrinsic or extrinsic factors.
-Early quantitative ecological models first formulated at the population
-level as differential or difference equations: deterministic models
-that seek to capture the essential features of a system while
-neglecting any random component as mere noise [@Coulson2004].
+In the extensive literature developing the consequences of both demographic
+and environmental noise in models of increasing complexity, it can 
+be easy to miss the equally important developments in making the origins
+of these sources of noise more precise -- developments which have important
+consquences for when and how the resulting models can be applied. 
+
+the canonical model on the highly influential @Leigh1981, @Lande1993, @Foley1994
+
+
+
+
+$$ \frac{\textrm{d} n}{\textrm{d} t} = \underbrace{f(n)}_{\textrm{det skeleton}} + \underbrace{\sigma_d \xi_d(t) \sqrt{n}}_{\textrm{demographic noise}} + \underbrace{\sigma_e \xi_e(t) n}_{\textrm{environmental noise}}$$
+
+
+
+
+
+Stochastic differential equations of this form are so-called "Langevin equation," popular in the physics literature.  This notation is rather sloppy, as the standard calculus does not apply to stochastic equations.  The Langevin formulation, most popular in physics, is usually associated with a Stratonovich integral.  Mathematicians prefer to write stochastic differential equations as $\textrm{d} n = f(x) \textrm{d} t + g(x) \textrm{d} B_t$, where the differentials hint at the underlying definition that this is the sum of a classic Reimann integral (over $\textrm{d}t$) and a stochastic It\^o integral.  
+
+
 Advances in both theoretical understanding and the advent of widely
 available and efficient numerical methods have helped drive research
 towards increasingly more explicit descriptions of how stochasticity
@@ -216,8 +240,7 @@ mathematical means to properly bridge between individual-based models
 (IBMs, usually implemented only in simulations) and familiar population-level
 dynamics (so called macroscopic dynamics).  
 
-; @Ovaskainen2010 the canonical on the highly influential @Leigh1981, @Lande1993, @Foley1994
-
+; @Ovaskainen2010 
 
 
 
@@ -468,7 +491,10 @@ model.  As with other forms of noise [@Melbourne2008; @Bonsall2004],
 interaction between individual or spatial variation and other sources
 of noise can drive patterns including the potential for persistence,
 coexistence, and dispersal of species [@Schreiber2010; @Hart2016;
-@Schreiber2017].  *Observational error* acts
+@Schreiber2017].  
+
+
+*Observational error* acts
 much like another form of stochasticity, arising from sampling
 effects or limitations of instruments, etc. Yet unlike the sources
 described above, this uncertainty does not impact the actual state
@@ -522,7 +548,7 @@ and continuing to extend such results to more complex contexts
 [@Ovaskainen2010 provides one excellent review], in
 particular addressing autocorrelated noise [e.g. @Ripa; @Ripa1999; 
 @Petchey, @Schreiber2010; @Lee2017; @Spanio2017] , spatial structure
-[e.g. @Durrett1994; @Dieckmann2000; @Kerr2002; @Schreiber2010] and stage structure
+[e.g. @Durrett1994; @Hastings1994; @Dieckmann2000; @Kerr2002; @Schreiber2010] and stage structure
 [e.g. @Cohen1979; @Tuljapurkar1989; @Caswell2009; @Metcalf2015; @Vindenes2017b], 
 among other issues.
 

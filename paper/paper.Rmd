@@ -107,74 +107,23 @@ to reveal underlying processes: to become "noise the informer."  Here I argue th
 this third shift in perspective offers an opportunity to better bridge the divide
 between respective primarily theoretical and primarily empricial communities by 
 seeing noise not as mathematical curiousity or statistical bugbear, but as a
-source for new opportunities for inference.  This shift in how we think about noise
-is nonetheless easy to miss in the extensive literature 
+source for new opportunities for inference. 
 
-Origins of noise and motivation for studying stochastic models @Kendall1949 and @Bartlett1960
-
-
-This trend from nuisance to creator
-to informer is of course not the only or the most obvious trend in the 
-extensive literature on stochastic modeling over the past few decades, but rather,
-an instructive lens in which to draw out a lar
-
-
-
-@Bjornstad2001 @Coulson2001 @Coulson2004
-
-I will focus on examples that
-illustrate this larger arc in how we are thinking about stochasticity as the role
-it plays.  
-
-
-(e.g. see in particular
-@Couslon2004, @Ovaskainen2010 on population extinction with 
-a focus on environmental and colored noise, @Black2012 on intrinsic / demographic noise,
-
-
-
-
-
-Few topics have recieved greater attention then the question of
-the persistence of a given species [@Kendall1949;  @Bartlett1960; @Lande1993; @Saether1998; @Coulson2001; @Schreiber2010]
-
-Excellent reviews and textbook introductions 
-
-
-@Bartlett1960 @Bjornstad2001 @Coulson2001 @Lande2003
-
-
-
-See in particular reviews by @Ovaskainen2010 and @Schreiber2012
-
-
-
-@Lee2017
-
-
-
-
-
-The extensive literature on demographic and environmental noise has been
-frequently reviewed elsewhere [@Black2012]
-
-
-@Saether1997
-
-
-I approach this synthesis in three parts.  First, I will sketch the ground-work
-for the origins of noise in any model as statistical summary of large number of
-additional processes from some lower level that are modeled only in aggregate.
-This will provide the fundamentals we need to illustrate several key examples
-of noise driven phenomena in ecological dynamics: noise the creator.  Finally,
-we will be able to invert some of these examples; instead of going from process
-to pattern, we will go from pattern to process: noise the informer.  
-
-
-I will anchor each of these sections using concrete examples from simple models.
-It is easy to critique such simple models: after all, one might summarize decades
+As the literature on stochastic modeling in ecology is both extensive and often
+technical, and so rather than attempt a comprehensive review, this synthesis
+will focus on the simplest examples necessary to illustrate this broader trend
+in the changing way we think about the role of noise and the opportunity
+that shift can present to better bridge theoretical and empirical communities.
+To that end, I will focus on examples from simple population models, echoing
+the motivation of @Bartlett1960 to focus on basic theoretical aspects common
+across models. In so doing, we will ignore the equally rich literature of 
+stochastic models in evolution [@Lenormand2009] and population genetics
+[e.g. @Ewens2004]. In an effort to make these themes accessible to more emprical
+readers, I will also focus on simplest examples necessary, with only passing
+mention of the rich literature extending these concepts to more realistic
+models.  It is easy to critique this choice: indeed, one might summarize decades
 of research in noting the twin observations that (1)  ecology is complex and (2)
-that complexity is important. In the stochasticty literature alone, much work 
+that complexity is important. In the stochasticity literature alone, much work 
 has been done to understand and extend fundamental results to more complex models,
 including the importance of age and stage structure [e.g. @Cohen1979; @Tuljapurkar1989;
 @Caswell2009; @Metcalf2015; @Vindenes2017b], spatial structure [e.g. @Durrett1994; @Dieckmann2000;
@@ -183,16 +132,11 @@ or the coexistence of multiple species [@Caswell1978; @Tuljapurkar1980; @Chesson
 @Chesson1982; @Chesson1985; @Chesson1989; @Melbourne2007; @Schreiber2017]; 
 correlated [@Ripa; @Ripa1999; @Petchey, @Schreiber2010; @Lee2017; @Spanio2017] or periodic
 [@Coulson2001; @Bjornstad2001; @Keeling2001] structure in environmental noise, or
-the interaction of ecological and evolutionary processes [@Saether1997; @Ozgul2009; @Lenormand2009; @Vindenes2015; @Schreiber2015],
-not to mention the extensive literature in stochastic evolution and popluation genetics
-[e.g. @Ewens2004, @Lewontin1969].  
+the interaction of ecological and evolutionary processes [@Saether1997; @Ozgul2009;
+@Lenormand2009; @Vindenes2015; @Schreiber2015]. In this we follow @Levins1966 in
+sacrificing realism for generality.
 
-
-While acknowledging more realistic examples and more general results where available,
-using specific and familiar simple models -- just complex enough to illustrate
-the phenomenon but no more -- will provide us with a platform that is more accessible 
-to both intution and exploration and extension either through mathematical manipulation or 
-computer simulation.  In this spririt, I provide concise, detailed and commented
+In this spririt, I provide concise, detailed and commented
 code for simulating each of the models presented in Appendix A.
 Simulations permit poking and prodding of empirically-minded
 investigation unencumbered by either experimental design or mathematical formalism.
@@ -205,10 +149,23 @@ illustrated here to readily function as inductive models with
 parameters inferred from time-series data. A copy of this appendix
 is maintained at <https://github.com/cboettig/noise-phenomena>, and
 bug reports, suggestions or help requests are welcome through the
-issue tracker.  A second appendix provides more mathematical details
+issue tracker.  Appendix B provides more mathematical details
 for interested readers.  With these in place, we are ready to begin
 our tour through three major areas of noisy phenomena: Origins of
 noise, emergent phenomena, and noise-driven inference.
+
+
+<!--
+I approach this synthesis in three parts.  First, I will sketch the ground-work
+for the origins of noise in any model as statistical summary of large number of
+additional processes from some lower level that are modeled only in aggregate.
+This will provide the fundamentals we need to illustrate several key examples
+of noise driven phenomena in ecological dynamics: noise the creator.  Finally,
+we will be able to invert some of these examples; instead of going from process
+to pattern, we will go from pattern to process: noise the informer.  
+-->
+
+
 
 
 # Origins of noise
@@ -236,7 +193,36 @@ of an extinsic factor, reflecting the fact that parameters we may
 treat as constants in a model in fact depend on variables such as 
 temperature or soil moisture that are not explicitly modeled by our 
 equations, but simplified into statistical summaries of those processes
-[@Ripa2012].
+[@Ripa2012]. 
+
+Many stochastic models are not explicit about whether the noise terms
+they introduce are intended to reflect intrinsic or extrinsic factors.
+Early quantitative ecological models first formulated at the population
+level as differential or difference equations: deterministic models
+that seek to capture the essential features of a system while
+neglecting any random component as mere noise [@Coulson2004].
+Advances in both theoretical understanding and the advent of widely
+available and efficient numerical methods have helped drive research
+towards increasingly more explicit descriptions of how stochasticity
+enters into quantitative models. 
+
+
+
+
+@Black2012 provides an important 
+review of intrinsic noise and approaches for addressing it, focusing
+in particular on use of the van Kampen system size expansion as a
+mathematical means to properly bridge between individual-based models
+(IBMs, usually implemented only in simulations) and familiar population-level
+dynamics (so called macroscopic dynamics).  
+
+; @Ovaskainen2010 the canonical on the highly influential @Leigh1981, @Lande1993, @Foley1994
+
+
+
+
+This division between intrinsic or demographic noise and extrinsic or
+environmental noise 
 
 
 The Gillespie simulation provides a simple and exact algorithm
@@ -260,7 +246,7 @@ see @Gardiner2009].
 It is often suggested that stochasticity is "inherent" or "fundamental,"
 e.g. "demographic stochasticity arises because the birth of an individual is probabilistic"
 [@Melbourne2012]. It is easy to forget that this is merely an assertion about a 
-model, not an assertion about reality.  Only in quantum mechanics do we find 
+model, not an assertion about reality [@Bartlett1960].  Only in quantum mechanics do we find 
 inherently probabilistic properties: births and deaths of organisms all have
 far more mechanistic explanations which we simply summarize in statistical terms:
 on average -- that is, summing over a wide range of possible mechanisms we have chosen
@@ -268,29 +254,10 @@ not to explicitly model -- an individual death occurs at rate $\lambda$.
 This is in fact an extrinisic factor (variables not modeled explicitly),
 which makes birth appear probabilistic; (just as we describe the toss of a coin
 as probabilistic when in fact it is a mechanistic outcome of Newton's laws).  
-Demographic stochasticity arises
-only subsequently, when we change scales from a description at the individual
-level to one at the population level.
+Demographic stochasticity arises only subsequently, when we change scales from
+a description at the individual level to one at the population level.
 
 
-@Keeling2012; @Melbourne2012; @Ripa2012
-
-This does not attempt to summarize all of the literature on the origins and
-types of noise, which have been reviewed elsewhere [e.g. @Saether1997; @Coulson2004; @Ovaskainen2010; @Black2012; @Schreiber2012; @Lenormand2009]
-
-justify simple models, 
-citations adapting this to complex models:
-
-
-Early
-quantitative ecological models first formulated at the population
-level as differential or difference equations: deterministic models
-that seek to capture the essential features of a system while
-neglecting any random component as mere noise [@Coulson2004].
-Advances in both theoretical understanding and the advent of widely
-available and efficient numerical methods have helped drive research
-towards increasingly more explicit descriptions of how stochasticity
-enters into quantitative models [@Black2012; @Ovaskainen2010].
 
 
 
@@ -317,18 +284,33 @@ known as the "master equation" [@vanKampen2007].
 
 It is possible to simulate such a process exactly using Gillespie's
 exact stochastic simulation algorithm [SSA; @Gillespie1977], which
-simulates each individual birth or death as a separate event. Figure \ref{gillespie}
-uses this algorithm to compare simulations of @Levins1969 patch model;
-(see Appendix A for example code).  In the Levins'  model,
-$n$ individuals compete for a
-finite number of suitable habitats $N$.  Individuals die a constant
-rate $e$, and produce offspring at a constant rate $c$ who then
-have a probability of colonizing an open patch that is simply
-proportional to the fraction of available patches, $1 - n/N$.  
+simulates each individual birth or death as a separate event. 
+
+We can illustrate both the Gillespie algorithm and the van Kampen
+system size expansion using @Levins1969 classic patch model,
 
 \begin{align}
 \frac{\ud n}{\ud t} = \underbrace{c n \left(1 - \frac{n}{N}\right)}_{\textrm{birth}} - \underbrace{e n}_{\textrm{death}}, \label{levins}
 \end{align}
+
+where $n$ individuals compete for a
+finite number of suitable habitats $N$.  Individuals die a constant
+rate $e$, and produce offspring at a constant rate $c$ who then
+have a probability of colonizing an open patch that is simply
+proportional to the fraction of available patches, $1 - n/N$.  
+We choose this model because it has precisely same functional form
+as the ubiquitous logistic growth model, $\frac{\ud n}{\ud t} = rn (1 - \tfrac{n}{K})$
+but is explicit about how this net growth rate is divided between
+birth and death rate.  As we shall see, this is not merely a notational
+convience but leads to real differences in observed stochastic properties
+of the model.  Though we focus on this simple model for clarity of 
+presentation, both computational and mathematical framework presented here 
+can easily be applied to alternative models to reach the same conclusions.  
+
+
+Figure \ref{gillespie}
+uses this algorithm to compare simulations of @Levins1969 patch model;
+(see Appendix A for example code).  In the Levins'  model,
 
 Figure \ref{gillespie} shows the results of two exact SSA simulations of this model with
 identical parameters except for the total number of available sites,
@@ -493,19 +475,6 @@ described above, this uncertainty does not impact the actual state
 of our system, and thus does not give rise to any additional phenomena
 or information about that process, though it can obscure it
 [@Knape2011; @deValpine2002].
-
-Other forms of uncertainty common in models are not stochastic
-phenomena.  This includes any form of *reducible uncertainty*: In
-constructing and estimating mathematical models of ecological
-processes, we encounter uncertainty over our parameter estimates
-and possible choice of models [@Ellison2004].  In some ways, this
-uncertainty can act like the stochasticity described above: for
-instance, both introduce variation into any forecast of future
-outcomes. Yet unlike stochasticity, this uncertainty is reducible:
-with additional observations, we can narrow the uncertainty over
-parameters or candidate models. Thus we will not consider model and
-parameter uncertainty, as they do not reflect intrinsic phenomena of 
-the dynamics but only our own ignorance about those dynamics.  
 *Deterministic chaos* [@Desharnais2001] is another mechanism of introducing
 significant variation into a simple model. Chaos can a look a lot
 like noise: indeed, it can be observationally indistinguishable
@@ -521,14 +490,6 @@ by all those things left out of our models, all that individual
 detail from intrinsic, lower level processes and external environmental
 processes that becomes aggregated in our simple models all but begs
 for a stochastic description.
-
-Much active research continues to explore the consequences of
-introducing these more explicitly motivated and interacting sources
-of noise. With some grounding in the origins of different types of
-noise in place, we are ready to move to our second stop to see how
-this noise can drive the creation of novel phenomena on a macroscopic
-level.
-
 
 
 # Noise the creator: Noise can induce novel phenomena
@@ -546,42 +507,37 @@ simple intuition for the mechanisms involved.
 
 ## Persistence and coexistence  
 
-Few topics have recieved greater attention then the question of
-the persistence of a given species [@Kendall1949;  @Bartlett1955; @Bartlett1960; @Lande1993; @Saether1998; @Coulson2001; @Schreiber2010]
+The loss of a species is without a doubt one of the most important
+possible consequences of noise, and unsurprisingly few topics have
+recieved greater attention then the question of the persistence of
+a given species [e.g. @Kendall1949;  @Bartlett1955; @Bartlett1960;
+@Lande1993; @Saether1998; @Coulson2001; @Schreiber2010] and coexistence
+of multiple species [@Caswell1978; @Tuljapurkar1980; @Chesson1981;
+@Chesson1982; @Chesson1985; @Chesson1989; @Melbourne2007; @Hart2016; @Schreiber2017]
+in stochastic models.  Two important trends in this literature have
+been establishing existing results in more general and precise language
+and theorems [e.g. see @Schreiber2012 and @Schreiber2017 for an excellent
+overview and synthesis of persistence and coexistence respectively],
+and continuing to extend such results to more complex contexts 
+[@Ovaskainen2010 provides one excellent review], in
+particular addressing autocorrelated noise [e.g. @Ripa; @Ripa1999; 
+@Petchey, @Schreiber2010; @Lee2017; @Spanio2017] , spatial structure
+[e.g. @Durrett1994; @Dieckmann2000; @Kerr2002; @Schreiber2010] and stage structure
+[e.g. @Cohen1979; @Tuljapurkar1989; @Caswell2009; @Metcalf2015; @Vindenes2017b], 
+among other issues.
 
-and coexistence of multiple species
-
-[@Caswell1978; @Tuljapurkar1980; @Chesson1981; @Chesson1982; @Chesson1985; @Chesson1989; @Melbourne2007; @Schreiber2017]
-
-
-Structured populations 
-[@Cohen1979; @Tuljapurkar1989; @Metcalf2015; @Vindenes2017b]
-
-See in particular reviews by @Ovaskainen2010 and @Schreiber2012
-
-Individual heterogeneity 
-@Vindenes2015; @Hart2016
-
-@Lee2017
-
-A natural focus of much research into stochastic ecological systems
-has been on understanding the implications for persistence of
-individual and coexistence of interacting species. Demographic noise
-in particular has fundamental implications for the long-term
+Demographic noise in particular has fundamental implications for the long-term
 equilibrium: any finite population, however big, is guaranteed to
-eventually go extinct under demographic noise [e.g. @Kendall1949; @Lande2003].  However, in most
-models it is possible to define a notion of quasi-stationary 
+eventually go extinct under demographic noise [e.g. @Kendall1949; @Lande2003].  
+In most models it is possible [@Schreiber2006] to define a notion of quasi-stationary 
 distribution concentrated around the deterministic attractor,
 and to prove the probability of extinction decreases exponentially with 
-system size (e.g. see @Ovaskainen2010; @Schreiber2017 also reviews 
-more recent literature which has established these results more generally). 
-Generalizations about persistence and stable coexistence of interacting
-species in stochastic models are difficult due to complex interactions
-between demographic and environmental noise, population structure,
-spatial heterogeneity, magnitude of noise, degree of auto-correlation and so forth
-[e.g. @Higgins1997; @Coulson2001; @Melbourne2008; @Hart2016];
-indeed care must be taken even in defining the appropriate notion of 
-persistence [e.g. @Schreiber2006].  Instead of these long-term limits,
+system size [@Ovaskainen2010; @Schreiber2017]. We will turn our attention
+away from the well-trodden ground of persistence and coexistence to focus
+on other phenomena that 
+
+
+
 here we will focus on a few examples of stochastic phenomena 
 that can emerge on shorter time scales and provide some intuition for 
 how the interaction between stochastic an nonlinear dynamics can 

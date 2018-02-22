@@ -6,6 +6,7 @@ output:
 bibliography: "../paper/refs.bib"
 ---
 
+\renewcommand{\thefigure}{A\arabic{figure}}
 
 # Getting started
 

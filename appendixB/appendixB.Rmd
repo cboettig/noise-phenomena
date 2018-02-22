@@ -8,13 +8,19 @@ address:
     address: "Dept of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley CA 94720-3114, USA"
 layout: 5p  
 bibliography: ../paper/refs.bib
-output: rticles::elsevier_article
+output: 
+  rticles::elsevier_article:
+    toc: true
+  
 preamble: "\\newcommand{\\ud}{\\mathrm{d}}"
 ---
 
+\renewcommand{\thefigure}{B\arabic{figure}}
+
+
+# Preliminary comments on notation
 
 ## Stochastic Differential Equations
-
 
 @Ovaskainen2010 writes the canonical equation, Eq (1) in the main text, in the form:
 
@@ -37,14 +43,42 @@ X_{t+s} - X{t}  = \int_t^{t+s} \mu(X_{\tau}, \tau) \textrm{d}\tau + \int_t^{t+s}
 \end{equation}
 
 
-The first integral (over $\textrm{d}t$) is the familiar Reimann integral of the classic calculus, but the second is an Itô integral, which integrates over the stochastic process $B_t$ (Brownian motion, also termed a Weiner process). The Itô calculus follows different rules from the classic calculus, largely due to the fact that an Itô integral has non-zero quadratic variation. (Crudely put, $\textrm{d}x^2 \sim 0$, but $\textrm{d}B^2 \sim dx$).
+The first integral (over $\textrm{d}t$) is the familiar Reimann integral of the classic calculus, but the second is an Itô integral, which integrates over the stochastic process $B_t$ (Brownian motion, also termed a Weiner process). The Itô calculus follows different rules from the classic calculus, largely due to the fact that an Itô integral has non-zero quadratic variation. (Crudely put, $\textrm{d}x^2 \sim 0$, but $\textrm{d}B^2 \sim dx$).  The SDE notation also traditionally adopts capital letters such as $X_t$ to denote stochastic variables.  
 
-The intepretation of Langevin equation is less precise, as it can be read to correspond to one of two possible stochastic integrals, and is often associated with a Stratonovich integral.  (Unlike the Itô integral, the Stratonovich integral has zero quadratic variation and so obeys the same chain rule as the classic calculus, but it is not a martingale, e.g. an unbiased random walk, which is a convenient for property for proving theorems).  Fortunately, the notion as a partial differential equation over probabilities does not have this ambiguity, which shows that @Ovaskainen2010 is referring to an Itô expression, just as I have written it more explicitly.  See @vanKampen2007 for an excellent discussion of the Itô-Stratonovich dillema and its intepretation with respect to intrinsic vs environmental noise factors. 
-
-## Master equations and the step operator
+The intepretation of Langevin equation is less precise, as it can be read to correspond to one of two possible stochastic integrals, and is often associated with a Stratonovich integral.  (Unlike the Itô integral, the Stratonovich integral has zero quadratic variation and so obeys the same chain rule as the classic calculus, but it is not a martingale, e.g. an unbiased random walk, which is a convenient for property for proving theorems).  Fortunately, the notion as a partial differential equation over probabilities does not have this ambiguity, which shows that @Ovaskainen2010 is referring to an Itô expression, just as I have written it more explicitly.  See @vanKampen2007 for an excellent discussion of the Itô-Stratonovich dillema and its intepretation with respect to intrinsic vs environmental noise factors. To avoid this ambiguity, mathematical literature will frequently write the Statonovich-type SDE explicitly as $\mathrm{d} X_t = f(X_t) \mathrm{d}t +  g(X_t) \circ  B_t$
 
 
-Consider a population that is of size $n$ with probability $p_n$, with birth and death rates given by $b_n$ and $d_n$ respectively, diagrammed in Fig~\ref{markov}  This representation is known as a single step Markov process.  The rate of transitions to the $n+1$ state $b_n$, the rate of transitions to $n-1$ is $d_n$.  Both of these are transitions away from the state $p_n$, hence the decrease the probability of $p_n$.  The probability $p_n$ increases by transitions into the state $n$, from either side: births enter from the state below at rate $b_{n-1}$ and deaths from the state above, $d_{n+1}$.  Hence the rate of change in $p_n$ is given by
+### Partial Differential Equation formulation
+
+An SDE can also be written in terms of an equivalent partial differential equation for the probability distribution of a given variable.  The SDE
+
+
+\begin{equation}
+\textrm{d} X_t = \mu(X_t) \textrm{d}t + \sigma(X_t) \textrm{d}B_t
+\end{equation}
+
+is equivalent to the PDE formulation [e.g. @vanKampen2007 or @Oksendal1985].
+
+
+\begin{equation}
+\frac{\partial}{\partial t} P(x,t) = - \frac{\partial}{\partial x} \mu(x) P(x,t) + \frac{1}{2} \frac{\partial^2}{\partial x^2} \sigma(x)^2 
+\end{equation}
+
+
+
+# Master equations and the step operator
+
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=.25\textwidth]{markov}
+\caption{Birth and death as state-dependent transition rates in a Markov process.}\label{markov}
+\end{center}
+\end{figure}
+
+
+Consider a population that is of size $n$ with probability $p_n$, with birth and death rates given by $b_n$ and $d_n$ respectively, diagrammed in Fig \ref{markov}  This representation is known as a single step Markov process.  The rate of transitions to the $n+1$ state $b_n$, the rate of transitions to $n-1$ is $d_n$.  Both of these are transitions away from the state $p_n$, hence the decrease the probability of $p_n$.  The probability $p_n$ increases by transitions into the state $n$, from either side: births enter from the state below at rate $b_{n-1}$ and deaths from the state above, $d_{n+1}$.  Hence the rate of change in $p_n$ is given by
 
 
 \begin{align}
@@ -54,14 +88,6 @@ Consider a population that is of size $n$ with probability $p_n$, with birth and
 
 
 This probability balance is known for historical reasons as a master equation. This equation will form the center of our treatment.  Master equations of this form can be written more concisely by introducing the step operator, $\mathbb E^k$ such that $\mathbb E^k f_n = f_{n+k}$, giving us
-
-
-\begin{figure}
-\begin{center}
-\includegraphics[width=.25\textwidth]{markov}
-\caption{Birth and death as state-dependent transition rates in a Markov process.}\label{markov}
-\end{center}
-\end{figure}
 
 \begin{align}
 \frac{\ud p_n}{\ud t} = (\mathbb E^{-1} - 1) b_n p_n + (\mathbb E -1) d_n p_n \label{master1}
@@ -90,9 +116,17 @@ and similarly the second moment is
 While all moments can be derived as above, it is often impossible to solve these equations for nonlinear models.  Moreover, we have yet to make any moment closure argument that solving for the first two moments in this manner will be sufficient.  We will illustrate how this is done in both the traditional diffusion approximation and then in the van Kampen system size expansion.   
 
 
-## A traditional derivation
+## The system-size expansion vs the diffusion approximation
 
-A derivation of the above formulation can be found, e.g. in @Nisbet1982's classic textbook on fluctuating populations, or more recently in @Lande2003.  This diffusion approximation is also given for a more mathematically inclined audience in @Gardiner2009 and in @vanKampen2007.  The approach starts with the same master equation that defines the underlying dynamics of births and deaths (matching the process implemented in the exact Gillespie algorithm, @Gillespie1977, see Appendix A).  
+@Kramers1940 @Moyal1949, @Kurtz1978
+
+
+@vanKampen1961 @vanKampen1976 @Kurtz1972 @Kurtz1978
+
+
+
+
+A derivation of diffusion approximation in @Nisbet1982's classic textbook on fluctuating populations, or more recently in @Lande2003.  This diffusion approximation is also given for a more mathematically inclined audience in @Gardiner2009 and in @vanKampen2007.  The approach starts with the same master equation that defines the underlying dynamics of births and deaths (matching the process implemented in the exact Gillespie algorithm, @Gillespie1977, see Appendix A).  
 
 The essence of the approach is to argue that in the limit of large populations, the discrete state for the number of indivduals in a population, $N$, can be replaced with a continuous variable, $n$, in which we can expand the master equation as a Taylor series and then truncate at second order.  In contrast to the system size expansion of van Kampen, this approach does not make system size explicit, but instead hinges on taking a simultaneous limit of both short time and small step size.  Consider small steps $x = \epsilon n$, and hence $p_n = \epsilon P_x$, where $\epsilon \ll 1$.  To keep the process from slowing down we consequently have to scale up the rates by $\epsilon$ as well:
 
@@ -313,10 +347,9 @@ Setting the remaining equations to zero to solve for the stationary state we can
 From which we recover the environmental variation equation presented in the main text.  
 
 
-## WKB
+## Large deviations
 
-
-@Ovaskainen2010 provides an overview literature in that addresses this limit and discusses the use of the WKB^[Wentzel, Kramers & Brillouin. Naturally this is KWB in Holland, BWK in France, and JWKB in England (for Jeffreys). Note that the physicist Gregor Wentzel is not the same as the mathematician Alexander Wentzell of the Fredilin-Wentzell theorem for large deviations years later, though I believe the former's result can be derived directly from the latter's.] method to address this case. 
+Notably, both the SDE derived from the Kramer-Moyal diffusion approximation and the central limit theorem result arising from the system size expansion break down in the case of large deviations.  @Ovaskainen2010 provides an overview literature in that addresses this limit and discusses the use of the WKB^[Wentzel, Kramers & Brillouin. Note that the physicist Gregor Wentzel is not the same as the mathematician Alexander Wentzell of the Fredilin-Wentzell theorem for large deviations years later, though I believe the former's result can be established more formally by the theorem from the latter.] method to address this case. 
 
 
 

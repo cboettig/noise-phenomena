@@ -236,9 +236,15 @@ model, established in highly influential papers of @Leigh1981, @Lande1993,
 
 $$ \textrm{d} N_t = \underbrace{f(N_t) \textrm{d} t}_{\textrm{det skeleton}} + \underbrace{\sigma_d \sqrt{N_t} \phantom{\cdot}\textrm{d}B_t^{(d)} }_{\textrm{demographic noise}} + \underbrace{\sigma_e N_t \phantom{\cdot}\textrm{d}B_t^{(e)}}_{\textrm{environmental noise}}$$
 
-Where $\textrm{d}B_t^{(d)}$ and $\textrm{d}B_t^{(e)}$ refer to Brownian processes, (i.e. Gaussian white noise process) for demographic and environmental stochasticity respectively.  When $f(n)$ is simply a Verhulst logistic function this is often referred to as the canonical model [e.g. @@Ovaskainen2010], and provides a clear illustration of the partition of separate deterministic and stochastic elements. Significant research continues to focus on extending the study of this model to consider more complex and higher-dimensional $f(n)$ (coexistence models, stage structured models) and consider the case of autocorrelated, rather than than white noise of $\textrm{d}B_t^{(e)}$.  
+Where $\textrm{d}B_t^{(d)}$ and $\textrm{d}B_t^{(e)}$ refer to Brownian processes, (i.e. Gaussian white noise process) for demographic and environmental stochasticity respectively.  When $f(n)$ is simply a Verhulst logistic function this is often referred to as the canonical model [e.g. @Ovaskainen2010], and provides a clear illustration of the partition of separate deterministic and stochastic elements. Significant research continues to focus on extending the study of this model to consider more complex and higher-dimensional $f(n)$ (coexistence models, stage structured models) and consider the case of autocorrelated, rather than than white noise of $\textrm{d}B_t^{(e)}$.  
 
-Before we follow that path, I will review how a shift towards more mechanistic descriptions of the origins of noise provide a more nuianced view of when the canonical model does an does not hold in the context of both demographic and environmental stochasticity.  My approach will highlight two fundamental tools: an ability for efficient, exact simulation using @Gillespie1977's stochastic simulation algorithm (SSA), and the van Kampen system size expansion [@vanKampen2007], which is rooted in the mathematical theorems of @Kurtz1970 & @Kurtz1971, in place of the more popular diffusion approximation derived by Taylor series [e.g. @Nisbet1982 @Lande2003; see comparisons in @vanKampen2007 and @Gardiner2009].  
+Before we follow that path, I will highlight
+
+I will review how a shift towards more mechanistic descriptions of the origins of noise provide a more nuianced view of when the canonical model does an does not hold in the context of both demographic and environmental stochasticity.  My approach will highlight two fundamental tools: an ability for efficient, exact simulation using @Gillespie1977's stochastic simulation algorithm (SSA), and the van Kampen system size expansion [@vanKampen1976].
+
+
+
+which is rooted in the mathematical theorems of Thomas Kurtz [@Kurtz1970 & @Kurtz1971, @Kurtz1972 @Kurtz1978], in place of the more popular diffusion approximation derived by Taylor series [e.g. @Nisbet1982, @Lande2003; rooted in the earlier work of @Kramers1940 and @Moyal1949, see comparisons in @vanKampen2007 and @Gardiner2009].  
 
 
 
@@ -310,20 +316,24 @@ read_csv("../appendixA/gillespie.csv", col_types = "cdiddd")  %>%
 
 
 The van Kampen system size expansion, shown for a general birth-death
-process in Appendix B, derives an ordinary differential equation (ODE)
-for the macroscopic process and a *linear* Fokker-Planck equation which
-governs the *deviations* from the macroscopic equation:
+process in Appendix B, derives an *ordinary* differential equation (ODE)
+for the macroscopic process, coupled to a *linear* SDE which
+governs the *deviations* ($\xi$)  from the macroscopic equation:
 
 
 \begin{align}
-\frac{\mathrm{d} x }{dt}  &= b(x) - d(x) + O(N^{-1})\\
-\frac{\mathrm{d} \sigma^2 }{dt}  &= 2 \left( \partial_x b(x)  - \partial_x d(x) \right) \sigma^2 + b(x) + d(x) \label{bd}
+\frac{\mathrm{d} x }{dt}  &= b(x) - d(x) + \mathcal{O}(N^{-1}) \\
+\mathrm{d} \xi &=  \partial_{x}  \left( b(x)  - d(x) \right)  \xi \mathrm{d}t + \sqrt{b(x) + d(x)} \mathrm{d} B_t   + \mathcal{O}(N^{-\tfrac{1}{2}}
 \end{align}
 
-where $x = \langle n \rangle$, the average or expected population
-size of an ensemble of replicates, assuming the transitions (+/- 1
-in this case) are much smaller than the system size ($N$ in the
-Levins model).  The dynamics for the average population
+
+\begin{align}
+\frac{\mathrm{d} x }{\mathrm{d} t}  &= b(x) - d(x) + \mathcal{O}(N^{-1})\\
+\frac{\mathrm{d} \sigma^2 }{\mathrm{d} t}  &= 2 \left( \partial_x b(x)  - \partial_x d(x) \right) \sigma^2 + b(x) + d(x)  + \mathcal{O}(N^{-\tfrac{1}{2}}) \label{bd}
+\end{align}
+
+
+The dynamics for the average population
 match the population-level equation.^[up to fluctuations of order
 $\tfrac{1}{N}$. We can actually both observe and successfully
 approximate this higher-order correction from additional terms in
@@ -333,10 +343,8 @@ be larger or smaller than predicted by the deterministic model --
 see Appendix A for examples in simulations compared to predictions
 of the system size expansion].
 
-
 Note that the van Kampen expansion is not identical to the SDE 
-postulated by the canonical equation, which corresponds to a 
-non-linear Fokker-Planck equation for the probability density.  
+postulated by the-so called canonical equation.  
 As shown in Appendix B, the popular expansion
 
 
@@ -383,9 +391,12 @@ that depends not only on population state $x$ but also on environmental
 factors $y$, it is possible to derive the steady-state variance
 (Appendix B) as:
 
+$$
 \begin{equation}
-\sigma_x^2  = \frac{ \left( \partial_y f(x,y) \right)^2}{\left( \partial_x f(x,y) \right)^2 + \partial_x f(x,y) \tau_c } \sigma_e^2 + \sigma^2_d \label{env_noise}
+\sigma_x^2  = \frac{ \left( \partial_y f(x,y) \right)^2}{\left( \partial_x f(x,y) \right)^2 + \partial_x f(x,y) \tau_c } \sigma_e^2 + \sigma^2_d 
+\label{env_noise}
 \end{equation}
+$$
 
 where $\sigma_e^2$ is the variance in the environmental noise and
 $\tau_c$ the auto-correlation of that noise, $\sigma_d^2$ the

@@ -205,67 +205,6 @@ temperature or soil moisture that are not explicitly modeled by our
 equations, but simplified into statistical summaries of those processes
 [@Ripa2012]. 
 
-In the extensive literature developing the consequences of both demographic
-and environmental noise in models of increasing complexity, it can 
-be easy to miss the equally important developments in making the origins
-of these sources of noise more precise -- developments which have important
-consquences for when and how the resulting models can be applied. 
-
-the canonical model on the highly influential @Leigh1981, @Lande1993, @Foley1994
-
-
-
-
-$$ \frac{\textrm{d} n}{\textrm{d} t} = \underbrace{f(n)}_{\textrm{det skeleton}} + \underbrace{\sigma_d \xi_d(t) \sqrt{n}}_{\textrm{demographic noise}} + \underbrace{\sigma_e \xi_e(t) n}_{\textrm{environmental noise}}$$
-
-
-
-
-
-Stochastic differential equations of this form are so-called "Langevin equation," popular in the physics literature.  This notation is rather sloppy, as the standard calculus does not apply to stochastic equations.  The Langevin formulation, most popular in physics, is usually associated with a Stratonovich integral.  Mathematicians prefer to write stochastic differential equations as $\textrm{d} n = f(x) \textrm{d} t + g(x) \textrm{d} B_t$, where the differentials hint at the underlying definition that this is the sum of a classic Reimann integral (over $\textrm{d}t$) and a stochastic It\^o integral.  
-
-
-Advances in both theoretical understanding and the advent of widely
-available and efficient numerical methods have helped drive research
-towards increasingly more explicit descriptions of how stochasticity
-enters into quantitative models. 
-
-
-
-
-@Black2012 provides an important 
-review of intrinsic noise and approaches for addressing it, focusing
-in particular on use of the van Kampen system size expansion as a
-mathematical means to properly bridge between individual-based models
-(IBMs, usually implemented only in simulations) and familiar population-level
-dynamics (so called macroscopic dynamics).  
-
-; @Ovaskainen2010 
-
-
-
-This division between intrinsic or demographic noise and extrinsic or
-environmental noise 
-
-
-The Gillespie simulation provides a simple and exact algorithm
-for simulating demographic stochasticity at an individual level.  
-Free from both the approximations and mathematical complexity of more common
-formulations using stochastic differential equations (SDEs), 
-(or their partial differential equation counterparts the Fokker-Planck equation),
-the Gillespie algorithm offers a simple and powerful approach to simulating
-stochastic phenomena that remains underutilized. 
-
-The mathematical proofs @Kurtz1970 & @Kurtz1971, popularized by
-@vanKampen's intuitive "system size" expansion, provide a far more 
-explicit framework to interpret demographic stochasticity than the
-better known diffusion approximation [@Nisbet1982 @Lande2003; 
-see @Gardiner2009].  
-
-
-
-
-
 It is often suggested that stochasticity is "inherent" or "fundamental,"
 e.g. "demographic stochasticity arises because the birth of an individual is probabilistic"
 [@Melbourne2012]. It is easy to forget that this is merely an assertion about a 
@@ -281,11 +220,30 @@ Demographic stochasticity arises only subsequently, when we change scales from
 a description at the individual level to one at the population level.
 
 
+In the extensive literature developing the consequences of both demographic
+and environmental noise in models of increasing complexity, it can 
+be easy to miss the equally important developments in making the origins
+of these sources of noise more precise. Models in which stochasticity was
+essentially "tacked on" to a deterministic skeleton can be substituted for 
+approaches that permit both the skeleton and noise to emerge from underlying
+processes.  This more mechanistically specific approach to the origins of 
+noise can indeed recover the classic formulations, but it can also 
+help highlight where those models break down.
+Much of the literature [e.g. see @Ovaskainen2010] has focused on the following
+model, established in highly influential papers of @Leigh1981, @Lande1993,
+@Foley1994:
 
+
+$$ \textrm{d} N_t = \underbrace{f(N_t) \textrm{d} t}_{\textrm{det skeleton}} + \underbrace{\sigma_d \sqrt{N_t} \phantom{\cdot}\textrm{d}B_t^{(d)} }_{\textrm{demographic noise}} + \underbrace{\sigma_e N_t \phantom{\cdot}\textrm{d}B_t^{(e)}}_{\textrm{environmental noise}}$$
+
+Where $\textrm{d}B_t^{(d)}$ and $\textrm{d}B_t^{(e)}$ refer to Brownian processes, (i.e. Gaussian white noise process) for demographic and environmental stochasticity respectively.  When $f(n)$ is simply a Verhulst logistic function this is often referred to as the canonical model [e.g. @@Ovaskainen2010], and provides a clear illustration of the partition of separate deterministic and stochastic elements. Significant research continues to focus on extending the study of this model to consider more complex and higher-dimensional $f(n)$ (coexistence models, stage structured models) and consider the case of autocorrelated, rather than than white noise of $\textrm{d}B_t^{(e)}$.  
+
+Before we follow that path, I will review how a shift towards more mechanistic descriptions of the origins of noise provide a more nuianced view of when the canonical model does an does not hold in the context of both demographic and environmental stochasticity.  My approach will highlight two fundamental tools: an ability for efficient, exact simulation using @Gillespie1977's stochastic simulation algorithm (SSA), and the van Kampen system size expansion [@vanKampen2007], which is rooted in the mathematical theorems of @Kurtz1970 & @Kurtz1971, in place of the more popular diffusion approximation derived by Taylor series [e.g. @Nisbet1982 @Lande2003; see comparisons in @vanKampen2007 and @Gardiner2009].  
 
 
 
 ## Demographic stochasticity
+
 
 Demographic stochasticity refers to fluctuations in population sizes
 or densities that arise from the fundamentally discrete nature of
@@ -305,9 +263,13 @@ $N$ is given by the sum over the ways to enter the state, minus the
 ways to leave the state: a simple expression of probability balance
 known as the "master equation" [@vanKampen2007].
 
-It is possible to simulate such a process exactly using Gillespie's
-exact stochastic simulation algorithm [SSA; @Gillespie1977], which
-simulates each individual birth or death as a separate event. 
+
+The @Gillespie1977 provides a simple and exact algorithm
+for simulating demographic stochasticity at an individual level.  
+Free from both the approximations and mathematical complexity,
+the Gillespie algorithm offers a simple and powerful approach to simulating
+stochastic phenomena that remains underutilized. 
+
 
 We can illustrate both the Gillespie algorithm and the van Kampen
 system size expansion using @Levins1969 classic patch model,
@@ -330,11 +292,6 @@ of the model.  Though we focus on this simple model for clarity of
 presentation, both computational and mathematical framework presented here 
 can easily be applied to alternative models to reach the same conclusions.  
 
-
-Figure \ref{gillespie}
-uses this algorithm to compare simulations of @Levins1969 patch model;
-(see Appendix A for example code).  In the Levins'  model,
-
 Figure \ref{gillespie} shows the results of two exact SSA simulations of this model with
 identical parameters except for the total number of available sites,
 $N$.
@@ -352,17 +309,11 @@ read_csv("../appendixA/gillespie.csv", col_types = "cdiddd")  %>%
 ```
 
 
-The van Kampen system size expansion provides a convenient way to
-explicitly approximate the "macroscopic" (i.e. population level,
-see @Black2012) dynamics from an individual-based description of
-events in a Markov process [@vanKampen2007; based on @Kurtz1970;
-@Kurtz1971].  In addition to illustrating how common stochastic
-models (in particular, Gaussian noise) arise from lower-level
-descriptions, this result will also provide us a useful framework
-for interpreting the behavior of stochastic models more generally.
-In Appendix B I illustrate the derivation of the following equations
-for the mean and expected population sizes for a generic density
-dependent birth-death process:
+The van Kampen system size expansion, shown for a general birth-death
+process in Appendix B, derives an ordinary differential equation (ODE)
+for the macroscopic process and a *linear* Fokker-Planck equation which
+governs the *deviations* from the macroscopic equation:
+
 
 \begin{align}
 \frac{\mathrm{d} x }{dt}  &= b(x) - d(x) + O(N^{-1})\\
@@ -381,6 +332,15 @@ inflation [@Gonzalez2002], where the average population size can
 be larger or smaller than predicted by the deterministic model --
 see Appendix A for examples in simulations compared to predictions
 of the system size expansion].
+
+
+Note that the van Kampen expansion is not identical to the SDE 
+postulated by the canonical equation, which corresponds to a 
+non-linear Fokker-Planck equation for the probability density.  
+As shown in Appendix B, the popular expansion
+
+
+
 
 The change in variance can be seen
 as a balance between the stochastic contribution, $b(x) + d(x)$

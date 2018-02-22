@@ -7,11 +7,41 @@ address:
   - code: a
     address: "Dept of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley CA 94720-3114, USA"
 layout: 5p  
-bibliography: canonical.bib
+bibliography: ../paper/refs.bib
 output: rticles::elsevier_article
 preamble: "\\newcommand{\\ud}{\\mathrm{d}}"
 ---
 
+
+## Stochastic Differential Equations
+
+
+@Ovaskainen2010 writes the canonical equation, Eq (1) in the main text, in the form:
+
+$$ \frac{\textrm{d} n}{\textrm{d} t} = \underbrace{f(n)}_{\textrm{det skeleton}} + \underbrace{\sigma_d \xi_d(t) \sqrt{n}}_{\textrm{demographic noise}} + \underbrace{\sigma_e \xi_e(t) n}_{\textrm{environmental noise}}$$
+
+rather than the more formal stochastic differential equation notation shown in the text.  Equations of this form are so-called "Langevin equation," popular in the physics literature [@vanKampen2007].  This notation looks like a more familiar differential equation, but the resemblence is misleading as the standard calculus does not apply to stochastic equations.  
+
+
+A stochastic differntial equation (SDE) of the form
+
+\begin{equation}
+\textrm{d} X_t = \mu(X_t) \textrm{d}t + \sigma(X_t) \textrm{d}B_t \label{SDE}
+\end{equation}
+
+separates out the differential elements$\textrm{d}X_t$, $\textrm{d}t$ and $\textrm{d}B_t$ intentionally to remind the reader that the expression is short-hand not for a derivative expression, but for integrals:
+
+
+\begin{equation}
+X_{t+s} - X{t}  = \int_t^{t+s} \mu(X_{\tau}, \tau) \textrm{d}\tau + \int_t^{t+s} \sigma(X_{\tau}, \tau) \textrm{d}B\tau
+\end{equation}
+
+
+The first integral (over $\textrm{d}t$) is the familiar Reimann integral of the classic calculus, but the second is an Itô integral, which integrates over the stochastic process $B_t$ (Brownian motion, also termed a Weiner process). The Itô calculus follows different rules from the classic calculus, largely due to the fact that an Itô integral has non-zero quadratic variation. (Crudely put, $\textrm{d}x^2 \sim 0$, but $\textrm{d}B^2 \sim dx$).
+
+The intepretation of Langevin equation is less precise, as it can be read to correspond to one of two possible stochastic integrals, and is often associated with a Stratonovich integral.  (Unlike the Itô integral, the Stratonovich integral has zero quadratic variation and so obeys the same chain rule as the classic calculus, but it is not a martingale, e.g. an unbiased random walk, which is a convenient for property for proving theorems).  Fortunately, the notion as a partial differential equation over probabilities does not have this ambiguity, which shows that @Ovaskainen2010 is referring to an Itô expression, just as I have written it more explicitly.  See @vanKampen2007 for an excellent discussion of the Itô-Stratonovich dillema and its intepretation with respect to intrinsic vs environmental noise factors. 
+
+## Master equations and the step operator
 
 
 Consider a population that is of size $n$ with probability $p_n$, with birth and death rates given by $b_n$ and $d_n$ respectively, diagrammed in Fig~\ref{markov}  This representation is known as a single step Markov process.  The rate of transitions to the $n+1$ state $b_n$, the rate of transitions to $n-1$ is $d_n$.  Both of these are transitions away from the state $p_n$, hence the decrease the probability of $p_n$.  The probability $p_n$ increases by transitions into the state $n$, from either side: births enter from the state below at rate $b_{n-1}$ and deaths from the state above, $d_{n+1}$.  Hence the rate of change in $p_n$ is given by
@@ -47,16 +77,54 @@ For example, the mean is:
 \begin{align}
 \frac{\ud }{\ud t} \langle n \rangle &= \sum n (\mathbb E^{-1} - 1) b_n p_n + \sum n (\mathbb E -1) d_n p_n \nonumber \\ 
 &= \sum  b_n p_n(\mathbb E - 1)n  + \sum d_n p_n(\mathbb E^{-1} -1) n \nonumber \\
-&= - \langle d_n \rangle +  \langle b_n \rangle \label{mean} \\
-\intertext{and similarly the second moment is}
+&= - \langle d_n \rangle +  \langle b_n \rangle \label{mean}
+\end{align}
+
+
+and similarly the second moment is
+
+\begin{align}
 \frac{\ud }{\ud t} \langle n^2 \rangle &= 2 \langle n (b_n - d_n) \rangle + \langle b_n+d_n \rangle \label{var}
 \end{align}
 
-The key observation here is that the variance includes the sum of birth and death, not just the difference.  Intuitively we would expect a population with large numbers of births and deaths that average to a small difference to fluctuate much more than one in which this difference is very small.  Despite this simple observation, countless models purporting to include demographic noise ignore this distinction.  While all moments can be derived as above, it is often impossible to solve these equations for nonlinear models.  Instead, we introduce an approximation of Eq \eqref{master1} that is physically motivated and intuitive.  The method is based on derivation presented by the van Kampen [@vanKampen], though a formal proof can be found in earlier work of Thomas Kurtz [@Kurtz1970; @Kurtz1971; @Kurtz1972].  
+While all moments can be derived as above, it is often impossible to solve these equations for nonlinear models.  Moreover, we have yet to make any moment closure argument that solving for the first two moments in this manner will be sufficient.  We will illustrate how this is done in both the traditional diffusion approximation and then in the van Kampen system size expansion.   
 
-# The system size expansion for a birth-death process
 
-## Introduction, a change of variables
+## A traditional derivation
+
+A derivation of the above formulation can be found, e.g. in @Nisbet1982's classic textbook on fluctuating populations, or more recently in @Lande2003.  This diffusion approximation is also given for a more mathematically inclined audience in @Gardiner2009 and in @vanKampen2007.  The approach starts with the same master equation that defines the underlying dynamics of births and deaths (matching the process implemented in the exact Gillespie algorithm, @Gillespie1977, see Appendix A).  
+
+The essence of the approach is to argue that in the limit of large populations, the discrete state for the number of indivduals in a population, $N$, can be replaced with a continuous variable, $n$, in which we can expand the master equation as a Taylor series and then truncate at second order.  In contrast to the system size expansion of van Kampen, this approach does not make system size explicit, but instead hinges on taking a simultaneous limit of both short time and small step size.  Consider small steps $x = \epsilon n$, and hence $p_n = \epsilon P_x$, where $\epsilon \ll 1$.  To keep the process from slowing down we consequently have to scale up the rates by $\epsilon$ as well:
+
+\begin{align*}
+	b_n - d_n = \frac{A_x}{\epsilon}
+\end{align*}
+
+Where $A$ is independent of $\epsilon$.  Similarly we have to scale the sum, which being proportional to the variance must be scaled by
+\begin{align*}
+b_n + d_n = \frac{B_x}{\epsilon^2}
+\end{align*}
+
+We Taylor expand the step operator $\mathbb E$ in the new variable:
+\begin{align*}
+\mathbb E^k &= 1+ \epsilon k\frac{\partial}{\partial x} + \frac{\epsilon^2 k^2}{2} \frac{\partial^2}{\partial x^2} + \ldots
+\end{align*}
+
+Then \eqref{master1} becomes:
+\begin{align}
+\frac{\partial P(x,t)}{\partial t} &= \left( \epsilon \frac{\partial }{\partial x} + \epsilon^2 \tfrac{1}{2}\frac{\partial^2 }{\partial x^2} + \ldots \right)\left(\frac{B_x}{2\epsilon^2}-\frac{A_x}{2\epsilon} \right)P \nonumber \\
++&\left(- \epsilon \frac{\partial }{\partial x} + \epsilon^2 \tfrac{1}{2}\frac{\partial^2 }{\partial x^2} - \ldots \right) \left( \frac{B_x}{2\epsilon^2} + \frac{A_x}{2\epsilon} \right)P 
+\intertext{Collecting terms of common order $\epsilon$, }
+& = - \frac{\partial A_x P}{\partial x} + \tfrac{1}{2} \frac{\partial^2 B_x P }{\partial x^2} + \mathcal O(\epsilon^2)\label{FP1}
+\end{align}
+
+For small $\epsilon$ we can ignore the terms of $\mathcal O(\epsilon^2)$, and we have recovered the diffusion approximation.  Unfortunately, we have not been very precise about what we mean by $\epsilon$ -- nature gives us no such obvious small parameter that we can use to "scale down" step sizes and "scale up" rates. The van Kampen expansion makes this notion more precise by introducing the concept of system size.  Instead of counts we consider a change of units into counts per system size, e.g. population density.  We can imagine drawing ever larger rings in our landscape of individuals, defining an ever bigger and bigger "system."  
+
+## The System size expansion
+
+ The method is based on derivation presented by the van Kampen [@vanKampen2007], though a formal proof can be found in earlier work of Thomas Kurtz [@Kurtz1970; @Kurtz1971; @Kurtz1972].  
+ 
+### Introduction: a change of variables
 
 In this approximation, we expand the master equation \eqref{master1} in terms of a measure of the system size, $\Omega$.  The heart of this approximation is a change of variables, the rest is simply book-keeping.  We begin by explaining this change of variables, which replaces $n$ by some average value $\phi$ and some fluctuations $\xi$.   
 
@@ -65,10 +133,6 @@ Observe that \eqref{master1} is written in terms of discrete individuals, repres
 \begin{align}
 n = \Omega \phi(t) + \Omega^{1/2} \xi \label{n}
 \end{align}
-
-
-
-
 
 
 We will change Eq \eqref{master1} into the variables $\phi$ and $\xi$.   We begin with the step operator, which can be approximated by a Taylor expansion.To formulate a Taylor expansion of the step operator (where $k$ can be a positive or negative integer), first consider the steop operator under the original discrete variable $n$:
@@ -128,7 +192,7 @@ Collecting terms of order $\Omega^{1/2}$ on both sides, we have:
 \frac{\ud \phi(t)}{\ud t} = b(\phi)-d(\phi) = \alpha_1(\phi) \label{macroscopic}
 \end{align}
 
-Where we have the part of the birth and death functions that depend on the macroscopic variable $\phi$ alone.  This is known as the macroscopic equation, and corresponds to the density equations commonly written down.  Following @vanKampen, we will call this difference $\alpha_1(\phi)$ as a shorthand\footnote{This notation suggests it is the first jump moment, defined as first moment of the transition rate between states in a Markov process.  It so happens this term will give the macroscopic law for any Markov process, not only a birth-death process.  The second moment of the transition rates, $a_2$, will be for us simply the sum of the birth and death rates.  We use this notation as it generalizes to processes that have a different master equation from \eqref{master1}, to describe a transition of arbitrary step size: $\alpha_{i,j} = \int r^i \Phi_j(r) \ud r$.}   
+Where we have the part of the birth and death functions that depend on the macroscopic variable $\phi$ alone.  This is known as the macroscopic equation, and corresponds to the density equations commonly written down.  Following @vanKampen2007, we will call this difference $\alpha_1(\phi)$ as a shorthand\footnote{This notation suggests it is the first jump moment, defined as first moment of the transition rate between states in a Markov process.  It so happens this term will give the macroscopic law for any Markov process, not only a birth-death process.  The second moment of the transition rates, $a_2$, will be for us simply the sum of the birth and death rates.  We use this notation as it generalizes to processes that have a different master equation from \eqref{master1}, to describe a transition of arbitrary step size: $\alpha_{i,j} = \int r^i \Phi_j(r) \ud r$.}   
 
 
 Collecting terms of order $\Omega^0$ we recover the diffusion equation:
@@ -152,24 +216,6 @@ The variance $\sigma_{\xi}^2 = \langle \xi^2 \rangle - \langle \xi \rangle^2$ ob
 \end{align}
 
 It is possible to prove that any solution to \eqref{FP} must be Gaussian [@Kurtz1970; @Kurtz1971].  Consequently, knowing these two moments completely determines the distribution of $n$.  This is often assumed for demographic noise.  We have justified this common Gaussian noise assumption by showing it is simply a consequence of expanding the master equation to linear order, $\mathcal O(\Omega^{0})$.  From \eqref{n mean} we can also conclude that the macroscopic (average) variable obeys the deterministic law. 
-
-
-## Stochastic Differential Equations
-
-The partial differential equation (PDE) given by \eqref{FP} is sometimes referred to as the Fokker-Planck equation. It is possible to prove this PDE is equivalent to as the stochastic differntial equation (SDE), 
-
-\begin{equation}
-\textrm{d} X_t = \mu(X_t) \textrm{d}t + \sigma(X_t) \textrm{d}B_t \label{SDE}
-\end{equation}
-
-which, despite the name, it is important to remember that this is actually an integral equation in the Itô calculus, and not a derivative. Note the separation of the differential elements, which are meant as shorthand for implicit integrals:
-
-\begin{equation}
-X_{t+s} - X{t}  = \int_t^{t+s} \mu(X_{\tau}, \tau) \textrm{d}\tau + \int_t^{t+s} \sigma(X_{\tau}, \tau) \textrm{d}B\tau
-\end{equation}
-
-
-The first integral is the ordinary Lebesgue integral, while the second is an Itô integral, which integrates over the stochastic process $B_t$ (Brownian motion, also termed a Weiner process). The Itô calculus follows different rules from the classic calculus, largely due to the fact that an Itô integral has non-zero quadratic variation. (Crudely put, $\textrm{d}x^2 \sim 0$, but $\textrm{d}B^2 \sim dx$).  Though it is common to formulate stochastic models directly as SDEs, it is worth remembering that the SDE is the result of a small noise approximation in the system size expansion, and can break down under larger deviations, even when the mean-field equation remains approximately accurate.  @Ovaskainen2010 provides an overview literature in that addresses this limit and discusses the use of the WKB^[Wentzel, Kramers & Brillouin. Naturally this is KWB in Holland, BWK in France, and JWKB in England (for Jeffreys). Note that the physicist Gregor Wentzel is not the same as the mathematician Alexander Wentzell of the Fredilin-Wentzell theorem for large deviations years later, though I believe the former's result can be derived directly from the latter's.] method to address this case. 
 
 
 ## Fluctuation dissipation theorem
@@ -227,7 +273,7 @@ though the partition into birth and death rates is not explicit.  Different ways
 \sigma^2 = \frac{rn^* + rn^{*2}/K}{2(2rn^*/K - r)} = K \nonumber
 \end{align}
 
-Which agrees with calculations elsewhere [@NisbetGurney]. 
+Which agrees with calculations elsewhere [@Nisbet1982]. 
 
 
 <!-- Include environmental noise example via stochastic K? -->
@@ -238,37 +284,9 @@ Which agrees with calculations elsewhere [@NisbetGurney].
 
 # An alternate derivation: the diffusion approximation
 
-A somewhat different approach to deriving a diffusion equation predominates in the literature.  This approach does not make system size explicit, but instead hinges on taking a simultaneous limit of both short time and small step size.  I prefer the van Kampen derivation, since it appeals to system size rather than an arbitrary small parameter going to zero.  It also provides a more natural treatment for nonlinear systems, for which the diffusion equation requires extra care.  With these notes in mind, the diffusion derivation usually goes as follows:  
-
-Consider small steps $x = \epsilon n$, and hence $p_n = \epsilon P_x$, where $\epsilon \ll 1$.  To keep the process from slowing down we consequently have to scale up the rates by $\epsilon$ as well:
-
-\begin{align*}
-	b_n - d_n = \frac{A_x}{\epsilon}
-\end{align*}
-
-Where $A$ is independent of $\epsilon$.  Similarly we have to scale the sum, which being proportional to the variance must be scaled by
-\begin{align*}
-b_n + d_n = \frac{B_x}{\epsilon^2}
-\end{align*}
-
-We Taylor expand the step operator $\mathbb E$ in the new variable:
-\begin{align*}
-\mathbb E^k &= 1+ \epsilon k\frac{\partial}{\partial x} + \frac{\epsilon^2 k^2}{2} \frac{\partial^2}{\partial x^2} + \ldots
-\end{align*}
-
-Then \eqref{master1} becomes:
-\begin{align}
-\frac{\partial P(x,t)}{\partial t} &= \left( \epsilon \frac{\partial }{\partial x} + \epsilon^2 \tfrac{1}{2}\frac{\partial^2 }{\partial x^2} + \ldots \right)\left(\frac{B_x}{2\epsilon^2}-\frac{A_x}{2\epsilon} \right)P \nonumber \\
-+&\left(- \epsilon \frac{\partial }{\partial x} + \epsilon^2 \tfrac{1}{2}\frac{\partial^2 }{\partial x^2} - \ldots \right) \left( \frac{B_x}{2\epsilon^2} + \frac{A_x}{2\epsilon} \right)P 
-\intertext{Collecting terms of common order $\epsilon$, }
-& = - \frac{\partial A_x P}{\partial x} + \tfrac{1}{2} \frac{\partial^2 B_x P }{\partial x^2} + \mathcal O(\epsilon^2)\label{FP1}
-\end{align}
-
-For small $\epsilon$ we can ignore the terms of $\mathcal O(\epsilon^2)$, and we have recovered the diffusion approximation.  Unfortunately, nature does not give us a parameter $\epsilon$ that goes to zero.  We expect that larger populations will have relatively smaller fluctuations (recall the introductory example) and hence this limit should have something to do with increasing the system size.  We make these notions more precise by expanding equation \eqref{master1} explicitly in terms of the system size.  This will lead us to a much richer and more satisfying description of demographic noise than the mathematical limit above.  
-
 # System size expansion in higher-dimensional systems: environmental noise example
 
-We introduce environmental noise into the master equation by allowing the transition rates to depend explicitly on the macroscopic variable $\psi$ as well as the state variable $\phi$.  It can be helpful to think of fluctuations in $\psi$ as also arising from some lower level transitions, but we need not model these explicitly.  Following the expansion as before (see @vanKampen for details), the mean dynamics are given by the macroscopic equations:
+We introduce environmental noise into the master equation by allowing the transition rates to depend explicitly on the macroscopic variable $\psi$ as well as the state variable $\phi$.  It can be helpful to think of fluctuations in $\psi$ as also arising from some lower level transitions, but we need not model these explicitly.  Following the expansion as before (see @vanKampen2007 for details), the mean dynamics are given by the macroscopic equations:
 
 \begin{align*}
 \frac{\ud \phi}{\ud t} &= \alpha_{1,0}(\phi, \psi) \\
@@ -293,6 +311,12 @@ Setting the remaining equations to zero to solve for the stationary state we can
 \end{equation*}
 
 From which we recover the environmental variation equation presented in the main text.  
+
+
+## WKB
+
+
+@Ovaskainen2010 provides an overview literature in that addresses this limit and discusses the use of the WKB^[Wentzel, Kramers & Brillouin. Naturally this is KWB in Holland, BWK in France, and JWKB in England (for Jeffreys). Note that the physicist Gregor Wentzel is not the same as the mathematician Alexander Wentzell of the Fredilin-Wentzell theorem for large deviations years later, though I believe the former's result can be derived directly from the latter's.] method to address this case. 
 
 
 

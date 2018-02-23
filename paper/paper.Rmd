@@ -87,6 +87,8 @@ We hope that these papers will combine a mix of synthetic reviews of the current
 
 \newpage
 
+<!-- FIXME look at Coulson, Bjornstead, Ovaskeinen and others and see how they define scope to focus on "population ecology" -->
+
 
 # Introduction: Noise the nuisance
 
@@ -234,17 +236,18 @@ model, established in highly influential papers of @Leigh1981, @Lande1993,
 @Foley1994:
 
 
-$$ \textrm{d} N_t = \underbrace{f(N_t) \textrm{d} t}_{\textrm{det skeleton}} + \underbrace{\sigma_d \sqrt{N_t} \phantom{\cdot}\textrm{d}B_t^{(d)} }_{\textrm{demographic noise}} + \underbrace{\sigma_e N_t \phantom{\cdot}\textrm{d}B_t^{(e)}}_{\textrm{environmental noise}}$$
+
+\begin{equation}
+\textrm{d} N_t = \underbrace{f(N_t) \textrm{d} t}_{\textrm{det skeleton}} + \underbrace{\sigma_d \sqrt{N_t} \phantom{\cdot}\textrm{d}B_t^{(d)} }_{\textrm{demographic noise}} + \underbrace{\sigma_e N_t \phantom{\cdot}\textrm{d}B_t^{(e)}}_{\textrm{environmental noise}} 
+\label{canonical}
+\end{equation}
+
+
 
 Where $\textrm{d}B_t^{(d)}$ and $\textrm{d}B_t^{(e)}$ refer to Brownian processes, (i.e. Gaussian white noise process) for demographic and environmental stochasticity respectively.  When $f(n)$ is simply a Verhulst logistic function this is often referred to as the canonical model [e.g. @Ovaskainen2010], and provides a clear illustration of the partition of separate deterministic and stochastic elements. Significant research continues to focus on extending the study of this model to consider more complex and higher-dimensional $f(n)$ (coexistence models, stage structured models) and consider the case of autocorrelated, rather than than white noise of $\textrm{d}B_t^{(e)}$.  
 
-Before we follow that path, I will highlight
+Before we follow that path, we will examine how this canonical model can emerge from a lower-level description and how it can deviate from that description. This approach will also set the stage to see how our understanding of stochastic models can be extended to better reflect natural processes that shape not only for the so-called deterministic skeleton, but the noise as well.  In so doing, I will highlight two tools fundamental to this analysis, one computational and one analytical: the exact simulation method of @Gillespie1977's stochastic simulation algorithm (SSA), and the van Kampen system size expansion [@vanKampen1976].
 
-I will review how a shift towards more mechanistic descriptions of the origins of noise provide a more nuianced view of when the canonical model does an does not hold in the context of both demographic and environmental stochasticity.  My approach will highlight two fundamental tools: an ability for efficient, exact simulation using @Gillespie1977's stochastic simulation algorithm (SSA), and the van Kampen system size expansion [@vanKampen1976].
-
-
-
-which is rooted in the mathematical theorems of Thomas Kurtz [@Kurtz1970 & @Kurtz1971, @Kurtz1972 @Kurtz1978], in place of the more popular diffusion approximation derived by Taylor series [e.g. @Nisbet1982, @Lande2003; rooted in the earlier work of @Kramers1940 and @Moyal1949, see comparisons in @vanKampen2007 and @Gardiner2009].  
 
 
 
@@ -267,18 +270,34 @@ each of these events are independent, this is a state-dependent
 Poisson process. The change in the probability of being in state
 $N$ is given by the sum over the ways to enter the state, minus the
 ways to leave the state: a simple expression of probability balance
-known as the "master equation" [@vanKampen2007].
+known as the "master equation" [@vanKampen2007].  Note that in general
+this approach is equally applicable to stochastic transitions of any sort,
+not just step sizes of +/- 1 and not just birth and death events, but
+can include transitions between stage classes or trait values, including
+mutations to continuously-valued traits in evolutionary dynamics [e.g. @Boettiger2009]. 
 
 
-The @Gillespie1977 provides a simple and exact algorithm
+The @Gillespie1977 provides an exact algorithm
 for simulating demographic stochasticity at an individual level.  
+The algorithm is merely a simple and direct implemtentation of the master
+equation, progressing in random step sizes deterimed
+by the waiting time until the next event.
 Free from both the approximations and mathematical complexity,
-the Gillespie algorithm offers a simple and powerful approach to simulating
-stochastic phenomena that remains underutilized. 
+the Gillespie algorithm is an interesting example of where we rely on a
+numerical implementation to check the accuracy of an analytic approximation,
+even in the case of simple models such as we will discuss.  Though the 
+algorithm is often maligned as numerically demanding, it can be run much
+more effectively even on large models on today's computers than when
+it was first developed in the 70s, and remains an underutilized approach
+for writing simple and approximation-free[^2] stochastic ecological models. 
 
+[^2]: that is, free from the approximation made by SDE models as we see in the
+van Kampen example.  All models are, of course, only approixmations. 
 
-We can illustrate both the Gillespie algorithm and the van Kampen
-system size expansion using @Levins1969 classic patch model,
+As our objective is to tie the origins of noise more closely to biological
+processes, it will be helpful to make the notion of a master equation concrete
+with a spefiic example.  We will focus on the classic case of @Levins1969 patch model,
+to illustrate the Gillespie algorithm and the van Kampen system size expansion
 
 \begin{align}
 \frac{\ud n}{\ud t} = \underbrace{c n \left(1 - \frac{n}{N}\right)}_{\textrm{birth}} - \underbrace{e n}_{\textrm{death}}, \label{levins}
@@ -289,18 +308,21 @@ finite number of suitable habitats $N$.  Individuals die a constant
 rate $e$, and produce offspring at a constant rate $c$ who then
 have a probability of colonizing an open patch that is simply
 proportional to the fraction of available patches, $1 - n/N$.  
+
+
 We choose this model because it has precisely same functional form
 as the ubiquitous logistic growth model, $\frac{\ud n}{\ud t} = rn (1 - \tfrac{n}{K})$
 but is explicit about how this net growth rate is divided between
 birth and death rate.  As we shall see, this is not merely a notational
 convience but leads to real differences in observed stochastic properties
-of the model.  Though we focus on this simple model for clarity of 
-presentation, both computational and mathematical framework presented here 
-can easily be applied to alternative models to reach the same conclusions.  
+of the model. Both the numerical approach (details in Appendix A) and the 
+analytical approach (Appendix B) illustrate that it is straight-forward
+to use this same approach in alternate formuluations.  
 
 Figure \ref{gillespie} shows the results of two exact SSA simulations of this model with
 identical parameters except for the total number of available sites,
-$N$.
+$N$, illustrating the magnitude of these fluctuations indeed scales in proportion
+to $\sqrt{N}$ as postulated by the canonical equation, Eq \eqref{canoical}.
 
 <!-- Figure 1: Gillespie simulations -->
 ```{r gillespie, warning=FALSE, fig.width=7, fig.cap="Population dynamics from a Gillespie simulation of the Levins model with large (N=1000, panel A) and small (N=100, panel B) number of sites (blue) show relatively weaker effects of demographic noise in the bigger system. Models are otherwise identical, with e = 0.2 and c = 1 (code in appendix A). Theoretical predictions for mean and plus/minus one standard deviation shown in horizontal re dashed lines. \\label{gillespie}"}
@@ -315,37 +337,82 @@ read_csv("../appendixA/gillespie.csv", col_types = "cdiddd")  %>%
 ```
 
 
-The van Kampen system size expansion, shown for a general birth-death
-process in Appendix B, derives an *ordinary* differential equation (ODE)
-for the macroscopic process, coupled to a *linear* SDE which
-governs the *deviations* ($\xi$)  from the macroscopic equation:
+The van Kampen system size expansion provides a mechanism to approximate the individual
+dynamics represented by the master equation (equivalently, by the Gillespie simulation)
+with a population-level description of the process.  This is important not only because
+it will illustrate both origins and approximations that lie behind the population level
+models that predominate this literature, but will give our syntheses a chance to point
+out some more subtle misconceptions that have also arisen. Details of this expansion
+for a generic birth death process and comparison with the more familiar diffusion 
+approximation are found in Appendix B.  
 
-
-\begin{align}
-\frac{\mathrm{d} x }{dt}  &= b(x) - d(x) + \mathcal{O}(N^{-1}) \\
-\mathrm{d} \xi &=  \partial_{x}  \left( b(x)  - d(x) \right)  \xi \mathrm{d}t + \sqrt{b(x) + d(x)} \mathrm{d} B_t   + \mathcal{O}(N^{-\tfrac{1}{2}}
-\end{align}
+van Kampen's approximation follows a central-limit theorem style argument established rigorously in
+the theorems of Kurtz at about the same time [@Kurtz1970 & @Kurtz1971, @Kurtz1972, in particular, see Thereom 4.4. @Kurtz1978].
+The heart of the approximation is to imagine a population on some large landscape of which
+we sample only a fixed area to estimate the population density.  That area is our 
+system size, which as it expands includes more and more total individuals and
+experiences proportionally smaller fluctionations in population density.  This 
+results in the conclusion that the population density obeys a simple Gaussian
+distribution, whose mean size $x$ and variance  $\sigma^2$ are given by *ordinary* differential equations:
 
 
 \begin{align}
 \frac{\mathrm{d} x }{\mathrm{d} t}  &= b(x) - d(x) + \mathcal{O}(N^{-1})\\
-\frac{\mathrm{d} \sigma^2 }{\mathrm{d} t}  &= 2 \left( \partial_x b(x)  - \partial_x d(x) \right) \sigma^2 + b(x) + d(x)  + \mathcal{O}(N^{-\tfrac{1}{2}}) \label{bd}
+\frac{\mathrm{d} \sigma^2 }{\mathrm{d} t}  &= 2 \partial_x  \left[ b(x)  - d(x) \right] \sigma^2 + b(x) + d(x)  + \mathcal{O}(N^{-\tfrac{1}{2}}) \label{vanKampen}
 \end{align}
 
+This result is striking for a variety of reasons.  First, we see the recovery of the 
+"deterministic skeleton," in which we naively replace population density $x/N$ for
+population count $n$ describes the *expected* density of the population
+(i.e. averaged over an esemble of replicate realizations of the Gillespie simulations),
+and with remarkable accuracy, up to order $1/N}$, i.e. a single individual.^[We can actually extend the van Kampen expansion to higher order and successfully approximate even this higher-order correction to the mean dynamics, recovering the phenomenon of stochastic inflation [@Gonzalez2002], where the average population size can be larger or smaller than predicted by the deterministic model depending on the curvature of the macroscopic equation].
+The variance term is equally interesting.  First, we note that noise arises from
+the interaction of individual birth and death events that defined our process,
+illustrating the origins of this noise.  Because both individual events of births
+and deaths add randomness, they both add to the growth of varation observed, i.e.
+$b(x) + d(x)$.  Second, we see that dynamics for the variance $\sigma_^2$ are *non-linear* whenever
+$b(x)$ or $d(x)$ are non-linear, so that different values of the population density
+will experience different noise intensities! In fact, this variance can only
+have an equilibrium size if the macroscopic equation has an equilibrium ($\partial_x  \left[ b(x)  - d(x) \right] = 0$)
+Third, this expansion shows the variance
+equation is also less precise, accurate only to order $1/\sqrt{N}$.
 
-The dynamics for the average population
-match the population-level equation.^[up to fluctuations of order
-$\tfrac{1}{N}$. We can actually both observe and successfully
-approximate this higher-order correction from additional terms in
-the system size expansion to recover the phenomenon of stochastic
-inflation [@Gonzalez2002], where the average population size can
-be larger or smaller than predicted by the deterministic model --
-see Appendix A for examples in simulations compared to predictions
-of the system size expansion].
+In the interests of a theoretical synthesis, I observe that this result
+is *different* than the canonical equation, Eq \eqref{canonical}, or more generally
+the diffusion approximation [or Kramer-Moyal expansion @Kramers1940; @Moyal1949; @Gardiner2009]
+which is much more typical in the ecological literature [e.g. the books of @Nisbet1982 and @Lande2003
+or the review in @Ovaskeinen2010]. @Black2012 gives an excellent introduction 
+to the van Kampen expansion as a connection between individual-based and population-level
+model descriptions and applications, but fails to point out these differences,
+mistakenly characterizing the van Kampen expansion as synonomous with the diffusion approximation.
+In brief, the diffusion approximation does not lead to a Gaussian distribution
+(equivalently, an SDE or PDE with linear noise term, see Appendix B), but rather
+a *non-linear* SDE of the form (e.g. @Ovaskeinen2010)
 
-Note that the van Kampen expansion is not identical to the SDE 
-postulated by the-so called canonical equation.  
-As shown in Appendix B, the popular expansion
+
+\begin{equation}
+\ud X_t = \left[ b(x) - d(x) \right] \ud t + \sqrt{b(X_t) + d(X_t)} \ud W_t \label{diffusion}
+\end{equation}
+
+This result has several potential draw-backs.  First, as noted in @vanKampen2007 or
+@Gardiner2009 (see Appendix B), the Kramer-Moyal expansion approach rests on rather
+a more dubious double limit that often has no clear biological intepretation and
+can restrict its validity (though I believe theorem 3.3 of @Kurtz1978 establishes
+this approximation on firmer grounds).  Second, the non-linear SDE formulation can
+prove more difficult to work with than the convenient ODE expressions from van Kampen,
+Eq \eqref{\vanKampen} (which can be expressed as a coupled ODE for the mean and 
+a linear SDE for deviations).  Third, while both approximations break down
+in the case of large deviations [see @Ovaskeinen2010], the van Kampen expansion
+shows that the macroscopic equation will continue to hold even when the 
+variance does not; in contrast to the non-linear SDE from the diffusion approximation.
+
+
+- Link back to Levins, show where same
+- IMPORTANCE of fluctuation dissipation theorem to the tranisition probability discussion!!
+- ENV noise and colored noise 
+
+
+
 
 
 
@@ -360,7 +427,7 @@ and precisely balance the strictly positive stochastic contribution
 of $b(x) + d(x)$ (the greater the rate of stochastic events involved, 
 the greater the fluctuations).  This balance at steady-state is known as the
 fluctuation-dissipation theorem [@vanKampen2007], an will prove a useful
-expression in understanding stochastic dynamics.  Because Eq \eqref{bd}
+expression in understanding stochastic dynamics.  Because Eq \eqref{vanKampen}
 also describes the time-evolution of these fluctuations, we can similarly
 solve for the correlation between two points separated by time $\tau$.
 

@@ -93,7 +93,7 @@ This probability balance is known for historical reasons as a master equation. T
 \frac{\ud p_n}{\ud t} = (\mathbb E^{-1} - 1) b_n p_n + (\mathbb E -1) d_n p_n \label{master1}
 \end{align}
 
-which for historical reasons is known as a master equation. From this we can directly calculate the mean and variance for this process by multiplying by $n$ or $n^2$ and summing over all $n$. These calculations are greatly simplified by observing the following property of the step operator: for any pair of test functions $f_n$, $g_n$, 
+which for historical reasons [see @vanKampen2007] is known as a master equation. From this we can directly calculate the mean and variance for this process by multiplying by $n$ or $n^2$ and summing over all $n$. These calculations are greatly simplified by observing the following property of the step operator: for any pair of test functions $f_n$, $g_n$, 
 \begin{align}
 \sum_{n=0}^{N-1}  g_n \mathbb E f_n = \sum_{n=1}^N f_n \mathbb E^{-1} g_n \nonumber
 \end{align}
@@ -152,11 +152,46 @@ Then \eqref{master1} becomes:
 & = - \frac{\partial A_x P}{\partial x} + \tfrac{1}{2} \frac{\partial^2 B_x P }{\partial x^2} + \mathcal O(\epsilon^2)\label{FP1}
 \end{align}
 
-For small $\epsilon$ we can ignore the terms of $\mathcal O(\epsilon^2)$, and we have recovered the diffusion approximation.  Unfortunately, we have not been very precise about what we mean by $\epsilon$ -- nature gives us no such obvious small parameter that we can use to "scale down" step sizes and "scale up" rates. The van Kampen expansion makes this notion more precise by introducing the concept of system size.  Instead of counts we consider a change of units into counts per system size, e.g. population density.  We can imagine drawing ever larger rings in our landscape of individuals, defining an ever bigger and bigger "system."  
+For small $\epsilon$ we can ignore the terms of $\mathcal O(\epsilon^2)$, and we have recovered the diffusion approximation.  As noted above, we can write this PDE in the more compact notation of an SDE, substituting in our original terms for birth and death:
+
+\begin{equation}
+\ud X_t = \left[ b(x) - d(x) \right] \ud t + \sqrt{b(X_t) + d(X_t)} \ud W_t
+\end{equation}
+
+
+
+
+
+
+Unfortunately, we have not been very precise about what we mean by $\epsilon$ -- nature gives us no such obvious small parameter that we can use to "scale down" step sizes and "scale up" rates. The van Kampen expansion makes this notion more precise by introducing the concept of system size.  Instead of counts we consider a change of units into counts per system size, e.g. population density.  We can imagine drawing ever larger rings in our landscape of individuals, defining an ever bigger and bigger "system."  
+
+
+
+
 
 ## The System size expansion
 
  The method is based on derivation presented by the van Kampen [@vanKampen2007], though a formal proof can be found in earlier work of Thomas Kurtz [@Kurtz1970; @Kurtz1971; @Kurtz1972].  
+ 
+ 
+ 
+ 
+ 
+ 
+
+The van Kampen system size expansion, shown for a general birth-death
+process in Appendix B, derives an *ordinary* differential equation (ODE)
+for the macroscopic process, coupled to a *linear* SDE which
+governs the *deviations* ($\xi$)  from the macroscopic equation:
+
+
+\begin{align}
+\frac{\mathrm{d} x }{dt}  &= b(x) - d(x) + \mathcal{O}(N^{-1}) \\
+\mathrm{d} \xi &=  \partial_{x}  \left( b(x)  - d(x) \right)  \xi \mathrm{d}t + \sqrt{b(x) + d(x)} \mathrm{d} B_t   + \mathcal{O}(N^{-\tfrac{1}{2}}
+\end{align}
+
+ 
+ 
  
 ### Introduction: a change of variables
 

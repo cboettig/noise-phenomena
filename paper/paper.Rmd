@@ -373,9 +373,23 @@ and deaths add randomness, they both add to the growth of varation observed, i.e
 $b(x) + d(x)$.  Second, we see that dynamics for the variance $\sigma_^2$ are *non-linear* whenever
 $b(x)$ or $d(x)$ are non-linear, so that different values of the population density
 will experience different noise intensities! In fact, this variance can only
-have an equilibrium size if the macroscopic equation has an equilibrium ($\partial_x  \left[ b(x)  - d(x) \right] = 0$)
+have an equilibrium size if the macroscopic equation has an equilibrium ($\partial_x  \left[ b(x)  - d(x) \right] < 0$)
 Third, this expansion shows the variance
-equation is also less precise, accurate only to order $1/\sqrt{N}$.
+equation is also less precise, accurate only to order $1/\sqrt{N}$. 
+This variance equation will be important to us later as we examine the relative
+roles of noise and nonlinearity in noise-driven phenomena such as stochastic
+transitions between alternate stable states.  
+
+The expected auto-correlation, $\langle x_0, x_t \rangle$ also follows from the
+system size expansion, e.g. at stationary state:
+
+$$\langle x_0, x_{t} \rangle = \frac{b(x) + d(x)}{2 \partial_x \left[ b(x) - d(x) \right]} \exp\lbrace  -t \left| \partial_x b(x) - \partial_x d(x) \right|  \rbrace $$
+which will also prove useful later on.  Note this expression simply states that the equilbrium
+variance is a balance between noise terms, $b(x)+ d(x)$ and the slope or eigenvalue of the
+deterministic skeleton, $2 \partial_x \left[ b(x) - d(x) \right]$, (a balance that forms the basis of the
+the fluctuation-disspation theorem) and that correlations fall off exponentially at a rate given by this slope.   
+We will see both autocorrelation and variance play similar roles to infer this eigenvalue when we 
+reach the role of noise as informer.  
 
 In the interests of a theoretical synthesis, I observe that this result
 is *different* than the canonical equation, Eq \eqref{canonical}, or more generally
@@ -394,7 +408,7 @@ a *non-linear* SDE of the form (e.g. @Ovaskeinen2010)
 \ud X_t = \left[ b(x) - d(x) \right] \ud t + \sqrt{b(X_t) + d(X_t)} \ud W_t \label{diffusion}
 \end{equation}
 
-This result has several potential draw-backs.  First, as noted in @vanKampen2007 or
+This better-known approach has several potential draw-backs.  First, as noted in @vanKampen2007 or
 @Gardiner2009 (see Appendix B), the Kramer-Moyal expansion approach rests on rather
 a more dubious double limit that often has no clear biological intepretation and
 can restrict its validity (though I believe theorem 3.3 of @Kurtz1978 establishes
@@ -406,71 +420,42 @@ in the case of large deviations [see @Ovaskeinen2010], the van Kampen expansion
 shows that the macroscopic equation will continue to hold even when the 
 variance does not; in contrast to the non-linear SDE from the diffusion approximation.
 
-
-- Link back to Levins, show where same
-- IMPORTANCE of fluctuation dissipation theorem to the tranisition probability discussion!!
-- ENV noise and colored noise 
-
-
-
-
-
-
-
-The change in variance can be seen
-as a balance between the stochastic contribution, $b(x) + d(x)$
-and the deterministic contribution, $\partial_x \left(b(x) - d(x)\right)$. 
-The deterministic contribution is the slope of the macroscopic
-equation, that is, the eigenvalue indicating the stability of the
-equilibrium point.  For stable points, this value must be negative
-and precisely balance the strictly positive stochastic contribution 
-of $b(x) + d(x)$ (the greater the rate of stochastic events involved, 
-the greater the fluctuations).  This balance at steady-state is known as the
-fluctuation-dissipation theorem [@vanKampen2007], an will prove a useful
-expression in understanding stochastic dynamics.  Because Eq \eqref{vanKampen}
-also describes the time-evolution of these fluctuations, we can similarly
-solve for the correlation between two points separated by time $\tau$.
-
-For our Levins' model, $b(n) = n (1 - \tfrac{n}{N})$ and $d(n) = en$,
-we find the average number of occupied patches 
+Applying the system size approximation to the example of the Levins model introduced
+previously lets us both recover the classic model while adding some nuance in 
+the interpretation.
+Taking $b(n) = n (1 - \tfrac{n}{N})$ and $d(n) = en$ and solving for the steady
+state to van Kampen's ODEs, we see the average number $\langle n \rangle$  of occupied patches is
 $\langle n \rangle = N\tfrac{e}{c}$ with variance at steady-state of 
 $\sigma^2_n = N \tfrac{e}{c}$.  Observe that the variance scales proportionally
 to the system size, $N$, which explains the standard deviation
-increases only as $\sqrt{N}$ while the steady state itself increases
-in direct proportion to $N$, resulting in the smaller relative size
-of fluctuations in the larger system in Figure \ref{gillespie}.  We can also see
-that different ways of partitioning the same macroscopic equation
+increases as $\sqrt{N}$, as in the canonical model and as predicted by Figure \ref{gillespie}.  
+We can also see that different ways of partitioning the same macroscopic equation
 into components of birth and death will create the same mean dynamics
-but with different levels of noise.  For instance, in a logistic
+but with *different* levels of noise.  For instance, in a logistic
 model with $b = rn$ and $d = rn^2/N$, we instead find the variance
 at steady state is $\sigma^2 = K$; significantly larger than in the
 Levins model.
 
 
+
 ## Environmental stochasticity
 
-Whereas demographic noise reflects processes at a lower scale (the
-individual, rather than the population), environmental stochasticity
-reflects processes whose dynamics we are not explicitly modelling.
-Once again, this can best be illustrated through an explicit
-formulation of the master equation.  For a generic population model
-that depends not only on population state $x$ but also on environmental
-factors $y$, it is possible to derive the steady-state variance
-(Appendix B) as:
-
-$$
-\begin{equation}
-\sigma_x^2  = \frac{ \left( \partial_y f(x,y) \right)^2}{\left( \partial_x f(x,y) \right)^2 + \partial_x f(x,y) \tau_c } \sigma_e^2 + \sigma^2_d 
-\label{env_noise}
-\end{equation}
-$$
-
-where $\sigma_e^2$ is the variance in the environmental noise and
-$\tau_c$ the auto-correlation of that noise, $\sigma_d^2$ the
-equilibrium variance contributed by demographic noise from before,
-($\tfrac{b + d}{-2\partial_x (b - d)}$) and where we have defined
-$f(x,y) = b(x,y) - d(x,y)$ for notational convenience.  For example,
-if extinction rate $e$ in our Levins' model is allowed to vary
+The van Kampen expansion can also be useful in illustrating how 
+environmental noise enters a model as a separate process or dimension.
+Like the expansion of demographic noise, this derivation leads to 
+environmental noise that is approximately Gaussian in distribution,
+but unlike the canonical model, leads to explicitly autocorrelated rather 
+than white noise (see derivation, Appendix B).  This result is intuitive:
+for continuous time models, all fluctations are positively auto-correlated
+by definition -- measure any continuous process at ever-closer intervals in
+time and these measurements must converge. As the derivation makes it clear,
+it is in fact the *relative* time scales of the environmental process
+and population level process that really matter.  The degree of coupling
+to environmental noise also depends on the derivative of the population 
+dynamics with respect to the stochastically varying environmental variable:
+the larger that derivative, the stronger the contribution of environmental
+fluctuations to population fluctuations. For example, if extinction
+rate $e$ in our Levins' model is allowed to vary
 stochastically as Gaussian white noise with variance $\sigma_e^2$
 and mean $e$, we find the expected variance introduced in the
 population to be:
@@ -479,11 +464,10 @@ $$\sigma_n^2 = \frac{e^2}{(c+e)^2} \sigma_e^2 + \frac{e}{c}N $$
 
 Note that the contribution of environmental stochasticity is
 independent of system size and directly proportional to the variance
-in the environment.  This derivation provides a useful illustration
-of the difference between demographic noise and environmental noise:
-the latter simply describes the variation introduced by some other
-dynamic variable that we are not modelling explicitly, and whose
-dynamics are independent of the state of our system, $x$. This
+in the environment.  
+
+
+This
 environmental variation no doubt also arises from some more detailed
 lower level process, but we need not be explicit about those dynamics
 -- the expansion tells us that it is sufficient to know the overall
@@ -495,25 +479,15 @@ relative to the system size.  In the case of large fluctuations,
 this approximation must be replaced with a different approach, such
 as the WKB approximation, as discussed in @Ovaskainen2010.
 
-The importance of $\tau_c$, or the degree of auto-correlation, which
-emerges from our derivation above, has also been and continues to be a subject of
+The importance of auto-correlation, has and continues to be a subject of
 significant interest in the study of stochastic population dynamics
 [e.g.@Roughgarden; @Ellner; @Lawton; @Ripa1999; @Marshall2015].
 Early work often assumed environmental noise would be
-uncorrelated as a mathematical convenience.  As the derivation of
-Eq \eqref{env_noise} makes clear, for a continuous-time process,
-the relevant metric is the timescale of auto-correlation in the
-environmental noise process relative to the auto-correlation timescale
-of the population dynamics.  The Gaussian noise that emerges out
-of the system-size approximation is always auto-correlated to some
-degree -- if we measure our environment at consecutive times
-infinitesimally far apart, we expect nearly identical values.  At
-intervals much longer than the correlation time, consecutive
-measurements are effectively independent (i.e. white noise). 
-The degree of auto-correlation in  noise is all about _relative_ timescales.
+uncorrelated as a mathematical convenience. 
 
+<!-- This can be condensed or dropped to save space -->
 
-## Other forms of stochasticity
+## Origins of other forms of stochasticity
 
 Stochasticity frequently enters our models in other ways as well.
 For instance, most population-level models treat all individuals

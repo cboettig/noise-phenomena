@@ -93,7 +93,19 @@ This probability balance is known for historical reasons as a master equation. T
 \frac{\ud p_n}{\ud t} = (\mathbb E^{-1} - 1) b_n p_n + (\mathbb E -1) d_n p_n \label{master1}
 \end{align}
 
-which for historical reasons [see @vanKampen2007] is known as a master equation. From this we can directly calculate the mean and variance for this process by multiplying by $n$ or $n^2$ and summing over all $n$. These calculations are greatly simplified by observing the following property of the step operator: for any pair of test functions $f_n$, $g_n$, 
+which for historical reasons [see @vanKampen2007] is known as a master equation. Note that we can define the master equation more generally in terms of a generic transition probability $w(y|x)$ of going into any state $y$ given that the system is currently in state $x$:
+
+$$
+\begin{equation}
+\frac{\mathrm{d}}{\mathrm{d}t} P(x,t) = \int w(x|y) P(y,t) - w(y|x)P(x,t) \mathrm{d} x
+\end{equation}
+$$
+
+The master equation can be thought of as a more process-based description of the Chapman-Kolmorogov equation defining a stochastic process [@vanKampen2007]. 
+
+
+<!--
+From this we can directly calculate the mean and variance for this process by multiplying by $n$ or $n^2$ and summing over all $n$. These calculations are greatly simplified by observing the following property of the step operator: for any pair of test functions $f_n$, $g_n$, 
 \begin{align}
 \sum_{n=0}^{N-1}  g_n \mathbb E f_n = \sum_{n=1}^N f_n \mathbb E^{-1} g_n \nonumber
 \end{align}
@@ -114,19 +126,12 @@ and similarly the second moment is
 \end{align}
 
 While all moments can be derived as above, it is often impossible to solve these equations for nonlinear models.  Moreover, we have yet to make any moment closure argument that solving for the first two moments in this manner will be sufficient.  We will illustrate how this is done in both the traditional diffusion approximation and then in the van Kampen system size expansion.   
-
+-->
 
 ## The system-size expansion vs the diffusion approximation
 
-@Kramers1940 @Moyal1949, @Kurtz1978
 
-
-@vanKampen1961 @vanKampen1976 @Kurtz1972 @Kurtz1978
-
-
-
-
-A derivation of diffusion approximation in @Nisbet1982's classic textbook on fluctuating populations, or more recently in @Lande2003.  This diffusion approximation is also given for a more mathematically inclined audience in @Gardiner2009 and in @vanKampen2007.  The approach starts with the same master equation that defines the underlying dynamics of births and deaths (matching the process implemented in the exact Gillespie algorithm, @Gillespie1977, see Appendix A).  
+A derivation of diffusion approximation is originally credited to @Kramers1940 and later improved by @Moyal1949, though Einstein makes implicit use of this approximation in his own work on Brownian Motion decades earlier [@Gardiner2009].  The diffusion approximation has been a popular basis for ecological stochastic models as well, such as in @Nisbet1982's classic textbook on fluctuating populations, or more recently in @Lande2003 and work reviewed in @Ovaskeinen.  This diffusion approximation is nicely summarized @Gardiner2009 and in @vanKampen2007, though I believe @Kurtz1978 provides a more formal proof that goes unmentioned by any of these references.  Both the diffusion approximation and the van Kampen expansion start with the same master equation that defines the underlying dynamics of births and deaths (matching the process implemented in the exact Gillespie algorithm, @Gillespie1977, see Appendix A).  
 
 The essence of the approach is to argue that in the limit of large populations, the discrete state for the number of indivduals in a population, $N$, can be replaced with a continuous variable, $n$, in which we can expand the master equation as a Taylor series and then truncate at second order.  In contrast to the system size expansion of van Kampen, this approach does not make system size explicit, but instead hinges on taking a simultaneous limit of both short time and small step size.  Consider small steps $x = \epsilon n$, and hence $p_n = \epsilon P_x$, where $\epsilon \ll 1$.  To keep the process from slowing down we consequently have to scale up the rates by $\epsilon$ as well:
 
@@ -159,30 +164,16 @@ For small $\epsilon$ we can ignore the terms of $\mathcal O(\epsilon^2)$, and we
 \end{equation}
 
 
-
-
-
-
 Unfortunately, we have not been very precise about what we mean by $\epsilon$ -- nature gives us no such obvious small parameter that we can use to "scale down" step sizes and "scale up" rates. The van Kampen expansion makes this notion more precise by introducing the concept of system size.  Instead of counts we consider a change of units into counts per system size, e.g. population density.  We can imagine drawing ever larger rings in our landscape of individuals, defining an ever bigger and bigger "system."  
 
 
 
 
 
-## The System size expansion
+## The system size expansion
 
- The method is based on derivation presented by the van Kampen [@vanKampen2007], though a formal proof can be found in earlier work of Thomas Kurtz [@Kurtz1970; @Kurtz1971; @Kurtz1972].  
- 
- 
- 
- 
- 
- 
 
-The van Kampen system size expansion, shown for a general birth-death
-process in Appendix B, derives an *ordinary* differential equation (ODE)
-for the macroscopic process, coupled to a *linear* SDE which
-governs the *deviations* ($\xi$)  from the macroscopic equation:
+This method is based on derivation originally proposed by van Kampen @vanKampen1961 @vanKampen1976 and later grounded in more formal work of Thomas Kurtz, [@Kurtz1970; @Kurtz1971; @Kurtz1972; @Kurtz1978].  In contrast to the diffusion approximation above, the system size expansion derives an *ordinary* differential equation (ODE) for the macroscopic process, coupled to a *linear* SDE which governs the *deviations* ($\xi$)  from the macroscopic equation:
 
 
 \begin{align}
@@ -190,11 +181,8 @@ governs the *deviations* ($\xi$)  from the macroscopic equation:
 \mathrm{d} \xi &=  \partial_{x}  \left( b(x)  - d(x) \right)  \xi \mathrm{d}t + \sqrt{b(x) + d(x)} \mathrm{d} B_t   + \mathcal{O}(N^{-\tfrac{1}{2}}
 \end{align}
 
+ Since this system of equations defines a Gaussian probability distribution, the main text summarizes this result as coupled ODEs for mean and variance, which should be familiar to readers not familiar with stochastic differential equation SDE formulations.  I summarize the derivation here for the birth death process, though an accessible presentation can found for both this and the more general form of the master equation in van Kampen's popular text, @vanKampen2007.  
  
- 
- 
-### Introduction: a change of variables
-
 In this approximation, we expand the master equation \eqref{master1} in terms of a measure of the system size, $\Omega$.  The heart of this approximation is a change of variables, the rest is simply book-keeping.  We begin by explaining this change of variables, which replaces $n$ by some average value $\phi$ and some fluctuations $\xi$.   
 
 Observe that \eqref{master1} is written in terms of discrete individuals, represented by the integer $n$.  Many population models permit real-valued variables for the population, usually interpreted as the density of individuals, for which fractional values have meaning.  If we go out to the field and mark off a very large area and count all the individuals within it, we can expect to get the population density, $\phi$.  Over some appropriate region, we expect the population density to be independent of our survey area.  Knowing the density, we can predict how many individuals we'd expect to find in any given area $\Omega$, simply $\phi \Omega$.  We also know that the larger the area, the more accurate our prediction.  We call $\phi$ a macroscopic variable -- it describes what we expect to see over an entire population (the macroscopic level) on average, rather than at the individual level.  It is an intensive (bulk) variable, because it does not depend on the area surveyed, while number $n$ will depend on the area $\Omega$ considered.  We expect $n$ to deviate around an average value of $\phi \Omega$ by some amount that depends on the system size.  For several reasons (such as the error term we found in the simple Poisson process), we will guess that the size of the fluctuations $\xi$ scale with system size as $\Omega^{1/2}$.  Mathematically, 
@@ -204,7 +192,7 @@ n = \Omega \phi(t) + \Omega^{1/2} \xi \label{n}
 \end{align}
 
 
-We will change Eq \eqref{master1} into the variables $\phi$ and $\xi$.   We begin with the step operator, which can be approximated by a Taylor expansion.To formulate a Taylor expansion of the step operator (where $k$ can be a positive or negative integer), first consider the steop operator under the original discrete variable $n$:
+We will change Eq \eqref{master1} into the variables $\phi$ (the macrosopic value, i.e. density) and $\xi$ (i.e. fluctuations/deviations from the expected density).   We begin with the step operator, which can be approximated by a Taylor expansion.To formulate a Taylor expansion of the step operator (where $k$ can be a positive or negative integer), first consider the steop operator under the original discrete variable $n$:
 
 \begin{align}
 \intertext{Take as the definition}
@@ -258,23 +246,36 @@ To complete the transformation, we put \eqref{Pi} on the left side, replace all 
 Collecting terms of order $\Omega^{1/2}$ on both sides, we have:
 
 \begin{align}
-\frac{\ud \phi(t)}{\ud t} = b(\phi)-d(\phi) = \alpha_1(\phi) \label{macroscopic}
+\frac{\ud \phi(t)}{\ud t} = b(\phi)-d(\phi) = a_1(\phi) \label{macroscopic}
 \end{align}
 
-Where we have the part of the birth and death functions that depend on the macroscopic variable $\phi$ alone.  This is known as the macroscopic equation, and corresponds to the density equations commonly written down.  Following @vanKampen2007, we will call this difference $\alpha_1(\phi)$ as a shorthand\footnote{This notation suggests it is the first jump moment, defined as first moment of the transition rate between states in a Markov process.  It so happens this term will give the macroscopic law for any Markov process, not only a birth-death process.  The second moment of the transition rates, $a_2$, will be for us simply the sum of the birth and death rates.  We use this notation as it generalizes to processes that have a different master equation from \eqref{master1}, to describe a transition of arbitrary step size: $\alpha_{i,j} = \int r^i \Phi_j(r) \ud r$.}   
+Where we have the part of the birth and death functions that depend on the macroscopic variable $\phi$ alone.  This is known as the macroscopic equation, and corresponds to the density equations commonly written down.  Following @vanKampen2007, we will call this difference $a_1(\phi)$ as a shorthand.  This notation suggests it is the first jump moment, defined as first moment of the transition rate between states in a Markov process.  It so happens this term will give the macroscopic law for any Markov process, not only a birth-death process.  The second moment of the transition rates, $a_2$, will be for us simply the sum of the birth and death rates.  We use this notation as it generalizes to processes that have a different master equation from \eqref{master1}, to describe a transition of arbitrary step size: 
 
 
-Collecting terms of order $\Omega^0$ we recover the diffusion equation:
+$$
+\begin{equation}
+a_i = \int r^i \Phi(r) \mathrm{d} r
+\end{equation}
+$$
+The first jump moment, $i == 1$ the two possible steps $r$ are $\pm 1$, and thus $a_1$ is sum of the two possible one-step transitions $+1 \cdot b(x) + -1 \cdot d(x)$.  The second jump moment the $r$ term is raised to the second power, making both contributions positive such that $a_2(x) = b(x) + d(x)$
+
+
+
+
+Collecting terms of order $\Omega^0$ we recover the *linear* Fokker Planck equation:
 
 \begin{align}
-\frac{\partial \Pi}{\partial t} = - \alpha'_{1,0}(\phi) \frac{\partial}{\partial \xi} \xi \Pi + \tfrac{1}{2}\alpha_{2,0}(\phi) \frac{\partial^2}{\partial \xi^2} \Pi \label{FP}
+\frac{\partial \Pi}{\partial t} = - a'_1(\phi) \frac{\partial}{\partial \xi} \xi \Pi + \tfrac{1}{2}a_2(\phi) \frac{\partial^2}{\partial \xi^2} \Pi \label{FP}
 \end{align}
 
-Where we define $\alpha_2(\phi) = b(\phi)+d(\phi)$ as an analogously.  From this it is a straight forward exercise to calculate the moments of the distribution (multiply by $\xi$, $\xi^2$ and integrate),
+Where we define $a_2(\phi) = b(\phi)+d(\phi)$ as an analogously.  Contrast this to the Fokker Planck equation of the diffusion equation, where the birth and death terms appear *inside* the derivatives and the derivatives are with respect to the state variable $x$ rather than the fluctuations, $\xi$.  
+
+
+From here it is a straight forward exercise to calculate the moments of the distribution (multiply by $\xi$, $\xi^2$ and integrate),
 
 \begin{align}
-\partial_t \langle \xi \rangle &= \alpha'_{1,0}(\phi) \langle \xi \rangle \\
-\partial_t  \langle \xi^2 \rangle &= 2\alpha'_{1,0}(\phi) \langle \xi \rangle + \alpha_{2,0}(\phi) \label{fluc} 
+\partial_t \langle \xi \rangle &= a'_1(\phi) \langle \xi \rangle \\
+\partial_t  \langle \xi^2 \rangle &= 2a'_1(\phi) \langle \xi \rangle + a_2(\phi) \label{fluc} 
 \end{align}
 
 The variance $\sigma_{\xi}^2 = \langle \xi^2 \rangle - \langle \xi \rangle^2$ obeys the same relation as the second moment. These equations must be solved using $\phi(t)$ from the macroscopic solution, solved with the appropriate initial condition $n_0$.  Then we can transform back to the original variables:
@@ -289,13 +290,13 @@ It is possible to prove that any solution to \eqref{FP} must be Gaussian [@Kurtz
 
 ## Fluctuation dissipation theorem
 
-Eq \eqref{fluc} is particularly instructive.  Note that $\alpha_2(\phi)$ is always positive, and hence will try to increase the fluctuations $\langle \xi^2 \rangle$.  As this term increases, it increases the influence of its coefficient $\alpha_1'(\phi)$.  If this term is negative (as it must be near a stable equilibrium) then it serves to dissipate these fluctuations.  Note the dissipation comes from the macroscopic behavior alone, and does not depend on knowing $b$ and $d$ separately.  Since this dissipation is strongest for large fluctuations and small for very small fluctuations, $\xi^2$ will exponentially approach an equilibrium:
+Eq \eqref{fluc} is particularly instructive.  Note that $a_2(\phi)$ is always positive, and hence will try to increase the fluctuations $\langle \xi^2 \rangle$.  As this term increases, it increases the influence of its coefficient $a_1'(\phi)$.  If this term is negative (as it must be near a stable equilibrium) then it serves to dissipate these fluctuations.  Note the dissipation comes from the macroscopic behavior alone, and does not depend on knowing $b$ and $d$ separately.  Since this dissipation is strongest for large fluctuations and small for very small fluctuations, $\xi^2$ will exponentially approach an equilibrium:
 
 \begin{align}
-\langle \xi^2 \rangle = \frac{-\alpha_2(\phi)}{2 \alpha_1'(\phi)} \label{fluctuation dissipation}
+\langle \xi^2 \rangle = \frac{-a_2(\phi)}{2 a_1'(\phi)} \label{fluctuation dissipation}
 \end{align}
 
-However, $\alpha_1'(\phi)$ need not be negative everywhere, but will be negative for any stable point, $\alpha_1'(\phi^s) < 0$.  Hence there will be a region around any stable point where this fluctuation-dissipation relationship given by \eqref{fluctuation dissipation} provides a good description of the fluctuations.  Consequently, for any birth-death process $b>d$ we can write down the equilibrium fluctuations as:
+However, $a_1'(\phi)$ need not be negative everywhere, but will be negative for any stable point, $a_1'(\phi^s) < 0$.  Hence there will be a region around any stable point where this fluctuation-dissipation relationship given by \eqref{fluctuation dissipation} provides a good description of the fluctuations.  Consequently, for any birth-death process $b>d$ we can write down the equilibrium fluctuations as:
 
 \begin{equation}
 \sigma^2 = \frac{b+d}{2 [d' - b']} \label{fluc diss} 
@@ -316,8 +317,8 @@ The Levins meta-population model is given by
 where $n$ is the number of occupied patches, $N$ the total number of patches, $c$ is the colonization rate, and $e$ the extinction rate.  The colonization term provides our birth rate function and the extinction rate the death rate function.  The total number of patches $N$ is an obvious choice for the system size $\Omega$.  From this we can immediately apply the above theory.  The jump moments written in the macroscopic variable are:
 
 \begin{align}
-\alpha_1(\phi) &= c \phi(1- \phi) - e\phi \\
-\alpha_2(\phi) &= c \phi(1-\phi) + e\phi
+a_1(\phi) &= c \phi(1- \phi) - e\phi \\
+a_2(\phi) &= c \phi(1-\phi) + e\phi
 \end{align}
 
 From which the macroscopic equation \eqref{macroscopic}, the fluctuations \eqref{fluc} can be solved.  According to \eqref{FP} the distribution is simply the Gaussian with the mean given by \eqref{n mean} and variance \eqref{n var}. The equilibrium of the macroscopic equation is:
@@ -350,41 +351,85 @@ Which agrees with calculations elsewhere [@Nisbet1982].
 
 
 
-
-# An alternate derivation: the diffusion approximation
-
 # System size expansion in higher-dimensional systems: environmental noise example
 
 We introduce environmental noise into the master equation by allowing the transition rates to depend explicitly on the macroscopic variable $\psi$ as well as the state variable $\phi$.  It can be helpful to think of fluctuations in $\psi$ as also arising from some lower level transitions, but we need not model these explicitly.  Following the expansion as before (see @vanKampen2007 for details), the mean dynamics are given by the macroscopic equations:
 
 \begin{align*}
-\frac{\ud \phi}{\ud t} &= \alpha_{1,0}(\phi, \psi) \\
-\frac{\ud \psi}{\ud t} &= \beta_{1,0}(\psi) 
+\frac{\ud \phi}{\ud t} &= a_1(\phi, \psi) \\
+\frac{\ud \psi}{\ud t} &= \beta_1(\psi) 
 \end{align*}
 
 while the fluctuation dynamics are now given by three coupled differential equations:
 
 
 \begin{align}
-\frac{\ud \langle \xi^2 \rangle}{\ud t} &= 2 \frac{\partial \alpha_{1,0}}{\partial \phi} \langle \xi^2 \rangle + 2 \frac{\partial \alpha_{1,0} }{\partial \psi} \langle \xi \eta \rangle + \alpha_{2,0} \label{phivar} \\
-\frac{\ud \langle \xi \eta \rangle}{\ud t} &= \left( \frac{\partial \alpha_{1,0}}{\partial \phi} + \frac{\partial \beta_{1,0} }{\partial \psi} \right)\langle \xi \eta \rangle + \frac{\partial \alpha_{1,0} }{\partial \psi} \langle \eta^2 \rangle \label{covar}\\
-\frac{\ud \langle \eta^2 \rangle}{\ud t} &= 2 \frac{\partial \beta_{1,0}}{\partial \psi} \langle \eta^2 \rangle + \beta_{2,0} \label{psivar}
+\frac{\ud \langle \xi^2 \rangle}{\ud t} &= 2 \frac{\partial a_1}{\partial \phi} \langle \xi^2 \rangle + 2 \frac{\partial a_1 }{\partial \psi} \langle \xi \eta \rangle + a_2 \label{phivar} \\
+\frac{\ud \langle \xi \eta \rangle}{\ud t} &= \left( \frac{\partial a_1}{\partial \phi} + \frac{\partial \beta_1 }{\partial \psi} \right)\langle \xi \eta \rangle + \frac{\partial a_1 }{\partial \psi} \langle \eta^2 \rangle \label{covar}\\
+\frac{\ud \langle \eta^2 \rangle}{\ud t} &= 2 \frac{\partial \beta_1}{\partial \psi} \langle \eta^2 \rangle + \beta_2 \label{psivar}
 \end{align}
 
-Without an explicit model for the environmental variation process, we can merely summarize its role in terms of the autocorrelation, $\tau_c := \tfrac{\partial \beta_{1,0}}{\partial \psi}$ and its overall variance at steady-state, $\langle \eta^2 \rangle = \tfrac{\beta_{2,0}}{-2 \partial_{\psi} \beta{1,0}}$, which we will refer to as the environmental variation $\sigma^2_e := \langle \eta^2 \rangle$.  A more detailed mechanistic description of how the environmental noise arises would permit a time-dependent solution, but the system size expansion tells us that these two summary statistics are all we need to express the steady-state solution above. 
+Without an explicit model for the environmental variation process, we can merely summarize its role in terms of the autocorrelation, $\tau_c := \tfrac{\partial \beta_1}{\partial \psi}$ and its overall variance at steady-state, $\langle \eta^2 \rangle = \tfrac{\beta_2}{-2 \partial_{\psi} \beta{1,0}}$, which we will refer to as the environmental variation $\sigma^2_e := \langle \eta^2 \rangle$.  A more detailed mechanistic description of how the environmental noise arises would permit a time-dependent solution, but the system size expansion tells us that these two summary statistics are all we need to express the steady-state solution above. 
 
 Setting the remaining equations to zero to solve for the stationary state we can write down a general formula for the variation in $\phi$:
 
 \begin{equation*}
-\langle xi^2 \rangle = \frac{ \left( \partial_{\psi} \alpha_{1,0}(\phi,\psi) \right)^2}{\left( \partial_{\phi} \alpha_{1,0}(\phi,\psi) \right)^2 + \partial_{\phi} \alpha_{1,0} (x,y) \tau_c } \sigma_e^2 + \sigma^2_d
+\langle xi^2 \rangle = \frac{ \left( \partial_{\psi} a_1(\phi,\psi) \right)^2}{\left( \partial_{\phi} a_1(\phi,\psi) \right)^2 + \partial_{\phi} a_1 (x,y) \tau_c } \sigma_e^2 + \sigma^2_d
 \end{equation*}
 
-From which we recover the environmental variation equation presented in the main text.  
+
+
+<!-- FIXME -->
+
+
+
+$$
+\begin{align}
+\frac{\mathrm{d} x}{\mathrm{d} t} &= \alpha_1(x, y)  \\
+\frac{\mathrm{d} y}{\mathrm{d} t} &= \beta_1(y) 
+\end{align}
+$$
+
+while the fluctuation dynamics are now given by three coupled differential equations:
+
+
+
+For a generic birth death process that depends both on
+on population state $x$ but also on environmental
+factors $y$, where we write $a_1(x,y) := b(x,y) - d(x,y)$,
+sum $a_2(x,y) := b(x,y) + d(x,y)$
+
+
+For a generic population model
+that depends not only on population state $x$ but also on environmental
+factors $y$, it is possible to derive the steady-state variance
+(Appendix B) as:
+
+$$
+\begin{align}
+&\sigma_x^2  = \frac{  \partial_y a_1(x,y) ^2}{ \partial_x a_1(x,y) ^2 +  \tau_c \phantom\cdot \partial_x a_1(x,y)  } \sigma_e^2 + \frac{1}{2} \frac{a_2(x,y)}{\partial_x a_1(x,y)}
+\end{align}
+$$
+
+where $\sigma_e^2$ is the variance in the environmental noise and
+$\tau_c$ the auto-correlation of that noise.  
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Large deviations
 
-Notably, both the SDE derived from the Kramer-Moyal diffusion approximation and the central limit theorem result arising from the system size expansion break down in the case of large deviations.  @Ovaskainen2010 provides an overview literature in that addresses this limit and discusses the use of the WKB^[Wentzel, Kramers & Brillouin. Note that the physicist Gregor Wentzel is not the same as the mathematician Alexander Wentzell of the Fredilin-Wentzell theorem for large deviations years later, though I believe the former's result can be established more formally by the theorem from the latter.] method to address this case. 
+Notably, both the SDE derived from the Kramer-Moyal diffusion approximation and the central limit theorem result arising from the system size expansion break down in the case of large deviations.  @Ovaskainen2010 provides an overview literature in that addresses this limit and discusses the use of the WKB^[Wentzel, Kramers & Brillouin. Note that the physicist Gregor Wentzel is not the same as the mathematician Alexander Wentzell of the Fredilin-Wentzell theorem for large deviations years later, though I believe the former's result can be established more formally by the theorem from the latter.] method to address this case, which is of particular interest in the persistence / coexistence literature where stochastic extinction arises only from such large deviations. 
 
 
 

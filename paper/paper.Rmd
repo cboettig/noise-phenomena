@@ -322,7 +322,7 @@ to use this same approach in alternate formuluations.
 Figure \ref{gillespie} shows the results of two exact SSA simulations of this model with
 identical parameters except for the total number of available sites,
 $N$, illustrating the magnitude of these fluctuations indeed scales in proportion
-to $\sqrt{N}$ as postulated by the canonical equation, Eq \eqref{canoical}.
+to $\sqrt{N}$ as postulated by the canonical equation, Eq \eqref{canonical}.
 
 <!-- Figure 1: Gillespie simulations -->
 ```{r gillespie, warning=FALSE, fig.width=7, fig.cap="Population dynamics from a Gillespie simulation of the Levins model with large (N=1000, panel A) and small (N=100, panel B) number of sites (blue) show relatively weaker effects of demographic noise in the bigger system. Models are otherwise identical, with e = 0.2 and c = 1 (code in appendix A). Theoretical predictions for mean and plus/minus one standard deviation shown in horizontal re dashed lines. \\label{gillespie}"}
@@ -365,12 +365,12 @@ This result is striking for a variety of reasons.  First, we see the recovery of
 "deterministic skeleton," in which we naively replace population density $x/N$ for
 population count $n$ describes the *expected* density of the population
 (i.e. averaged over an esemble of replicate realizations of the Gillespie simulations),
-and with remarkable accuracy, up to order $1/N}$, i.e. a single individual.^[We can actually extend the van Kampen expansion to higher order and successfully approximate even this higher-order correction to the mean dynamics, recovering the phenomenon of stochastic inflation [@Gonzalez2002], where the average population size can be larger or smaller than predicted by the deterministic model depending on the curvature of the macroscopic equation].
+and with remarkable accuracy, up to order $1/N$, i.e. a single individual.^[We can actually extend the van Kampen expansion to higher order and successfully approximate even this higher-order correction to the mean dynamics, recovering the phenomenon of stochastic inflation [@Gonzalez2002], where the average population size can be larger or smaller than predicted by the deterministic model depending on the curvature of the macroscopic equation].
 The variance term is equally interesting.  First, we note that noise arises from
 the interaction of individual birth and death events that defined our process,
 illustrating the origins of this noise.  Because both individual events of births
 and deaths add randomness, they both add to the growth of varation observed, i.e.
-$b(x) + d(x)$.  Second, we see that dynamics for the variance $\sigma_^2$ are *non-linear* whenever
+$b(x) + d(x)$.  Second, we see that dynamics for the variance $\sigma^2$ are *non-linear* whenever
 $b(x)$ or $d(x)$ are non-linear, so that different values of the population density
 will experience different noise intensities! In fact, this variance can only
 have an equilibrium size if the macroscopic equation has an equilibrium ($\partial_x  \left[ b(x)  - d(x) \right] < 0$)
@@ -414,7 +414,7 @@ a more dubious double limit that often has no clear biological intepretation and
 can restrict its validity (though I believe theorem 3.3 of @Kurtz1978 establishes
 this approximation on firmer grounds).  Second, the non-linear SDE formulation can
 prove more difficult to work with than the convenient ODE expressions from van Kampen,
-Eq \eqref{\vanKampen} (which can be expressed as a coupled ODE for the mean and 
+Eq \eqref{vanKampen} (which can be expressed as a coupled ODE for the mean and 
 a linear SDE for deviations).  Third, while both approximations break down
 in the case of large deviations [see @Ovaskainen2010], the van Kampen expansion
 shows that the macroscopic equation will continue to hold even when the 

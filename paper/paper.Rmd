@@ -457,14 +457,17 @@ the larger that derivative, the stronger the contribution of environmental
 fluctuations to population fluctuations. For example, if extinction
 rate $e$ in our Levins' model is allowed to vary
 stochastically as Gaussian white noise with variance $\sigma_e^2$
-and mean $e$, we find the expected variance introduced in the
+and mean $\bar e$, we find the expected variance introduced in the
 population to be:
 
-$$\sigma_n^2 = \frac{e^2}{(c+e)^2} \sigma_e^2 + \frac{e}{c}N $$
+$$\sigma_n^2 = \frac{\bar e}{c}N + \frac{\left[(1-\frac{\bar{e}}{c}) N\right]^2}{(\bar e - c)^2} \sigma_e^2$$
 
-Note that the contribution of environmental stochasticity is
-independent of system size and directly proportional to the variance
-in the environment.  
+where $\left[(1-\frac{\bar{e}}{c}) N$ is the equilibrium population size.
+This reflects the assumption of the canonical equation, Eq \eqref{canonical}
+that the standard deviation scales in direct proportion to the system size $N$,
+while the demographic noise scales as the square root.  Consequently,
+for a large system, the demographic contribution becomes proportionally smaller
+while the environmental contribution remains the same. 
 
 
 This

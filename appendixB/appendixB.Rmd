@@ -12,7 +12,7 @@ output:
   rticles::elsevier_article:
     toc: true
   
-preamble: "\\newcommand{\\ud}{\\mathrm{d}}"
+preamble: "\\newcommand{\ud}{\\mathrm{d}}"
 ---
 
 \renewcommand{\thefigure}{B\arabic{figure}}
@@ -90,7 +90,7 @@ Consider a population that is of size $n$ with probability $p_n$, with birth and
 This probability balance is known for historical reasons as a master equation. This equation will form the center of our treatment.  Master equations of this form can be written more concisely by introducing the step operator, $\mathbb E^k$ such that $\mathbb E^k f_n = f_{n+k}$, giving us
 
 \begin{align}
-\frac{\ud p_n}{\ud t} = (\mathbb E^{-1} - 1) b_n p_n + (\mathbb E -1) d_n p_n \label{master1}
+\frac{\mathrm{d} p_n}{\mathrm{d} t} = (\mathbb E^{-1} - 1) b_n p_n + (\mathbb E -1) d_n p_n \label{master1}
 \end{align}
 
 which for historical reasons [see @vanKampen2007] is known as a master equation. Note that we can define the master equation more generally in terms of a generic transition probability $w(y|x)$ of going into any state $y$ given that the system is currently in state $x$:
@@ -113,7 +113,7 @@ From this we can directly calculate the mean and variance for this process by mu
 For example, the mean is:
 
 \begin{align}
-\frac{\ud }{\ud t} \langle n \rangle &= \sum n (\mathbb E^{-1} - 1) b_n p_n + \sum n (\mathbb E -1) d_n p_n \nonumber \\ 
+\frac{\mathrm{d} }{\mathrm{d} t} \langle n \rangle &= \sum n (\mathbb E^{-1} - 1) b_n p_n + \sum n (\mathbb E -1) d_n p_n \nonumber \\ 
 &= \sum  b_n p_n(\mathbb E - 1)n  + \sum d_n p_n(\mathbb E^{-1} -1) n \nonumber \\
 &= - \langle d_n \rangle +  \langle b_n \rangle \label{mean}
 \end{align}
@@ -122,7 +122,7 @@ For example, the mean is:
 and similarly the second moment is
 
 \begin{align}
-\frac{\ud }{\ud t} \langle n^2 \rangle &= 2 \langle n (b_n - d_n) \rangle + \langle b_n+d_n \rangle \label{var}
+\frac{\mathrm{d} }{\mathrm{d} t} \langle n^2 \rangle &= 2 \langle n (b_n - d_n) \rangle + \langle b_n+d_n \rangle \label{var}
 \end{align}
 
 While all moments can be derived as above, it is often impossible to solve these equations for nonlinear models.  Moreover, we have yet to make any moment closure argument that solving for the first two moments in this manner will be sufficient.  We will illustrate how this is done in both the traditional diffusion approximation and then in the van Kampen system size expansion.   
@@ -160,7 +160,7 @@ Then \eqref{master1} becomes:
 For small $\epsilon$ we can ignore the terms of $\mathcal O(\epsilon^2)$, and we have recovered the diffusion approximation.  As noted above, we can write this PDE in the more compact notation of an SDE, substituting in our original terms for birth and death:
 
 \begin{equation}
-\ud X_t = \left[ b(x) - d(x) \right] \ud t + \sqrt{b(X_t) + d(X_t)} \ud W_t
+\mathrm{d} X_t = \left[ b(x) - d(x) \right] \mathrm{d} t + \sqrt{b(X_t) + d(X_t)} \mathrm{d} W_t
 \end{equation}
 
 
@@ -219,25 +219,25 @@ Making this substitution to \eqref{En} we find:
 Taking $P(n,t) = \Pi(\xi, t)$, we can rewrite the time derivative.  First, note that the derivative of the probability distribution in the master equation, $\tfrac{\partial}{\partial t} P(n,t)$ is taken with $n$ held constant,
 
 \begin{align}
-\frac{\ud n}{\ud t} &= \Omega \frac{\ud \phi(t)}{\ud t}  + \Omega^{1/2}\frac{\ud \xi}{\ud t} = 0, \nonumber \\
+\frac{\mathrm{d} n}{\mathrm{d} t} &= \Omega \frac{\mathrm{d} \phi(t)}{\mathrm{d} t}  + \Omega^{1/2}\frac{\mathrm{d} \xi}{\mathrm{d} t} = 0, \nonumber \\
 \intertext{therefore}
-\frac{\ud \xi}{\ud t} &= -\Omega^{1/2}\frac{\ud \phi(t)}{\ud t}. \label{dxidt}
+\frac{\mathrm{d} \xi}{\mathrm{d} t} &= -\Omega^{1/2}\frac{\mathrm{d} \phi(t)}{\mathrm{d} t}. \label{dxidt}
 \end{align}
 
 Also by the chain rule, we have
 \begin{align*}
-\frac{\partial}{\partial t} P(n,t) &= \frac{\partial \Pi}{\partial t}  + \frac{\partial \Pi}{\partial \xi}\frac{\ud \xi}{\ud t} 
+\frac{\partial}{\partial t} P(n,t) &= \frac{\partial \Pi}{\partial t}  + \frac{\partial \Pi}{\partial \xi}\frac{\mathrm{d} \xi}{\mathrm{d} t} 
 \end{align*}
 Substituting in \eqref{dxidt}, we find:  
 
 \begin{align}
-\frac{\partial}{\partial t} P(n,t) &= \frac{\partial \Pi}{\partial t}  - \Omega^{1/2}\frac{\ud \phi}{\ud t}\frac{\partial \Pi}{\partial \xi} \label{Pi}
+\frac{\partial}{\partial t} P(n,t) &= \frac{\partial \Pi}{\partial t}  - \Omega^{1/2}\frac{\mathrm{d} \phi}{\mathrm{d} t}\frac{\partial \Pi}{\partial \xi} \label{Pi}
 \end{align}
 
 To complete the transformation, we put \eqref{Pi} on the left side, replace all the $\mathbb E$'s in \eqref{master1} with \eqref{taylor}, and all the $n$'s appearing in the functions $b_n$ and $d_n$ with \eqref{n}:
 
 \begin{align}
-&\frac{\partial \Pi(\xi, t)}{\partial t}  - \Omega^{1/2}\frac{\ud \phi}{\ud t}\frac{\partial \Pi}{\partial \xi}  = \nonumber \\
+&\frac{\partial \Pi(\xi, t)}{\partial t}  - \Omega^{1/2}\frac{\mathrm{d} \phi}{\mathrm{d} t}\frac{\partial \Pi}{\partial \xi}  = \nonumber \\
 &\quad \left( -\Omega^{-1/2} \frac{\partial}{\partial \xi} +  \frac{\Omega^{-1}}{2} \frac{\partial^2}{\partial \xi^2} + \ldots\right)b(\phi\Omega+\xi\Omega^{1/2})\Pi(\xi, t)\nonumber \\
 +&\quad \left( \Omega^{-1/2} \frac{\partial}{\partial \xi} +  \frac{\Omega^{-1}}{2} \frac{\partial^2}{\partial \xi^2} + \ldots\right)d(\phi\Omega+\xi\Omega^{1/2})\Pi(\xi, t)
 \end{align}
@@ -246,7 +246,7 @@ To complete the transformation, we put \eqref{Pi} on the left side, replace all 
 Collecting terms of order $\Omega^{1/2}$ on both sides, we have:
 
 \begin{align}
-\frac{\ud \phi(t)}{\ud t} = b(\phi)-d(\phi) = a_1(\phi) \label{macroscopic}
+\frac{\mathrm{d} \phi(t)}{\mathrm{d} t} = b(\phi)-d(\phi) = a_1(\phi) \label{macroscopic}
 \end{align}
 
 Where we have the part of the birth and death functions that depend on the macroscopic variable $\phi$ alone.  This is known as the macroscopic equation, and corresponds to the density equations commonly written down.  Following @vanKampen2007, we will call this difference $a_1(\phi)$ as a shorthand.  This notation suggests it is the first jump moment, defined as first moment of the transition rate between states in a Markov process.  It so happens this term will give the macroscopic law for any Markov process, not only a birth-death process.  The second moment of the transition rates, $a_2$, will be for us simply the sum of the birth and death rates.  We use this notation as it generalizes to processes that have a different master equation from \eqref{master1}, to describe a transition of arbitrary step size: 
@@ -303,7 +303,7 @@ However, $a_1'(\phi)$ need not be negative everywhere, but will be negative for 
 \end{equation}
 
 
-This expression has the wonderful properties of being both simple and general.  
+This expression has the wonderful properties of being both simple and quite general.  
 
 
 ## Example: The Levins patch model
@@ -311,7 +311,7 @@ This expression has the wonderful properties of being both simple and general.
 The Levins meta-population model is given by
 
 \begin{align}
-\frac{\ud n}{\ud t} = c n \left(1 - \frac{n}{N}\right) - e n \label{levins}
+\frac{\mathrm{d} n}{\mathrm{d} t} = c n \left(1 - \frac{n}{N}\right) - e n \label{levins}
 \end{align}
 
 where $n$ is the number of occupied patches, $N$ the total number of patches, $c$ is the colonization rate, and $e$ the extinction rate.  The colonization term provides our birth rate function and the extinction rate the death rate function.  The total number of patches $N$ is an obvious choice for the system size $\Omega$.  From this we can immediately apply the above theory.  The jump moments written in the macroscopic variable are:
@@ -336,7 +336,7 @@ while the steady-state fluctuations are given by \eqref{fluctuation dissipation}
 
 Note that the macroscopic equation for Levins' patch model has the same mathematical formulation as the familiar logistic equation, 
 
-$$\frac{\ud n}{\ud t} = r n \left( 1 - \frac{n}{K} \right)$$
+$$\frac{\mathrm{d} n}{\mathrm{d} t} = r n \left( 1 - \frac{n}{K} \right)$$
 though the partition into birth and death rates is not explicit.  Different ways of dividing this equation between birth and death can therefore create different fluctuation patterns, even as the macroscopic average remains unchanged.  For instance, taking $b = rn$ and $d = rn^2/K$ and  we can calculate the fluctuations of the logistic equation around its equilibrium $n^* = K$ as:
 
 \begin{align}
@@ -349,76 +349,98 @@ Which agrees with calculations elsewhere [@Nisbet1982].
 <!-- Include environmental noise example via stochastic K? -->
 
 
-
-
 # System size expansion in higher-dimensional systems: environmental noise example
 
-We introduce environmental noise into the master equation by allowing the transition rates to depend explicitly on the macroscopic variable $\psi$ as well as the state variable $\phi$.  It can be helpful to think of fluctuations in $\psi$ as also arising from some lower level transitions, but we need not model these explicitly.  Following the expansion as before (see @vanKampen2007 for details), the mean dynamics are given by the macroscopic equations:
+Environmental noise arises not as a summary of lower-level processes, like in the case of intrinsic noise, but rather as a recognition that things we treat as model parameters are in fact dynamic variables themselves and subject to their own dynamics which we summarize statistically rather than model explicitly.  We can recognize this as simply a special case of a multivariate system size expansion; e.g. where a parameter of our birth or death process varies according to some environmental dynamics (e.g. a death rate $e$ linked to fluctuations in temperature, $y$.)  In general, we can write this as a macroscopic equation in two variables:
 
+$$\frac{\mathrm{d} x}{\mathrm{d} t} = a_1(x, y) $$
+
+In general, we could imagine a specific equation for the dynamics of the environmental process $y$, perhaps also subject to a system size expansion. To keep things simple, we will adopt a linear OU process for the noise, 
+
+$$
 \begin{align*}
-\frac{\ud \phi}{\ud t} &= a_1(\phi, \psi) \\
-\frac{\ud \psi}{\ud t} &= \beta_1(\psi) 
+\mathrm{d} y &= - \beta y \phantom \cdot \mathrm{d} t + \sigma_e \mathrm{d}W
 \end{align*}
-
-while the fluctuation dynamics are now given by three coupled differential equations:
-
-
-\begin{align}
-\frac{\ud \langle \xi^2 \rangle}{\ud t} &= 2 \frac{\partial a_1}{\partial \phi} \langle \xi^2 \rangle + 2 \frac{\partial a_1 }{\partial \psi} \langle \xi \eta \rangle + a_2 \label{phivar} \\
-\frac{\ud \langle \xi \eta \rangle}{\ud t} &= \left( \frac{\partial a_1}{\partial \phi} + \frac{\partial \beta_1 }{\partial \psi} \right)\langle \xi \eta \rangle + \frac{\partial a_1 }{\partial \psi} \langle \eta^2 \rangle \label{covar}\\
-\frac{\ud \langle \eta^2 \rangle}{\ud t} &= 2 \frac{\partial \beta_1}{\partial \psi} \langle \eta^2 \rangle + \beta_2 \label{psivar}
-\end{align}
-
-Without an explicit model for the environmental variation process, we can merely summarize its role in terms of the autocorrelation, $\tau_c := \tfrac{\partial \beta_1}{\partial \psi}$ and its overall variance at steady-state, $\langle \eta^2 \rangle = \tfrac{\beta_2}{-2 \partial_{\psi} \beta{1,0}}$, which we will refer to as the environmental variation $\sigma^2_e := \langle \eta^2 \rangle$.  A more detailed mechanistic description of how the environmental noise arises would permit a time-dependent solution, but the system size expansion tells us that these two summary statistics are all we need to express the steady-state solution above. 
-
-Setting the remaining equations to zero to solve for the stationary state we can write down a general formula for the variation in $\phi$:
-
-\begin{equation*}
-\langle xi^2 \rangle = \frac{ \left( \partial_{\psi} a_1(\phi,\psi) \right)^2}{\left( \partial_{\phi} a_1(\phi,\psi) \right)^2 + \partial_{\phi} a_1 (x,y) \tau_c } \sigma_e^2 + \sigma^2_d
-\end{equation*}
-
-
-
-<!-- FIXME -->
-
-
+$$
+which corresponds to mean-zero Gaussian noise with auto-correlation $\beta$, where the white-noise limit corresponds to $\beta \to 0$. Following the expansion as before (see @vanKampen2007 for details of the multi-variate case), the mean dynamics for the population size are once again given by the macroscopic equation, $\frac{\mathrm{d} x}{\mathrm{d} t} = a_1(x, y) $, while the fluctuation dynamics are now given by three coupled differential equations:
 
 $$
 \begin{align}
-\frac{\mathrm{d} x}{\mathrm{d} t} &= \alpha_1(x, y)  \\
-\frac{\mathrm{d} y}{\mathrm{d} t} &= \beta_1(y) 
+\frac{\mathrm{d} \langle \xi^2 \rangle}{\mathrm{d} t} &= 2 \frac{\partial a_1}{\partial x} \langle \xi^2 \rangle + 2 \frac{\partial a_1 }{\partial y} \langle \xi \eta \rangle + a_2 \\
+\frac{\mathrm{d} \langle \xi \eta \rangle}{\mathrm{d} t} &= \left( \frac{\partial a_1}{\partial x} - \beta \right)\langle \xi \eta \rangle + \frac{\partial a_1 }{\partial y} \langle \eta^2 \rangle \\
+\frac{\mathrm{d} \langle \eta^2 \rangle}{\mathrm{d} t} &= -2 \beta \langle \eta^2 \rangle + \gamma_e^2
 \end{align}
-$$
-
-while the fluctuation dynamics are now given by three coupled differential equations:
-
-
-
-For a generic birth death process that depends both on
-on population state $x$ but also on environmental
-factors $y$, where we write $a_1(x,y) := b(x,y) - d(x,y)$,
-sum $a_2(x,y) := b(x,y) + d(x,y)$
-
-
-For a generic population model
-that depends not only on population state $x$ but also on environmental
-factors $y$, it is possible to derive the steady-state variance
-(Appendix B) as:
 
 $$
+
+Note that the fluctuations in population density $x$ depends as before on the fluctuation-disspation tradeoff, $2 \frac{\partial a_1}{\partial x} \langle \xi^2 \rangle + a_2$, but include the additonal term arising from a covariance with the environmental flucatuations. We can simplify this expression as before by considering the equilibrium noise dynamics
+
+$$
+\langle \xi^2 \rangle = \underbrace{-\frac{a_2}{2\partial_x a_1}}_{\textrm{demographic noise}} + \underbrace{\frac{\left[\partial_{y} a_1\right] ^2}{\partial_x a_1 - \beta} \frac{\langle\eta^2\rangle}{2\partial_x a_1}}_{\textrm{environmental contribution}}
+$$
+
+Here we have the familiar demographic noise term, coupled to an environmental noise contribution which depends on the details of how the environmental noise enters the macroscopic model, $\partial_y a_1$, as well as the relative correlation times $\partial_x a_1$ and $\beta$ of the population process and environmental process.
+Note that we have left this expression in terms of $\langle \eta^2 \rangle$, rather than subsituting in the equilibrium expression 
+
+$$\langle \eta^2 \rangle = \frac{\gamma_e^2}{2\beta},$$
+
+so that we can consider separately the limit of white environmental noise without also increasing the variance of the process. Changing the correlation while holding the total variation $\langle \eta^2\rangle$ constant thus amounds to increasing the intrinsic noise level $\gamma^2$ proportionally.  In general, a more mechanistic description of what it means to change the autocorrelation of an environmental process for a given variance is needed.  Nevertheless, considering the the white noise limit with some fixed variance, when $\beta \ll \partial_x \alpha_1$,  this expression simplifies as:
+
+
+$$
+\langle \xi^2 \rangle = \underbrace{-\frac{a_2}{2\partial_x a_1}}_{\textrm{demographic noise}} +  \underbrace{\frac{1}{2} \left[\frac{\partial_{y} a_1}{ \partial_x a_1}\right] ^2}_{\textrm{environmental coupling}} \langle\eta^2\rangle
+$$
+Taking extinction as such a Gaussian white noise process with meant $\bar e$ and variance $\sigma_e^2$, we can plug in our birth-death equations for the Levins model (and rescaling by system size, from $x = n/N$ back to $n = xN$), into the above equation to find the expected fluctuations are: 
+
+$$\sigma_n^2 = \frac{\bar e}{c}N + \frac{\left[(1-\frac{\bar{e}}{c}) N\right]^2}{(\bar e-c)^2} \sigma_e^2$$
+
+where we recognize the term $(1-\frac{\bar{e}}{c}) N$ as the equilibrium population size, $\bar n$.  Meanwhile, if timescale of environmental fluctuations is much longer than population fluctuations (a red noise limit, $\beta \gg \partial_x \alpha_1$) this can instead be written as
+
+$$
+\langle \xi^2 \rangle = \underbrace{-\frac{a_2}{2\partial_x a_1}}_{\textrm{demographic noise}} + \underbrace{- \frac{\left[\partial_{y} a_1\right] ^2}{2\partial_x a_1 \beta}}_{\textrm{environmental coupling}}  \langle\eta^2\rangle
+$$
+(Recall that we have taken these expressions at equilibrium, and at equilibrium the derivative of the macroscopic equation $\partial_x a_1 < 0$ by definition, which guarentees the variances above are strictly positive).  In this limit ($\beta \gg \partial_x \alpha_1$), the overall noise decreases both with stronger dampening / higher autocorelation in the environmental process, (larger $\beta$) just as it does with increased dampening in population dynamics $\partial_x a_1$.  
+
+<!--
+## Crowley model
+
+Consider the Crowley model \cite{Crowley05} of competition for space:
+
 \begin{align}
-&\sigma_x^2  = \frac{  \partial_y a_1(x,y) ^2}{ \partial_x a_1(x,y) ^2 +  \tau_c \phantom\cdot \partial_x a_1(x,y)  } \sigma_e^2 + \frac{1}{2} \frac{a_2(x,y)}{\partial_x a_1(x,y)}
+\dot x &= b_1 x (1-x-y) - d_1 x + cxy \\
+\dot y &= b_2 y (1-x-y) - d_2 y - cxy
 \end{align}
+
+Where $x$ and $y$ are the respective densities of two species competing for space.  In the model species $x$ is the better competitor, displacing species $y$ from patches at rate $cyx$, while species $y$ is the better colonizer when $b_2 > b_1$, taking $d_1 = d_2$ for simplicity.  Under this competition-colinization trade-off, this the deterministic skeleton supports stable coexistence of both species.  We intepret this as an individaul model analgous to the Levins model, with a finite number of patches $N$ that both species compete to occupy. Taking $N$ as our system size ($\Omega$), we have $n_x = \Omega x + \Omega^{1/2} \xi$ and $n_y = \Omega y + \Omega^{1/2} \eta$, we proceed much as before to derive the fluctuation equations:
+
+$$
+\begin{align*}
+\partial_t \sigma_{\xi}^2 &= 2( b_1(1-2x-y) + c y-d_1 )\sigma_{\xi}^2 \\ 
+& \quad + 2( -b_1x+cx )\langle x y \rangle		 \\
+& \quad + b_1 x(1-x-y) + c x y+d_2 x)\\
+\sigma_{\eta}^2 &= 2(b_2(1-2y-x) - c x-d_2)\sigma_{\eta}^2							\ \\
+& \quad + 2(-b_2 y-c y)\langle \xi \eta \rangle								\\
+& \quad + b_2 y(1-x-y) + c x y+d_2 y)\\
+\langle \xi \eta \rangle &= b_1(1-2x-y)+c y-d_1)\langle \xi \eta \rangle			 \\
+& \quad + (-b_1 x+c x) \sigma^2_{\eta}										 \\ 
+& \quad + (-b_2 y - c y)\sigma^2_{\xi}										 \\ 
+& \quad + (b_2(1-2 y-x) - c x - d_2)\langle \xi \eta \rangle - c x y;
+\end{align*}
 $$
 
-where $\sigma_e^2$ is the variance in the environmental noise and
-$\tau_c$ the auto-correlation of that noise.  
+These three coupled equations can be solved by numerical integration, which we compare to individual-based simulation of the Crowley competition model, Fig~\ref{crowley}.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=.5\textwidth]{crowley_fluc.png}
+\caption{Fluctuations for species $x$ in black and $y$ in red.  Smooth curves are theoretical predictions of variance within each population.  Model parameters: $b_1 = 0.2$, $b_2 = 0.6$, $d_1 = d_2 = c = 0.1$, $N=1000$, plots based on exact Gillespie simulations averaged over an ensemble of $10^2$ realizations.}\label{crowley}
+\end{center}
+\end{figure}
 
 
 
-
-
-
+Mimicking the structure of the Levins model only in multiple dimensions, this model can also provide a simple mechanistic illustration of the impact of "environmental," e.g. exogenous, noise as well as demographic noise on a system.  We can focus on the dynamics of a single species, say, $y$, treating the role of species $x$ as some external disturbance that can make open patches temporarily uninhabitable and displace inhabited patches.  
+-->
 
 
 

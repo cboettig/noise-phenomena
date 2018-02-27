@@ -274,7 +274,7 @@ known as the "master equation" [@vanKampen2007].  Note that in general
 this approach is equally applicable to stochastic transitions of any sort,
 not just step sizes of +/- 1 and not just birth and death events, but
 can include transitions between stage classes or trait values, including
-mutations to continuously-valued traits in evolutionary dynamics [e.g. @Boettiger2009]. 
+mutations to continuously-valued traits in evolutionary dynamics [e.g. @Boettiger2010]. 
 
 
 The @Gillespie1977 provides an exact algorithm
@@ -395,13 +395,13 @@ In the interests of a theoretical synthesis, I observe that this result
 is *different* than the canonical equation, Eq \eqref{canonical}, or more generally
 the diffusion approximation [or Kramer-Moyal expansion @Kramers1940; @Moyal1949; @Gardiner2009]
 which is much more typical in the ecological literature [e.g. the books of @Nisbet1982 and @Lande2003
-or the review in @Ovaskeinen2010]. @Black2012 gives an excellent introduction 
+or the review in @Ovaskainen2010]. @Black2012 gives an excellent introduction 
 to the van Kampen expansion as a connection between individual-based and population-level
 model descriptions and applications, but fails to point out these differences,
 mistakenly characterizing the van Kampen expansion as synonomous with the diffusion approximation.
 In brief, the diffusion approximation does not lead to a Gaussian distribution
 (equivalently, an SDE or PDE with linear noise term, see Appendix B), but rather
-a *non-linear* SDE of the form (e.g. @Ovaskeinen2010)
+a *non-linear* SDE of the form (e.g. @Ovaskainen2010)
 
 
 \begin{equation}
@@ -416,7 +416,7 @@ this approximation on firmer grounds).  Second, the non-linear SDE formulation c
 prove more difficult to work with than the convenient ODE expressions from van Kampen,
 Eq \eqref{\vanKampen} (which can be expressed as a coupled ODE for the mean and 
 a linear SDE for deviations).  Third, while both approximations break down
-in the case of large deviations [see @Ovaskeinen2010], the van Kampen expansion
+in the case of large deviations [see @Ovaskainen2010], the van Kampen expansion
 shows that the macroscopic equation will continue to hold even when the 
 variance does not; in contrast to the non-linear SDE from the diffusion approximation.
 
@@ -546,7 +546,7 @@ simple intuition for the mechanisms involved.
 ## Persistence and coexistence  
 
 The loss of a species is without a doubt one of the most important
-possible consequences of noise, and unsurprisingly few topics have
+possible consequences of noise. Unsurprisingly few topics have
 recieved greater attention then the question of the persistence of
 a given species [e.g. @Kendall1949;  @Bartlett1955; @Bartlett1960;
 @Lande1993; @Saether1998; @Coulson2001; @Schreiber2010] and coexistence
@@ -572,21 +572,21 @@ distribution concentrated around the deterministic attractor,
 and to prove the probability of extinction decreases exponentially with 
 system size [@Ovaskainen2010; @Schreiber2017]. We will turn our attention
 away from the well-trodden ground of persistence and coexistence to focus
-on other phenomena that 
+on other phenomena that can emerge in stochastic models.  This will
+highlight the importance of noisy phenomena beyond the ability to obscure
+a deterministic skeleton of some underlying process or in driving extinctions,
+but rather in shaping and driving other interesting patterns we observe in
+natural systems. It is these phenomena that will also underpin the third
+transition in which noise can be turned to our advantage as a source
+of information about ecological processes.
 
-
-
-here we will focus on a few examples of stochastic phenomena 
-that can emerge on shorter time scales and provide some intuition for 
-how the interaction between stochastic an nonlinear dynamics can 
-create these surprising results.  
 
 <!--
 
 Insufficient space left for any treatment of these...
 Permenance, robust permenance
 
-**Bet hedging**, Lewontin & Cohen 1969; Levins 1969; 
+**Bet hedging**, @Lewontin1969 & Cohen 1969; Levins 1969; 
 
 -->
 

@@ -111,17 +111,24 @@ between respective primarily theoretical and primarily empricial communities by
 seeing noise not as mathematical curiousity or statistical bugbear, but as a
 source for new opportunities for inference. 
 
+
+
+The gap between theory-focused specialists and more empirically minded non-specialists
+is particularly acute in the ecological literature on stochastic processes, making
+a review of 
+
+
+
 As the literature on stochastic modeling in ecology is both extensive and often
 technical, and so rather than attempt a comprehensive review, this synthesis
 will focus on the simplest examples necessary to illustrate this broader trend
-in the changing way we think about the role of noise and the opportunity
-that shift can present to better bridge theoretical and empirical communities.
+in the changing way we think about the role of noise.
 To that end, I will focus on examples from simple population models, echoing
 the motivation of @Bartlett1960 to focus on basic theoretical aspects common
 across models. In so doing, we will ignore the equally rich literature of 
 stochastic models in evolution [@Lenormand2009] and population genetics
 [e.g. @Ewens2004]. In an effort to make these themes accessible to more emprical
-readers, I will also focus on simplest examples necessary, with only passing
+readers, I will rely on the simplest examples necessary, with only passing
 mention of the rich literature extending these concepts to more realistic
 models.  It is easy to critique this choice: indeed, one might summarize decades
 of research in noting the twin observations that (1)  ecology is complex and (2)
@@ -137,6 +144,10 @@ correlated [@Ripa; @Ripa1999; @Petchey, @Schreiber2010; @Lee2017; @Spanio2017] o
 the interaction of ecological and evolutionary processes [@Saether1997; @Ozgul2009;
 @Lenormand2009; @Vindenes2015; @Schreiber2015]. In this we follow @Levins1966 in
 sacrificing realism for generality.
+
+
+
+
 
 In this spririt, I provide concise, detailed and commented
 code for simulating each of the models presented in Appendix A.
@@ -462,7 +473,7 @@ population to be:
 
 $$\sigma_n^2 = \frac{\bar e}{c}N + \frac{\left[(1-\frac{\bar{e}}{c}) N\right]^2}{(\bar e - c)^2} \sigma_e^2$$
 
-where $\left[(1-\frac{\bar{e}}{c}) N$ is the equilibrium population size.
+where $(1-\frac{\bar{e}}{c}) N$ is the equilibrium population size.
 This reflects the assumption of the canonical equation, Eq \eqref{canonical}
 that the standard deviation scales in direct proportion to the system size $N$,
 while the demographic noise scales as the square root.  Consequently,

@@ -379,7 +379,8 @@ $$
 \langle \xi^2 \rangle = \underbrace{-\frac{a_2}{2\partial_x a_1}}_{\textrm{demographic noise}} + \underbrace{\frac{\left[\partial_{y} a_1\right] ^2}{\partial_x a_1 - \beta} \frac{\langle\eta^2\rangle}{2\partial_x a_1}}_{\textrm{environmental contribution}}
 $$
 
-Here we have the familiar demographic noise term, coupled to an environmental noise contribution which depends on the details of how the environmental noise enters the macroscopic model, $\partial_y a_1$, as well as the relative correlation times $\partial_x a_1$ and $\beta$ of the population process and environmental process.
+note that this process provides a justification for moving the noise from 'inside' the deterministic skeleton to merely an additive Gaussian random variable on the end of the determinstic process.  The details of how the noise term enter the dynamics are reflected in the dervative of the population equation with respect to the environmental variable, $\partial_y a_1(x,y)$, as well as the relative correlation times $\partial_x a_1$ and $\beta$ of the population process and environmental process.  This environmental contribution adds on to the variance contributed by the demographic noise.  Both demographic and environmental noise contributions are 'damped' in proportion to the stability of the macroscopic equation, $\partial_x a_1$.  
+
 Note that we have left this expression in terms of $\langle \eta^2 \rangle$, rather than subsituting in the equilibrium expression 
 
 $$\langle \eta^2 \rangle = \frac{\gamma_e^2}{2\beta},$$

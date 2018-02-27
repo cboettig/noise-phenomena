@@ -451,53 +451,70 @@ Levins model.
 
 ## Environmental stochasticity
 
-The van Kampen expansion can also be useful in illustrating how 
-environmental noise enters a model as a separate process or dimension.
+The van Kampen expansion can also be useful in illustrating how extrinsic
+factors such as environmental noise enter into a stochastic model.
 Like the expansion of demographic noise, this derivation leads to 
 environmental noise that is approximately Gaussian in distribution,
-but unlike the canonical model, leads to explicitly autocorrelated rather 
-than white noise (see derivation, Appendix B).  This result is intuitive:
-for continuous time models, all fluctations are positively auto-correlated
-by definition -- measure any continuous process at ever-closer intervals in
-time and these measurements must converge. As the derivation makes it clear,
-it is in fact the *relative* time scales of the environmental process
-and population level process that really matter.  The degree of coupling
-to environmental noise also depends on the derivative of the population 
-dynamics with respect to the stochastically varying environmental variable:
-the larger that derivative, the stronger the contribution of environmental
-fluctuations to population fluctuations. For example, if extinction
-rate $e$ in our Levins' model is allowed to vary
-stochastically as Gaussian white noise with variance $\sigma_e^2$
-and mean $\bar e$, we find the expected variance introduced in the
-population to be:
+but unlike the canonical model, leads to explicitly autocorrelated noise 
+(see derivation, Appendix B).  Auto-correlated or "colored" environmental
+noise has been a topic of significant theoretical interest 
+[e.g. @Roughgarden; @Ellner; @Lawton; @Ripa1999; @Marshall2015], but such 
+formulations start from the empirical observation of autocorrelation 
+in environmental time series rather than a process-based derivation.
+As the expansion clearly shows, any bounded continuous-time process will
+involve auto-correlation -- measure a continuous process at ever-closer intervals in
+time and these measurements must converge. As the derivation in Appendix B makes clear,
+it is rather the the *relative* time scales of the environmental process
+and population level process that really matter (more precisely, the relative 
+magnitudes of the autocorrelation time of the environmental dynamics and population dynamics.)
+An environment with comparatively short autocorrelation scale will act
+effectively as white noise upon the population dynamics.  
+
+
+
+
+The van Kampen expansion for extrinsic factors (appendix B) also highlights
+the importance of how environmental noise couples to the population dynamics.
+A mechanistic description of environmental noise acts directly on parameters
+of the ecological model: for instance, in our Levins' model we may imagine
+that the extinction rate of patches does not occur at some fixed rate $e$
+but rather at some stochastically fluctuating rate of a given mean, variance,
+and autocorellation.  The system size expansion illustrates how we replace
+a model where stochasticity is nested inside some parameter into the simpler
+format of the canonical equation where this contribution can be merely added
+on as Gaussian noise at the end of a deterministic skeleton.  (The expansion
+derives that the environmental noise is proportional to the square of the derivative
+of the deterministic skeleton with respect to the environmental variable,
+see appendix B.) Thus for the Levin's model, we can capture the fluctuations
+introduced by demographic and environmental noise at equilibrium as
+a Gaussian distribution with variance given by the sum of of demographic
+and environmental contributions:
 
 $$\sigma_n^2 = \frac{\bar e}{c}N + \frac{\left[(1-\frac{\bar{e}}{c}) N\right]^2}{(\bar e - c)^2} \sigma_e^2$$
 
 where $(1-\frac{\bar{e}}{c}) N$ is the equilibrium population size.
 This reflects the assumption of the canonical equation, Eq \eqref{canonical}
-that the standard deviation scales in direct proportion to the system size $N$,
+that the standard deviation (e.g. square root of the variance) scales in direct proportion to the system size $N$,
 while the demographic noise scales as the square root.  Consequently,
 for a large system, the demographic contribution becomes proportionally smaller
 while the environmental contribution remains the same. 
 
+These examples of how a stochastic model arises from both intrinsic and extrinsic
+sources of noise through the use of the system size expansion serve both
+as critique and justification of the familiar notion of a stochastic model as 
+a deterministic skeleton plus some Gaussian white noise term.  Critique, because
+the expansions show that both "noise" and "deterministic skeleton" are the 
+result of lower-level mechanistic processes, whose precise form will 
+depend on the details of those processes.  Yet the expansion also shows us that
+this Gaussian noise description can be a surprisingly good approximation,
+that noise intensity will converge to a stationary value whenever the system
+dynamics have a stable point, and that the contribution of extrinsic
+(i.e. environmental) noise factors will dominate in large systems.  These
+justifications will allow us to pursue our analysis of noise-driven phenomena
+using simple models in which a nonlinear deterministic skeleton is driven by
+Gaussian environmental noise. 
 
-This
-environmental variation no doubt also arises from some more detailed
-lower level process, but we need not be explicit about those dynamics
--- the expansion tells us that it is sufficient to know the overall
-variance and the degree of auto-correlation.  Recent work has also
-highlighted the importance of including both demographic and
-environmental noise [@Melbourne2008; @Bonsall2004].  The system
-size expansion still requires the assumption that the noise is small
-relative to the system size.  In the case of large fluctuations,
-this approximation must be replaced with a different approach, such
-as the WKB approximation, as discussed in @Ovaskainen2010.
 
-The importance of auto-correlation, has and continues to be a subject of
-significant interest in the study of stochastic population dynamics
-[e.g.@Roughgarden; @Ellner; @Lawton; @Ripa1999; @Marshall2015].
-Early work often assumed environmental noise would be
-uncorrelated as a mathematical convenience. 
 
 <!-- This can be condensed or dropped to save space -->
 
@@ -619,7 +636,7 @@ read_csv("../appendixA/quasicycles.csv") %>%
 
 ## Quasi-cycles 
 
-<!--  -->
+<!-- Justify and contrast models to individual noise -->
 
 Understanding the origin of sustained oscillations has long been a
 central question in ecology [@Hastings1996; @Bjornstad2001].  The
@@ -846,6 +863,10 @@ population in a changing environment  [@Balaban2004].
 -->
 
 # Noise the informer: Noise can provide novel information
+
+
+<!-- More frank introduction to this section, see reply to Reviewer 1-->
+
 
 One of the most interesting aspects of noise is as a source of
 additional information.  This can be realized in a variety of ways.

@@ -92,23 +92,23 @@ We hope that these papers will combine a mix of synthetic reviews of the current
 
 # Introduction: Noise the nuisance
 
-To the empricical ecologist, stochasticity, or more simply, "noise,"
+To the empirical ecologist, stochasticity, or more simply, "noise,"
 is just that -- something which obscures patterns we are trying to infer [@Knape2011];
-and an ever richer batteries of stastical methods are developed largely in an
+and an ever richer batteries of statistical methods are developed largely in an
 attempt to strip away this undesirable randomness to reveal the patterns
 beneath [@Coulson2001].  Over the past several decades, theoretical ecology has transitioned
-from thinking of stochasticity in such terms; where noise is a nuciance
+from thinking of stochasticity in such terms; where noise is a nuisance
 that obscures the "deterministic skeleton" of the underlying mechanisms,
 to the recognition that stochasticity can itself be a mechanism for 
-driving many interesting phenomena [@Coulson2004].  Yet this transistion from "noise the nuisance"
+driving many interesting phenomena [@Coulson2004].  Yet this transition from "noise the nuisance"
 to "noise the creator" of ecological phenomena has had, with a few notable exceptions,
-relatively little impact in empricial thinking about stochasticity.  One of the
+relatively little impact in empirical thinking about stochasticity.  One of the
 most provocative of those exceptions has turned the classical notion of noise
 the nuisance on its head: recognizing that noise driven phenomena can become a tool
 to reveal underlying processes: to become "noise the informer."  Here I argue that
 this third shift in perspective offers an opportunity to better bridge the divide
-between respective primarily theoretical and primarily empricial communities by 
-seeing noise not as mathematical curiousity or statistical bugbear, but as a
+between respective primarily theoretical and primarily empirical communities by 
+seeing noise not as mathematical curiosity or statistical bugbear, but as a
 source for new opportunities for inference. 
 
 
@@ -116,7 +116,7 @@ source for new opportunities for inference.
 The gap between theory-focused specialists and more empirically minded non-specialists
 is particularly acute in the ecological literature on stochastic processes, making
 a review of 
-
+<!-- FIXME -->
 
 
 As the literature on stochastic modeling in ecology is both extensive and often
@@ -127,7 +127,7 @@ To that end, I will focus on examples from simple population models, echoing
 the motivation of @Bartlett1960 to focus on basic theoretical aspects common
 across models. In so doing, we will ignore the equally rich literature of 
 stochastic models in evolution [@Lenormand2009] and population genetics
-[e.g. @Ewens2004]. In an effort to make these themes accessible to more emprical
+[e.g. @Ewens2004; @Gillespie2004]. In an effort to make these themes accessible to more empirical
 readers, I will rely on the simplest examples necessary, with only passing
 mention of the rich literature extending these concepts to more realistic
 models.  It is easy to critique this choice: indeed, one might summarize decades
@@ -149,7 +149,7 @@ sacrificing realism for generality.
 
 
 
-In this spririt, I provide concise, detailed and commented
+In this spirit, I provide concise, detailed and commented
 code for simulating each of the models presented in Appendix A.
 Simulations permit poking and prodding of empirically-minded
 investigation unencumbered by either experimental design or mathematical formalism.
@@ -189,7 +189,7 @@ they introduce are intended to reflect intrinsic or extrinsic factors.
 Early quantitative ecological models first formulated at the population
 level in deterministic settings. The notion of a deterministic
 "skeleton" -- responsible for the phenomena of interest -- that is obscured
-from view by the nusiance of noise has slowly given way to recognition
+from view by the nuisance of noise has slowly given way to recognition
 that stochastic and deterministic elements not only interact in 
 interesting ways [@Coulson2004] but also share a common origin [e.g. @Black2012].
 A central theme of stochastic modeling research over the past
@@ -203,7 +203,7 @@ is only as a simplification or summary of the effects of a large
 number of other processes, often occurring at different scales.
 This literature has largely divided the origins of stochasticity between 
 *intrinsic* factors: where stochasticity is introduced to reflect
-the reality that our variables of interest are intriniscally 
+the reality that our variables of interest are intrinsically 
 statistical averages of lower-level processes, and *extrinsic*
 factors: where stochasticity reflects the impact of other variables
 we are not explicitly modeling at all [e.g. @Keeling2012].  **Demographic stochasticity**
@@ -212,7 +212,7 @@ which reflects the fact that the continuous variable we often think of a
 "population size" or "population density" is an average over a 
 lower level process of births and deaths among a finite number of 
 individuals [@Melbourne2012].  **Environmental stochasticity** is the primary example 
-of an extinsic factor, reflecting the fact that parameters we may
+of an extrinsic factor, reflecting the fact that parameters we may
 treat as constants in a model in fact depend on variables such as 
 temperature or soil moisture that are not explicitly modeled by our 
 equations, but simplified into statistical summaries of those processes
@@ -226,7 +226,7 @@ inherently probabilistic properties: births and deaths of organisms all have
 far more mechanistic explanations which we simply summarize in statistical terms:
 on average -- that is, summing over a wide range of possible mechanisms we have chosen
 not to explicitly model -- an individual death occurs at rate $\lambda$.  
-This is in fact an extrinisic factor (variables not modeled explicitly),
+This is in fact an extrinsic factor (variables not modeled explicitly),
 which makes birth appear probabilistic; (just as we describe the toss of a coin
 as probabilistic when in fact it is a mechanistic outcome of Newton's laws).  
 Demographic stochasticity arises only subsequently, when we change scales from
@@ -255,7 +255,7 @@ model, established in highly influential papers of @Leigh1981, @Lande1993,
 
 
 
-Where $\textrm{d}B_t^{(d)}$ and $\textrm{d}B_t^{(e)}$ refer to Brownian processes, (i.e. Gaussian white noise process) for demographic and environmental stochasticity respectively.  When $f(n)$ is simply a Verhulst logistic function this is often referred to as the canonical model [e.g. @Ovaskainen2010], and provides a clear illustration of the partition of separate deterministic and stochastic elements. Significant research continues to focus on extending the study of this model to consider more complex and higher-dimensional $f(n)$ (coexistence models, stage structured models) and consider the case of autocorrelated, rather than than white noise of $\textrm{d}B_t^{(e)}$.  
+Where $\textrm{d}B_t^{(d)}$ and $\textrm{d}B_t^{(e)}$ refer to Brownian processes, (i.e. Gaussian white noise process) for demographic and environmental stochasticity respectively.  When $f(n)$ is simply a Verhulst logistic function this is often referred to as the canonical model [e.g. @Ovaskainen2010], and provides a clear illustration of the partition of separate deterministic and stochastic elements. Significant research continues to focus on extending the study of this model to consider more complex and higher-dimensional $f(n)$ (coexistence models, stage structured models) and consider the case of auto-correlated, rather than than white noise of $\textrm{d}B_t^{(e)}$.  
 
 Before we follow that path, we will examine how this canonical model can emerge from a lower-level description and how it can deviate from that description. This approach will also set the stage to see how our understanding of stochastic models can be extended to better reflect natural processes that shape not only for the so-called deterministic skeleton, but the noise as well.  In so doing, I will highlight two tools fundamental to this analysis, one computational and one analytical: the exact simulation method of @Gillespie1977's stochastic simulation algorithm (SSA), and the van Kampen system size expansion [@vanKampen1976].
 
@@ -290,8 +290,8 @@ mutations to continuously-valued traits in evolutionary dynamics [e.g. @Boettige
 
 The @Gillespie1977 provides an exact algorithm
 for simulating demographic stochasticity at an individual level.  
-The algorithm is merely a simple and direct implemtentation of the master
-equation, progressing in random step sizes deterimed
+The algorithm is merely a simple and direct implementation of the master
+equation, progressing in random step sizes determined
 by the waiting time until the next event.
 Free from both the approximations and mathematical complexity,
 the Gillespie algorithm is an interesting example of where we rely on a
@@ -303,11 +303,11 @@ it was first developed in the 70s, and remains an underutilized approach
 for writing simple and approximation-free[^2] stochastic ecological models. 
 
 [^2]: that is, free from the approximation made by SDE models as we see in the
-van Kampen example.  All models are, of course, only approixmations. 
+van Kampen example.  All models are, of course, only approximations. 
 
 As our objective is to tie the origins of noise more closely to biological
 processes, it will be helpful to make the notion of a master equation concrete
-with a spefiic example.  We will focus on the classic case of @Levins1969 patch model,
+with a specific example.  We will focus on the classic case of @Levins1969 patch model,
 to illustrate the Gillespie algorithm and the van Kampen system size expansion
 
 \begin{align}
@@ -325,10 +325,10 @@ We choose this model because it has precisely same functional form
 as the ubiquitous logistic growth model, $\frac{\ud n}{\ud t} = rn (1 - \tfrac{n}{K})$
 but is explicit about how this net growth rate is divided between
 birth and death rate.  As we shall see, this is not merely a notational
-convience but leads to real differences in observed stochastic properties
+convenience but leads to real differences in observed stochastic properties
 of the model. Both the numerical approach (details in Appendix A) and the 
 analytical approach (Appendix B) illustrate that it is straight-forward
-to use this same approach in alternate formuluations.  
+to use this same approach in alternate formulations.  
 
 Figure \ref{gillespie} shows the results of two exact SSA simulations of this model with
 identical parameters except for the total number of available sites,
@@ -358,11 +358,11 @@ for a generic birth death process and comparison with the more familiar diffusio
 approximation are found in Appendix B.  
 
 van Kampen's approximation follows a central-limit theorem style argument established rigorously in
-the theorems of Kurtz at about the same time [@Kurtz1970 & @Kurtz1971, @Kurtz1972, in particular, see Thereom 4.4. @Kurtz1978].
+the theorems of Kurtz at about the same time [@Kurtz1970 & @Kurtz1971, @Kurtz1972, in particular, see Theorem 4.4. @Kurtz1978].
 The heart of the approximation is to imagine a population on some large landscape of which
 we sample only a fixed area to estimate the population density.  That area is our 
 system size, which as it expands includes more and more total individuals and
-experiences proportionally smaller fluctionations in population density.  This 
+experiences proportionally smaller fluctuations in population density.  This 
 results in the conclusion that the population density obeys a simple Gaussian
 distribution, whose mean size $x$ and variance  $\sigma^2$ are given by *ordinary* differential equations:
 
@@ -375,12 +375,12 @@ distribution, whose mean size $x$ and variance  $\sigma^2$ are given by *ordinar
 This result is striking for a variety of reasons.  First, we see the recovery of the 
 "deterministic skeleton," in which we naively replace population density $x/N$ for
 population count $n$ describes the *expected* density of the population
-(i.e. averaged over an esemble of replicate realizations of the Gillespie simulations),
+(i.e. averaged over an ensemble of replicate realizations of the Gillespie simulations),
 and with remarkable accuracy, up to order $1/N$, i.e. a single individual.^[We can actually extend the van Kampen expansion to higher order and successfully approximate even this higher-order correction to the mean dynamics, recovering the phenomenon of stochastic inflation [@Gonzalez2002], where the average population size can be larger or smaller than predicted by the deterministic model depending on the curvature of the macroscopic equation].
 The variance term is equally interesting.  First, we note that noise arises from
 the interaction of individual birth and death events that defined our process,
 illustrating the origins of this noise.  Because both individual events of births
-and deaths add randomness, they both add to the growth of varation observed, i.e.
+and deaths add randomness, they both add to the growth of variation observed, i.e.
 $b(x) + d(x)$.  Second, we see that dynamics for the variance $\sigma^2$ are *non-linear* whenever
 $b(x)$ or $d(x)$ are non-linear, so that different values of the population density
 will experience different noise intensities! In fact, this variance can only
@@ -388,18 +388,18 @@ have an equilibrium size if the macroscopic equation has an equilibrium ($\parti
 Third, this expansion shows the variance
 equation is also less precise, accurate only to order $1/\sqrt{N}$. 
 This variance equation will be important to us later as we examine the relative
-roles of noise and nonlinearity in noise-driven phenomena such as stochastic
+roles of noise and non-linearity in noise-driven phenomena such as stochastic
 transitions between alternate stable states.  
 
 The expected auto-correlation, $\langle x_0, x_t \rangle$ also follows from the
 system size expansion, e.g. at stationary state:
 
 $$\langle x_0, x_{t} \rangle = \frac{b(x) + d(x)}{2 \partial_x \left[ b(x) - d(x) \right]} \exp\lbrace  -t \left| \partial_x b(x) - \partial_x d(x) \right|  \rbrace $$
-which will also prove useful later on.  Note this expression simply states that the equilbrium
+which will also prove useful later on.  Note this expression simply states that the equilibrium
 variance is a balance between noise terms, $b(x)+ d(x)$ and the slope or eigenvalue of the
 deterministic skeleton, $2 \partial_x \left[ b(x) - d(x) \right]$, (a balance that forms the basis of the
-the fluctuation-disspation theorem) and that correlations fall off exponentially at a rate given by this slope.   
-We will see both autocorrelation and variance play similar roles to infer this eigenvalue when we 
+the fluctuation-dissipation theorem) and that correlations fall off exponentially at a rate given by this slope.   
+We will see both auto-correlation and variance play similar roles to infer this eigenvalue when we 
 reach the role of noise as informer.  
 
 In the interests of a theoretical synthesis, I observe that this result
@@ -409,7 +409,7 @@ which is much more typical in the ecological literature [e.g. the books of @Nisb
 or the review in @Ovaskainen2010]. @Black2012 gives an excellent introduction 
 to the van Kampen expansion as a connection between individual-based and population-level
 model descriptions and applications, but fails to point out these differences,
-mistakenly characterizing the van Kampen expansion as synonomous with the diffusion approximation.
+mistakenly characterizing the van Kampen expansion as synonymous with the diffusion approximation.
 In brief, the diffusion approximation does not lead to a Gaussian distribution
 (equivalently, an SDE or PDE with linear noise term, see Appendix B), but rather
 a *non-linear* SDE of the form (e.g. @Ovaskainen2010)
@@ -421,7 +421,7 @@ a *non-linear* SDE of the form (e.g. @Ovaskainen2010)
 
 This better-known approach has several potential draw-backs.  First, as noted in @vanKampen2007 or
 @Gardiner2009 (see Appendix B), the Kramer-Moyal expansion approach rests on rather
-a more dubious double limit that often has no clear biological intepretation and
+a more dubious double limit that often has no clear biological interpretation and
 can restrict its validity (though I believe theorem 3.3 of @Kurtz1978 establishes
 this approximation on firmer grounds).  Second, the non-linear SDE formulation can
 prove more difficult to work with than the convenient ODE expressions from van Kampen,
@@ -455,19 +455,19 @@ The van Kampen expansion can also be useful in illustrating how extrinsic
 factors such as environmental noise enter into a stochastic model.
 Like the expansion of demographic noise, this derivation leads to 
 environmental noise that is approximately Gaussian in distribution,
-but unlike the canonical model, leads to explicitly autocorrelated noise 
+but unlike the canonical model, leads to explicitly auto-correlated noise 
 (see derivation, Appendix B).  Auto-correlated or "colored" environmental
 noise has been a topic of significant theoretical interest 
 [e.g. @Roughgarden; @Ellner; @Lawton; @Ripa1999; @Marshall2015], but such 
-formulations start from the empirical observation of autocorrelation 
+formulations start from the empirical observation of auto-correlation 
 in environmental time series rather than a process-based derivation.
 As the expansion clearly shows, any bounded continuous-time process will
 involve auto-correlation -- measure a continuous process at ever-closer intervals in
 time and these measurements must converge. As the derivation in Appendix B makes clear,
 it is rather the the *relative* time scales of the environmental process
 and population level process that really matter (more precisely, the relative 
-magnitudes of the autocorrelation time of the environmental dynamics and population dynamics.)
-An environment with comparatively short autocorrelation scale will act
+magnitudes of the auto-correlation time of the environmental dynamics and population dynamics.)
+An environment with comparatively short auto-correlation scale will act
 effectively as white noise upon the population dynamics.  
 
 
@@ -479,13 +479,13 @@ A mechanistic description of environmental noise acts directly on parameters
 of the ecological model: for instance, in our Levins' model we may imagine
 that the extinction rate of patches does not occur at some fixed rate $e$
 but rather at some stochastically fluctuating rate of a given mean, variance,
-and autocorellation.  The system size expansion illustrates how we replace
+and auto-correlation.  The system size expansion illustrates how we replace
 a model where stochasticity is nested inside some parameter into the simpler
 format of the canonical equation where this contribution can be merely added
 on as Gaussian noise at the end of a deterministic skeleton.  (The expansion
 derives that the environmental noise is proportional to the square of the derivative
 of the deterministic skeleton with respect to the environmental variable,
-see appendix B.) Thus for the Levin's model, we can capture the fluctuations
+see appendix B.) Thus for the Levins' model, we can capture the fluctuations
 introduced by demographic and environmental noise at equilibrium as
 a Gaussian distribution with variance given by the sum of of demographic
 and environmental contributions:
@@ -578,7 +578,7 @@ simple intuition for the mechanisms involved.
 
 The loss of a species is without a doubt one of the most important
 possible consequences of noise. Unsurprisingly few topics have
-recieved greater attention then the question of the persistence of
+received greater attention then the question of the persistence of
 a given species [e.g. @Kendall1949;  @Bartlett1955; @Bartlett1960;
 @Lande1993; @Saether1998; @Coulson2001; @Schreiber2010] and coexistence
 of multiple species [@Caswell1978; @Tuljapurkar1980; @Chesson1981;
@@ -589,7 +589,7 @@ and theorems [e.g. see @Schreiber2012 and @Schreiber2017 for an excellent
 overview and synthesis of persistence and coexistence respectively],
 and continuing to extend such results to more complex contexts 
 [@Ovaskainen2010 provides one excellent review], in
-particular addressing autocorrelated noise [e.g. @Ripa; @Ripa1999; 
+particular addressing auto-correlated noise [e.g. @Ripa; @Ripa1999; 
 @Petchey, @Schreiber2010; @Lee2017; @Spanio2017] , spatial structure
 [e.g. @Durrett1994; @Hastings1994; @Dieckmann2000; @Kerr2002; @Schreiber2010] and stage structure
 [e.g. @Cohen1979; @Tuljapurkar1989; @Caswell2009; @Metcalf2015; @Vindenes2017b], 

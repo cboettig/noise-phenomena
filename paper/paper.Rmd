@@ -307,10 +307,10 @@ even in the case of simple models such as we will discuss.  Though the
 algorithm is often maligned as numerically demanding, it can be run much
 more effectively even on large models on today's computers than when
 it was first developed in the 70s, and remains an underutilized approach
-for writing simple and approximation-free[^2] stochastic ecological models. 
+for writing simple and approximation-free^[that is, free from the approximation
+made by SDE models as we see in the van Kampen example.  All models are, of course,
+only approximations.] stochastic ecological models. 
 
-[^2]: that is, free from the approximation made by SDE models as we see in the
-van Kampen example.  All models are, of course, only approximations. 
 
 As our objective is to tie the origins of noise more closely to biological
 processes, it will be helpful to make the notion of a master equation concrete
@@ -570,6 +570,16 @@ for a stochastic description.
 
 # Noise the creator: Noise can induce novel phenomena
 
+Outside of the primarily theoretical literature on stochastic dynamics
+in ecology, noise is viewed largely as a nusiance: something entirely
+distinct from the processes we are interested in which invariably keeps
+getting in the way.  As we have seen in section on origins, such 
+characterizations are misleading: noise arises from the very same processes.
+While both empirical and statistical literature have frequently emphasized
+techniques to remove noise, a central theme of stochastic processes
+have emphasized an almost opposite conclusion: noise cannot be subtracted or
+averaged away, since tthe presence of noise can fundamentally alter the
+dynamics we observe.
 Stochasticity can give rise to a wide array of interesting phenomena
 that are often at odds with our intuition. As these examples will
 illustrate, such behavior arises through an interaction between
@@ -872,20 +882,50 @@ population in a changing environment  [@Balaban2004].
 # Noise the informer: Noise can provide novel information
 
 
-<!-- More frank introduction to this section, see reply to Reviewer 1-->
+In examining "noise the creator," we began with a tension between
+the intepretation of noise as it is usually presented in the context of
+statistical inference: a nusiance to be stripped away, and how it is
+viewed by theorist, as a potentially fundamental driver of patterns,
+including oscillations, regime shifts, extinction & coexistence.
+In this third section, we attempt to re-unite these two largely
+divergent views of the role of noise by highlighting how phenomena
+from the latter (noisy phenomena) can be used to address the questions
+of the former (inferring underlying process from pattern). 
 
+The most provacative example of how noisy phenomena can act to reveal
+underlying processes comes from the literature on so-called 'early
+warning signs' of critical transitions [e.g. @Scheffer2009].  This approach
+exploits the ability of the equations we encountered in "origins of noise"
+to reveal subtle changes in underlying processes before those changes are
+visible at the macroscopic (deterministic) level.  This literature focuses
+on the phenomenon of a tipping point, in which gradual changes to the environment
+show essentially no changes to the behavior of a system (i.e. the abundance of a
+population or health of lake ecosystem) followed by a rapid change when the
+tipping point is reached that cannot be easily reversed. [@Scheffer2009;
+@Scheffer2015].  The fundamental insight of early warning signals has been
+to realize that though the average or deterministic dynamics of such a system
+do not change significantly prior to the tipping point, the dynamics of the
+noise must change in a consistent and predictable manner.
 
-One of the most interesting aspects of noise is as a source of
-additional information.  This can be realized in a variety of ways.
-For instance, in deriving expressions for the variance created by
-demographic noise above, we observed that different partitions of
-a logistic growth model can lead to the same macroscopic dynamics
-(same values for $b$ - $d$), while having different variance (due
-to different values for $b$+$d$).  This suggests that the variation
-observed in such a population could potentially help resolve
-how dynamics are partitioned between individual birth and death
-rates (though in practice one would have to first account for any
-contribution of environmental noise).
+This pattern, known as 'critical slowing down' for reasons that will become 
+obvious, was first proposed an an early warning sign for ecological
+transitions by @Wissel1984, but has received considerable attention only more recently,
+particularly owing to work in empirical systems [@Scheffer2015].
+Our analysis in the origins of noise provides sufficient framework to illustrate
+this idea completely.  The premise behind the tipping point just described
+is that of a fold bifurucation [which I will not detail here, but see @Holling1973; @Scheffer2009; @Strogatz2001].
+The key thing we need to know about this bifurcation is that it involves
+changes *derivative* of the deterministic skeleton ($\partial_x \left[ b(x) - d(x) \right]$ in
+the notation of our example), which can build up for some time without
+significant changes to the location of the equilibrium state $\hat x$.
+This derivative did not appear in our marcroscopic equation, $\tfrac{\mathrm{d}x}{\mathrm{d}t}} = b(x) - d(x)$,
+but featured regularly in our equations for the noise, such as the 
+expected variance, Eq \eqref{var} and autocorrelation, Eq \eqref{autocor}.
+This term represents the *stability*  of the equilibrium: how quickly
+deviations return to the stationary value.  
+
+The trick of the early warning signals approach is to view noise as 
+a sequence of countless miniature perturbation experiments.
 
 <!-- fixme need more background? --> 
 
@@ -925,7 +965,11 @@ in the fluctuation-dissipation result we found for generic birth
 death models).  This observation has been exploited with particular
 success as a potential *early warning sign* that a system is loosing
 stability; possibly due to an approaching catastrophic transition
-or saddle-node bifurcation.  This pattern, known as critical slowing
+or saddle-node bifurcation.  
+
+
+
+This pattern, known as critical slowing
 down (in reference to the auto-correlation time in the physics
 literature) was first proposed an an early warning sign for ecological
 systems by @Wissel1984, but has received considerable empirical as
@@ -990,6 +1034,22 @@ a wide array of practical [@Boettiger2013b; @Scheffer2015], statistical
 @Hastings2010] challenges to such application.  This creates a two-way dialog
 between empirical and theoretical work that does much to advance the field
 as a whole.
+
+
+<!--
+One of the most interesting aspects of noise is as a source of
+additional information.  This can be realized in a variety of ways.
+For instance, in deriving expressions for the variance created by
+demographic noise above, we observed that different partitions of
+a logistic growth model can lead to the same macroscopic dynamics
+(same values for $b$ - $d$), while having different variance (due
+to different values for $b$+$d$).  This suggests that the variation
+observed in such a population could potentially help resolve
+how dynamics are partitioned between individual birth and death
+rates (though in practice one would have to first account for any
+contribution of environmental noise).
+-->
+
 
 
 # Conclusions

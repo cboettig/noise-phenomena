@@ -915,14 +915,18 @@ Our analysis in the origins of noise provides sufficient framework to illustrate
 this idea completely.  The premise behind the tipping point just described
 is that of a fold bifurucation [which I will not detail here, but see @Holling1973; @Scheffer2009; @Strogatz2001].
 The key thing we need to know about this bifurcation is that it involves
-changes *derivative* of the deterministic skeleton ($\partial_x \left[ b(x) - d(x) \right]$ in
+changes *derivative* of the deterministic skeleton ($\partial_x \left[ b(x) - d(x) \right]_{x=\hat x}$) in
 the notation of our example), which can build up for some time without
 significant changes to the location of the equilibrium state $\hat x$.
 This derivative did not appear in our marcroscopic equation, $\tfrac{\mathrm{d}x}{\mathrm{d}t}} = b(x) - d(x)$,
 but featured regularly in our equations for the noise, such as the 
 expected variance, Eq \eqref{var} and autocorrelation, Eq \eqref{autocor}.
-This term represents the *stability*  of the equilibrium: how quickly
+This derivative represents the *stability*  of the equilibrium: how quickly
 deviations return to the stationary value.  
+The magnitude of both variance and autocorrelation must increase
+as the stability ($\partial_x \left[ b(x) - d(x) \right]_{x=\hat x}$) decreases
+prior to a critical tranisition.  
+
 
 The trick of the early warning signals approach is to view noise as 
 a sequence of countless miniature perturbation experiments.
@@ -954,27 +958,7 @@ gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1), c(2,2)))
 ```
 
 
-
-Noise can provide novel information in other ways as well.  Stochastic
-fluctuations act like a continual miniature perturbation experiment,
-constantly pushing a system away from an equilibrium to reveal its
-behavior elsewhere in state space. Observing the size and
-auto-correlation of these fluctuations thus provides insight on the
-stability of an equilibrium point, (as can be seen, for instance
-in the fluctuation-dissipation result we found for generic birth
-death models).  This observation has been exploited with particular
-success as a potential *early warning sign* that a system is loosing
-stability; possibly due to an approaching catastrophic transition
-or saddle-node bifurcation.  
-
-
-
-This pattern, known as critical slowing
-down (in reference to the auto-correlation time in the physics
-literature) was first proposed an an early warning sign for ecological
-systems by @Wissel1984, but has received considerable empirical as
-well as theoretical attention only more recently [@Scheffer2009;
-@Scheffer2015].  Increases in two of these early warning indicators,
+Increases in two of these early warning indicators,
 variance and auto-correlation, are illustrated along with the
 timeseries of a simulation of the dynamics of yeast population
 growth in Figure \ref{tipping}.  This simulation is based on a mechanistic model

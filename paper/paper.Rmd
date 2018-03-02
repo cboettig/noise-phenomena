@@ -77,17 +77,8 @@ ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
 ```
 
 
-<!--
-Directions:
-
-We hope that these papers will combine a mix of synthetic reviews of the current state of an area, as well as insights into how the field has developed during the last twenty years, discussion of current important questions, and developments and insights that would significantly advance the field. Although certainly not necessary, if there are any past Ecology Letters papers that have had a profound impact on the development of an area – be it beneficial or not – a brief discussion of that impact would be appropriate. We also hope that articles will be written in a thoughtful style, but also provocative if appropriate.
-
--->
-
 
 \newpage
-
-<!-- FIXME look at Coulson, Bjornstead, Ovaskeinen and others and see how they define scope to focus on "population ecology" -->
 
 
 # Introduction: Noise the nuisance
@@ -111,47 +102,15 @@ between respective primarily theoretical and primarily empirical communities by
 seeing noise not as mathematical curiosity or statistical bugbear, but as a
 source for new opportunities for inference. 
 
+<!-- -->
 
-
-The gap between theory-focused specialists and more empirically minded non-specialists
-is particularly acute in the ecological literature on stochastic processes, making
-a review of 
-<!-- FIXME -->
-
-
-As the literature on stochastic modeling in ecology is both extensive and often
-technical, and so rather than attempt a comprehensive review, this synthesis
-will focus on the simplest examples necessary to illustrate this broader trend
-in the changing way we think about the role of noise.
-To that end, I will focus on examples from simple population models, echoing
-the motivation of @Bartlett1960 to focus on basic theoretical aspects common
-across models. In so doing, we will ignore the equally rich literature of 
-stochastic models in evolution [@Lenormand2009] and population genetics
-[e.g. @Ewens2004; @Gillespie2004]. In an effort to make these themes accessible to more empirical
-readers, I will rely on the simplest examples necessary, with only passing
-mention of the rich literature extending these concepts to more realistic
-models.  It is easy to critique this choice: indeed, one might summarize decades
-of research in noting the twin observations that (1)  ecology is complex and (2)
-that complexity is important. In the stochasticity literature alone, much work 
-has been done to understand and extend fundamental results to more complex models,
-including the importance of age and stage structure [e.g. @Cohen1979; @Tuljapurkar1989;
-@Caswell2009; @Metcalf2015; @Vindenes2017b], spatial structure [e.g. @Durrett1994; @Dieckmann2000;
-@Kerr2002; @Schreiber2010], Individual heterogeneity [e.g. @Vindenes2015; @Hart2016]
-or the coexistence of multiple species [@Caswell1978; @Tuljapurkar1980; @Chesson1981;
-@Chesson1982; @Chesson1985; @Chesson1989; @Melbourne2007; @Schreiber2017]; 
-correlated [@Ripa; @Ripa1999; @Petchey, @Schreiber2010; @Lee2017; @Spanio2017] or periodic
-[@Coulson2001; @Bjornstad2001; @Keeling2001] structure in environmental noise, or
-the interaction of ecological and evolutionary processes [@Saether1997; @Ozgul2009;
-@Lenormand2009; @Vindenes2015; @Schreiber2015]. In this we follow @Levins1966 in
-sacrificing realism for generality.
-
-
-
-
-
-In this spirit, I provide concise, detailed and commented
-code for simulating each of the models presented in Appendix A.
-Simulations permit poking and prodding of empirically-minded
+The gap between specialists and non-specialists is particularly acute in the
+ecological literature on stochastic processes.  This makes the potential benefit
+for new synthesis all the greater, but also poses an obvious challenge in 
+appealing to both audiences.  In recognition of this, I provide concise and
+commented code for simulating each of the models presented in the supplement,
+Appendix A, while more mathematical background and derivations are presented Appendix B.
+Numerical simulations permit poking and prodding of empirically-minded
 investigation unencumbered by either experimental design or mathematical formalism.
 Most stochastic models are expressed in the BUGS language, which
 may be more familiar to empirical readers than corresponding
@@ -162,10 +121,58 @@ illustrated here to readily function as inductive models with
 parameters inferred from time-series data. A copy of this appendix
 is maintained at <https://github.com/cboettig/noise-phenomena>, and
 bug reports, suggestions or help requests are welcome through the
-issue tracker.  Appendix B provides more mathematical details
-for interested readers.  With these in place, we are ready to begin
-our tour through three major areas of noisy phenomena: Origins of
-noise, emergent phenomena, and noise-driven inference.
+issue tracker. 
+
+
+
+To emphasize the underlying trend in the changing roles in which we
+see and understand noisy processes, I will also restrict my focus 
+to relatively simple models primarily from population ecology context.
+Simplicity not only makes examples (in equations and in code) more
+tractable but also allows us to focus on aspects that are germane to many
+contexts rather than unique to particular complexitites [@Levins1966; @Bartlett1960].
+Nevertheless, that complexity matters -- few themes have been better 
+emphasized in the theoretical literature [@Bjornstad2001].  Both
+the foundational literature and recent research continue to echo the
+theme of understanding the impact different real world complexities
+have in stochastic dynamics, including the importance
+of age and stage structure [e.g. @Cohen1979; @Tuljapurkar1989;
+@Caswell2009; @Metcalf2015; @Vindenes2017b], spatial structure [e.g.
+@Durrett1994; @Dieckmann2000; @Kerr2002; @Schreiber2010], Individual
+heterogeneity [e.g. @Vindenes2015; @Hart2016] or the coexistence
+of multiple species [@Caswell1978; @Tuljapurkar1980; @Chesson1981;
+@Chesson1982; @Chesson1985; @Chesson1989; @Melbourne2007;
+@Schreiber2017]; correlated [@Ripa; @Ripa1999; @Petchey, @Schreiber2010;
+@Lee2017; @Spanio2017] or periodic [@Coulson2001; @Bjornstad2001;
+@Keeling2001] structure in environmental noise, or the interaction
+of ecological and evolutionary processes [@Saether1997; @Ozgul2009;
+@Lenormand2009; @Vindenes2015; @Schreiber2015].  As such, we will 
+rely on both textbooks and recent reviews to provide a proper treatment
+of these issues, and focus on broader trends that may be less apparent
+to non-specialists.
+
+This review is structured into three sections: Origins of noise, emergent
+phenomena, and noise-driven inference.  The first section lays the conceptual
+groundwork we will need, while also highlighting a shift to more and more
+mechanistically rooted descriptions of noise.  We will see where the common
+formulation of 'deterministic skeleton plus noise term' comes from, how it 
+is best justified, and when it breaks down.  The second section introduces
+"noise the creator," showing examples of ecological phenomena generated by
+stochasticity.  These examples will be familiar to most specialists but
+illustrate a different way of thinking than held by most ecologists, where
+noise is only a nuciance to be filtered or averaged out.  The third and
+final section, "noise the informer," turns these examples back-to-front, 
+asking what noise can tell us about a system: such as its underlying resilience
+or stability, or the approach of a catastophic shift. Examples are fewer
+here, and have largely yet to benefit from the introduction of either
+the rigorous theorems or more complex models so plentiful in the previous
+sections.  Yet the promise of prediction, of early warning signs before
+tipping points, have spurred broad interest in such noise-based inference.
+This review is a call to both deepen the connection to mechanism and better
+formalize this thinking, but also look more broadly into other ways in which
+noisy phenomena can help inform and predict underlying processes.
+
+
 
 
 <!--

@@ -966,14 +966,17 @@ a sequence of countless miniature perturbation experiments.
 
 
 <!-- Figure 4: Early warning signals -->
-```{r tipping, fig.width=7, fig.height=10, fig.cap="Early warning signs of a critical transition in a simulation of increasing serial dilution of budding yeast. Panel A: Data from replicate manipulations by @Dai2015. Panel B: simulated single time series moel.  Panel C, D: Rolling variance and autocorrelation over simulated data show an increase in advance of the transition.  Simulation details in Appendix A. Warning signal statistics for experimental data not shown, see @Dai2015.\\label{tipping}"}
+```{r tipping, fig.width=7, fig.height=10, fig.cap="Early warning signs of a critical transition in a simulation of increasing serial dilution of budding yeast. Panel A: Data from replicate manipulations by @Dai2015. Panel B: Coefficient of variation for the same experimental data. Panel C: Simulated single time series moel.  Panel D, E: Rolling variance and autocorrelation over simulated data show an increase in advance of the transition.  Simulation details in Appendix A. Warning signal statistics for experimental data not shown, see @Dai2015.\\label{tipping}"}
 tipping <- read_csv("../appendixA/tipping.csv") 
 
 pop_dai <- ggplot() + 
   annotation_raster(readPNG("figures/pop-dai2015.png"), 
                     xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf) +
   labs(subtitle = "A.")
-
+cv_dai <- ggplot() + 
+  annotation_raster(readPNG("figures/cv-dai2015.png"), 
+                    xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf) +
+  labs(subtitle = "B.")
 pop_sim <- 
   tipping %>% 
   select(t, population = x, tip_time) %>%
@@ -981,12 +984,12 @@ pop_sim <-
   geom_vline(aes(xintercept = tip_time), col=colours[2], lty=2) + 
   scale_y_log10(labels=fancy_scientific)  + 
   coord_cartesian(ylim=c(1e3, 5e5)) +
-  labs(subtitle = "B. Yeast population size", 
+  labs(subtitle = "C. Yeast population size", 
        caption = "Vertical red dashed line indicates tipping point location")
 
 stat_sim <- tipping %>%
   dplyr::select(-x) %>%
-  dplyr::rename("C. autocorrelation" = autocorrelation, "D. variance" = variance) %>%
+  dplyr::rename("D. autocorrelation" = autocorrelation, "E. variance" = variance) %>%
   gather(series, value, -t, -tip_time) %>%
   ggplot(aes(t, value)) + geom_line(col=colours[[1]]) + 
   geom_vline(aes(xintercept = tip_time), col=colours[[2]], lty=2) +

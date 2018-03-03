@@ -686,6 +686,9 @@ state (Figure \ref{quasicycles}A).  However, the introduction of relatively smal
 noise into the system can be sufficient to excite the system into
 sustained oscillations (Figure \ref{quasicycles}B) 
 [empirical discussed in @Greenman2003; @Bjornstad2004; @Black2010].  
+Figure \ref{quasicycles}C shows empirical data on records of bluefin 
+tuna catch that @Bjornstad2004 analyze as a possible example for such
+quasi-cycle oscillations in an important marine predator.
 
 @Nisbet1976 first identifies the potential for quasi-cycles to explain
 sustained oscillations in a simple predator prey model with stochastic
@@ -753,17 +756,26 @@ resonant frequency, and could not produce sustained oscillations
 
 ## Stochastic switching
 
-We turn from stochastic resonance to oscillations of a very different
-sort, which do not resemble any deterministic process, as seen in
-Figure \ref{noisy_switch}A.  This pattern is characterized by long stretches during
+We turn from stochastic resonance to oscillations of a  different
+sort, illustrated in Figure \ref{noisy_switch} in empirical data on 
+rubella outbreaks in Copenhagen, analyzed by @Keeling2001, and in 
+simulations of a standard model shown in Figure \ref{noisy_switch}B.
+This pattern is characterized by long stretches during
 which fluctuations in the state variable remain concentrated around
 a high average value followed by sudden, rapid transitions into
 fluctuations concentrated around a lower value.  This behavior
 arises through the interaction of stochasticity and alternative
-stable state dynamics.  The simulation shown in Figure \ref{noisy_switch}A for the
-is based on an resource consumption model first proposed by @May1977
-as one of the early examples of the potential for alternative stable
-state dynamics.  The resource grows according to a logistic growth
+stable state dynamics.  
+
+
+Both for clarity of presentation and highlight the generality of 
+stochastic switching in diverse models, we will focus not specifically
+on the more complex disease model analyzed in @Kelling2001 but
+rather rely on the classic resource consumption model of @May1977
+which has been widely used to study alternative state dynamics.
+As we shall see, stochastic switching is a generic property of 
+models with alternative stable states which will have other implications
+later on.  In @May1977 model, a resource species grows according to a logistic growth
 model and is consumed according to a Holling Type-III functional
 response curve, to which I have simply introduced the addition of
 environmental noise:
@@ -771,7 +783,7 @@ environmental noise:
 $$X_{t+1} = X_t + \underbrace{X_t r \left(1 -\frac{X_t}{K} \right)}_{\textrm{ growth, } g(X_t)}  - \underbrace{\frac{a X_t ^ Q}{X_t^ Q + H ^ Q}}_{\textrm{consumption, } c(X_t)} + \xi_t,$$
 
 where $\xi_t$ is normally distributed environmental variation with
-mean zero and standard deviation $\sigma$. Figure \ref{noisy_switch}B shows separate
+mean zero and standard deviation $\sigma$. Figure \ref{noisy_switch}C shows separate
 curves corresponding the parts of the model describing vegetation
 growth and vegetation consumption, using the same parameters as
 shown in the simulation panel, 3A.  Equilibria exist whenever growth
@@ -785,7 +797,7 @@ $X_t \approx 0.5$, closely matching the average fluctuations seen
 in the simulation in 3A.  Stochastic fluctuations drive spontaneous
 shifts between these alternative stable states.
 
-The concept of a potential well, Figure \ref{noisy_switch}C, is often invoked when
+The concept of a potential well, Figure \ref{noisy_switch}D, is often invoked when
 describing the behavior of alternative stable states.  The curve
 for the potential well, $U(x)$ is defined as the negative integral
 of the population growth rate,
@@ -804,14 +816,14 @@ Figure \ref{noisy_switch}, where it is straight-forward to show [e.g. @Feller;
 to the exponential of the depth of the well from the lowest point to
 the separation barrier, (a result that is familiar as Arrhenius law
 of activation energy to grade-school students of chemistry).  This
-effect is visible even in the short simulation shown in 3A, which
+effect is visible even in the short simulation shown in Figure \ref{noisy_switch}B, which
 spends longer times in the lower state which has the deeper well.
 (Readers are encouraged to experiment with this by adjusting the
 parameters of the simulation in the included code).  Unfortunately,
 the literature is not always careful in describing how this potential
 well diagram arises, which has caused it to become a source for as
 least as much confusion as it is of insight.  While the curves in
-Figure \ref{noisy_switch}B can be clearly associated with underlying mechanisms of
+Figure \ref{noisy_switch}C can be clearly associated with underlying mechanisms of
 rates: logistic growth and consumption with handling time, the same
 is not true of the potential: it is much harder to have a good
 intuition about the 'negative integral of the difference growth and
@@ -878,40 +890,51 @@ basin of attraction).  Both a steeper negative slope or a longer
 distance to integrate over between stable and unstable points will
 create a deeper well.
 
+
+Because these transitions between alternative stable states appear as
+such a dramatic deviation from the previous pattern (as illustrated
+in Figure \ref{noisy_switch}A), it is  tempting to assume they
+result from some sudden external force or change in the
+environment. As the numerical examples clearly illustrate,
+these transitions can neverthless be explained entirely by chance
+[@Boettiger2012;  @Drake2013]. 
+
 Empirical evidence for stochastic switching in ecological timeseries
 is limited by the long time scale usually required 
-[but see @Keeling2001; @Clements2016; @Clements2017]. Because a single
-stochastic transition between alternative stable states appears as
-such a dramatic deviation from the previous pattern (as illustrated
-in Figure \ref{noisy_switch}A), it is often tempting to assume the change could only
-be the result of some sudden external force or change in the
-environment, so it is worth remembering that given long enough,
-these transitions can happen entirely by chance stochasticity
-[@Boettiger2012; @Drake2013]. However, these transitions are most
-likely to observed in systems with relatively shallow potential
-wells.  This is mostly likely to occur of some external change is
-slowly making the potential well shallower and thus transitions
-more likely -- a phenomenon that has become to be known as "flickering"
-and suggested as a potential early warning sign of an approaching
-transition [@Brock2010].  Examples of flickering between alternative
-stable states have been suggested in data ranging from geological
-timescales at the end of glaciation in the Pleistocene [@Taylor1993]
-to ecological scales over a few decades in lake ecosystems [@Wang2012].
+[but see @Keeling2001; @Taylor1993; @Wang2012; @Clements2016; @Clements2017]. 
+As our discussion highlights, we are most likely to observe the phenomenon when at
+least one of the potential wells is relatively shallow, which
+results in a pattern of long periods in a single state (the deeper well)
+punctuated by brief excursions into and back out of the shallow well.
+This drives the more spike-like pattern seen in the rubella outbreaks
+from @Keeling2001. 
 Stochastic transitions between bi-stable states are thought to play
 an important role in genetic switches, where among other phenomena
 this mechanism can explain the emergence of two alternative phenotypes
 in clonal microbial populations, which can act to buffer the
-population in a changing environment  [@Balaban2004].
+population in a changing environment  [@Balaban2004]. This mechanism
+has also been explored in the emergence of multiple strategies
+under evolutionary dynamics in disease models [@Read2007].  
 
-<!--
-**Further examples**
-- @Read2007  Stochasticity generates an evolutionary instability for infectious disease 
-- Spatial pattern formation: Turning patterns found in plankton-herbivore dynamics [@Levin1976]
 
--->
 
 # Noise the informer: Noise can provide novel information
 
+
+Transitions from systems with particularly shallow wells have recently
+taken on new empirical significance.  Because such transitions become
+more likely as the potential well becomes less deep (i.e. the attractor
+has become less stable), the onset of such transitions can be intepreted
+as an indication of this loss of stability. This phenomenon has been
+dubbed "flickering" and suggested as a warning sign that a more
+permanent transition to the alternate stable state is approaching [@Brock2010].  
+Examples of flickering between alternative
+stable states have been suggested in data ranging from geological
+timescales at the end of glaciation in the Pleistocene [@Taylor1993]
+to ecological scales over a few decades in lake ecosystems [@Wang2012].
+Flickering is then our first example of "noise the informer" -- in
+which the emergence of a stochastic phenomenon is re-interpreted 
+in a way that sheds light on an underlying process.  
 
 In examining "noise the creator," we began with a tension between
 the intepretation of noise as it is usually presented in the context of
@@ -923,10 +946,12 @@ divergent views of the role of noise by highlighting how phenomena
 from the latter (noisy phenomena) can be used to address the questions
 of the former (inferring underlying process from pattern). 
 
-The most provacative example of how noisy phenomena can act to reveal
-underlying processes comes from the literature on so-called 'early
-warning signs' of critical transitions [e.g. @Scheffer2009].  This approach
-exploits the ability of the equations we encountered in "origins of noise"
+Our most provacative example of how noisy phenomena can act to reveal
+underlying processes comes from the literature we have just touched upon
+in the case of flickering -- a growing set of so-called 'early
+warning signs' of critical transitions [e.g. @Scheffer2009].  The fundamental
+insight behind all of these signs comes from the exploiting the ability of
+equations we encountered in "origins of noise"
 to reveal subtle changes in underlying processes before those changes are
 visible at the macroscopic (deterministic) level.  This literature focuses
 on the phenomenon of a tipping point, in which gradual changes to the environment
@@ -958,11 +983,6 @@ The magnitude of both variance and autocorrelation must increase
 as the stability ($\partial_x \left[ b(x) - d(x) \right]_{x=\hat x}$) decreases
 prior to a critical tranisition.  
 
-
-The trick of the early warning signals approach is to view noise as 
-a sequence of countless miniature perturbation experiments.
-
-<!-- fixme need more background? --> 
 
 
 <!-- Figure 4: Early warning signals -->
@@ -1001,27 +1021,33 @@ gridExtra::grid.arrange(pop_dai, cv_dai, pop_sim, stat_sim,
 
 ```
 
-
-Increases in two of these early warning indicators,
-variance and auto-correlation, are illustrated along with the
-timeseries of a simulation of the dynamics of yeast population
-growth in Figure \ref{tipping}.  This simulation is based on a mechanistic model
-developed by @Dai2012 that closely matches the population dynamics
+The trick of the early warning signals approach is to view noise as 
+a sequence of countless miniature perturbation experiments.  
+Figure \ref{tipping} illustrates early warning indicators in an
+experimental manipulation and corrsponding simulated model of
+@Dai2012 and @Dai2015.  Though early warning signals have been
+reported in a growing range of systems [@Scheffer2015], these
+laboratory experiments in population dynamics
 they observed in serial dilutions of budding yeast _Saccharomyces
-cerevisiae_ on a sucrose medium. Because the relevant proteins are
+cerevisiae_ on a sucrose medium provide the most convincing 
+mechanistic intepretation of the underlying fold bifurcation.
+Because the relevant proteins are
 located in the extra-cellular matrix rather than inside the cells,
 budding yeast break down sucrose collaboratively, creating an Allee
 effect below which the population is too small to sustain itself.
 Increasing the serial dilution rate slowly over time drives the
-stable population towards a fold bifurcation, which is accompanied
-by the patterns of increasing variance and increasing auto-correlation
-seen empirically in lab populations [@Dai2012] as well as the
-numerical simulation shown in Figure \ref{tipping}.
+stable population towards a fold bifurcation which is accompanied
+by the patterns of increasing variance and increasing auto-correlation.
+This pattern can be seen empirically in lab populations [@Dai2012; @Dai2015]
+and explored numerically in a simulation of the yeast dynamics shown in 
+Figure \ref{tipping}. As the mechanistic model of yeast population
+dynamics is already quite simple, the simulation shown here (code in Appendix B)
+corresponds directly to the model proposed by @Dai2015.
 
 As we saw in the equations from the system-size approximation, the
 variance and auto-correlation in question are technically properties
 of an ensemble, and should be computed over replicate simulations.
-While the laboratory experiments of @Dai2012 do precisely this,
+While the laboratory experiments such as @Dai2015 do precisely this,
 conducting identical, independent replicate manipulations in separate
 beakers, this is not an option in natural populations.  If the
 environmental change is sufficiently slow relative to the measurements,
@@ -1029,6 +1055,13 @@ one can assume that the system is close to its stationary state
 over a given window in time, computing these averages over a rolling
 time window as we illustrate here, rather than across an ensemble
 of replicates.
+
+
+In contrast to the examples we have considered previously, work that extends
+this analysis into more complex scenarios of structured populations, interacting species,
+autocorrelated noise etc are significantly underdeveloped.  Even the burgeoning area
+of spatial early warning indicators [e.g. @Guttal2009; @Dakos2011; @Bel2012; @Dai2013]
+remains idosynchratic, and rigorous theorems are few.  
 
 The challenge of identifying warning signs that a system is approaching
 a tipping point has proven a rich area for applications of stochastic
@@ -1042,26 +1075,30 @@ external drivers without changing the auto-correlation, and both variance
 and auto-correlation can increase if a system loses stability without
 approaching a saddle-node bifurcation, but will not show flickering.
 The greater our suite of stochastic indicators, the better our ability
-to pin down the processes involved.  Such examples suggest
+to pin down the processes involved.  
+
+Such examples suggest
 that stochastic processes could play a similar role in identifying
 other critical transitions. For instance, stochastic resonance may be 
 visible in advance of a Hopf bifurcation, where a stable state gives
 way to stable oscillations (limit cycle) of growing magnitude
 [e.g. @Fussmann2000; @Nelson2013; @Strogatz2001].
 
-Most importantly, the framing of stochastic processes as indicators of
-changes in an ecosystem that might otherwise go unnoticed has proven a
+Intepreting stochastic processes as indicators of subtle but ominous
+changes in an ecosystem has proven a
 rich catalyst for bringing these concepts beyond the realm of abstract
 theory. A rich array of experimental and observational tests of early
 warning signals [_i.e._ @Carpenter2011; @Dai2012; @Clements2016; @Clements2017;
-and many others, _e.g._ see @Scheffer2015 review] has served no merely
+and many others, _e.g._ see @Scheffer2015 review] has served not merely
 to illustrate these phenomena can be seen in laboratory and field ecosystems,
 but also to spark suggestions of additional possible indicators and surface
 a wide array of practical [@Boettiger2013b; @Scheffer2015], statistical
 [e.g. @Boettiger2012d; @Boettiger2012], and theoretical [e.g. @Dai2015;
 @Hastings2010] challenges to such application.  This creates a two-way dialog
 between empirical and theoretical work that does much to advance the field
-as a whole.
+as a whole. 
+
+
 
 
 <!--

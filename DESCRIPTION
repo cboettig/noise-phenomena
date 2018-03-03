@@ -1,6 +1,6 @@
 Package: compendium
 Version: 0.1.0
 Depends: RcppRoll, rmarkdown, adaptivetau, nimble, tidyverse, ggthemes,
-         gridExtra, regimeshifts, png
+         gridExtra, regimeshifts, png, scales
 Suggests: extrafont, hrbrthemes, Cairo
 Remotes: cboettig/regimeshifts@v0.0.1

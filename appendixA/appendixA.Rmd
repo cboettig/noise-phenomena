@@ -393,7 +393,6 @@ tip_df %>%
          variance = roll_var(x, n = 100, fill=NA),
          tip_time = tip_time) %>%
   write_csv("tipping.csv")
-tipping
 ```
 
 We are now ready to create the panels shown in Figure 4:

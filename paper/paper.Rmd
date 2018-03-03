@@ -1059,33 +1059,31 @@ of replicates.
 
 In contrast to the examples we have considered previously, work that extends
 this analysis into more complex scenarios of structured populations, interacting species,
-autocorrelated noise etc are significantly underdeveloped.  Even the burgeoning area
-of spatial early warning indicators [e.g. @Guttal2009; @Dakos2011; @Bel2012; @Dai2013]
-remains idosynchratic, and rigorous theorems are few.  
-
-The challenge of identifying warning signs that a system is approaching
-a tipping point has proven a rich area for applications of stochastic
-processes.  We have already seen how in addition to the patterns of
-increasing variance and auto-correlation, our survey of stochastic phenomena
-has highlighted the increased potential to observe stochastic switching,
-or flickering, as the system approaches the tipping point.  Challenges remain
+autocorrelated noise etc are significantly underdeveloped. Issues of spatial
+structure have recieved more attention [e.g. @Guttal2009; @Dakos2011; @Bel2012; @Dai2013]
+but still largely idosynchratic.  Significant challenges remain
 in distinguishing these patterns from other causes [@Boettiger2013a].
 For instance, as we have seen, variance in a system can increase due to
 external drivers without changing the auto-correlation, and both variance
 and auto-correlation can increase if a system loses stability without
 approaching a saddle-node bifurcation, but will not show flickering.
-The greater our suite of stochastic indicators, the better our ability
-to pin down the processes involved.  
+Teasing these issues apart in greater mathematical formalism and under more
+complex and realistic models remain largely open problems.  
 
-Such examples suggest
+More broadly, examples of early warning signals such as increasing variance,
+auto-correllation, and flickering all point to ways in which stochasticty
+and noise-driven phenomena can be transformed from something which obscures
+underlying processes to something which reveals them.  I believe this is
+role could apply far more broadly than in just the context of stability and
+tipping points.  The examples from fold bifurcations already suggest
 that stochastic processes could play a similar role in identifying
 other critical transitions. For instance, stochastic resonance may be 
 visible in advance of a Hopf bifurcation, where a stable state gives
 way to stable oscillations (limit cycle) of growing magnitude
 [e.g. @Fussmann2000; @Nelson2013; @Strogatz2001].
 
-Intepreting stochastic processes as indicators of subtle but ominous
-changes in an ecosystem has proven a
+Intepreting stochastic processes as potential new sources of information
+has also proven to be a
 rich catalyst for bringing these concepts beyond the realm of abstract
 theory. A rich array of experimental and observational tests of early
 warning signals [_i.e._ @Carpenter2011; @Dai2012; @Clements2016; @Clements2017;

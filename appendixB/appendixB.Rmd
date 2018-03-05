@@ -7,12 +7,11 @@ address:
   - code: a
     address: "Dept of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley CA 94720-3114, USA"
 layout: 5p  
-bibliography: ../paper/refs.bib
+bibliography: "../paper/refs.bib"
 output: 
   rticles::elsevier_article:
     toc: true
-  
-preamble: "\\newcommand{\ud}{\\mathrm{d}}"
+preamble: "\\newcommand{\\ud}{\\mathrm{d}}"
 ---
 
 \renewcommand{\thefigure}{B\arabic{figure}}
@@ -95,11 +94,11 @@ This probability balance is known for historical reasons as a master equation. T
 
 which for historical reasons [see @vanKampen2007] is known as a master equation. Note that we can define the master equation more generally in terms of a generic transition probability $w(y|x)$ of going into any state $y$ given that the system is currently in state $x$:
 
-$$
+
 \begin{equation}
 \frac{\mathrm{d}}{\mathrm{d}t} P(x,t) = \int w(x|y) P(y,t) - w(y|x)P(x,t) \mathrm{d} x
 \end{equation}
-$$
+
 
 The master equation can be thought of as a more process-based description of the Chapman-Kolmorogov equation defining a stochastic process [@vanKampen2007]. 
 
@@ -203,12 +202,15 @@ We will change Eq \eqref{master1} into the variables $\phi$ (the macrosopic valu
 \intertext{This suggests we can approximate the step operator by a Taylor series}
 \mathbb E^k &= 1+ k\frac{\partial}{\partial n} + \frac{k^2}{2} \frac{\partial^2}{\partial n^2} + \ldots \label{En}
 \end{align}
+
 To change variables, recall the chain rule,
+
 \begin{align}
 &\frac{\partial}{\partial \xi} f(n(\xi)) =  \frac{\partial n}{\partial \xi} \frac{\partial}{\partial n} f(n(\xi)) \nonumber \\
 \intertext{hence} 
 &\frac{\partial}{\partial n} =  \left(\frac{\partial n}{\partial \xi}\right)^{-1} \frac{\partial}{\partial \xi} \nonumber 
 \end{align}
+
 Making this substitution to \eqref{En} we find:  
 
 
@@ -225,6 +227,7 @@ Taking $P(n,t) = \Pi(\xi, t)$, we can rewrite the time derivative.  First, note 
 \end{align}
 
 Also by the chain rule, we have
+
 \begin{align*}
 \frac{\partial}{\partial t} P(n,t) &= \frac{\partial \Pi}{\partial t}  + \frac{\partial \Pi}{\partial \xi}\frac{\mathrm{d} \xi}{\mathrm{d} t} 
 \end{align*}
@@ -252,11 +255,11 @@ Collecting terms of order $\Omega^{1/2}$ on both sides, we have:
 Where we have the part of the birth and death functions that depend on the macroscopic variable $\phi$ alone.  This is known as the macroscopic equation, and corresponds to the density equations commonly written down.  Following @vanKampen2007, we will call this difference $a_1(\phi)$ as a shorthand.  This notation suggests it is the first jump moment, defined as first moment of the transition rate between states in a Markov process.  It so happens this term will give the macroscopic law for any Markov process, not only a birth-death process.  The second moment of the transition rates, $a_2$, will be for us simply the sum of the birth and death rates.  We use this notation as it generalizes to processes that have a different master equation from \eqref{master1}, to describe a transition of arbitrary step size: 
 
 
-$$
+
 \begin{equation}
 a_i = \int r^i \Phi(r) \mathrm{d} r
 \end{equation}
-$$
+
 The first jump moment, $i == 1$ the two possible steps $r$ are $\pm 1$, and thus $a_1$ is sum of the two possible one-step transitions $+1 \cdot b(x) + -1 \cdot d(x)$.  The second jump moment the $r$ term is raised to the second power, making both contributions positive such that $a_2(x) = b(x) + d(x)$
 
 
@@ -336,7 +339,10 @@ while the steady-state fluctuations are given by \eqref{fluctuation dissipation}
 
 Note that the macroscopic equation for Levins' patch model has the same mathematical formulation as the familiar logistic equation, 
 
-$$\frac{\mathrm{d} n}{\mathrm{d} t} = r n \left( 1 - \frac{n}{K} \right)$$
+\begin{equation*}
+\frac{\mathrm{d} n}{\mathrm{d} t} = r n \left( 1 - \frac{n}{K} \right)
+\end{equation*}
+
 though the partition into birth and death rates is not explicit.  Different ways of dividing this equation between birth and death can therefore create different fluctuation patterns, even as the macroscopic average remains unchanged.  For instance, taking $b = rn$ and $d = rn^2/K$ and  we can calculate the fluctuations of the logistic equation around its equilibrium $n^* = K$ as:
 
 \begin{align}
@@ -357,49 +363,53 @@ $$\frac{\mathrm{d} x}{\mathrm{d} t} = a_1(x, y) $$
 
 In general, we could imagine a specific equation for the dynamics of the environmental process $y$, perhaps also subject to a system size expansion. To keep things simple, we will adopt a linear OU process for the noise, 
 
-$$
+
 \begin{align*}
 \mathrm{d} y &= - \beta y \phantom \cdot \mathrm{d} t + \sigma_e \mathrm{d}W
 \end{align*}
-$$
-which corresponds to mean-zero Gaussian noise with auto-correlation $\beta$, where the white-noise limit corresponds to $\beta \to 0$. Following the expansion as before (see @vanKampen2007 for details of the multi-variate case), the mean dynamics for the population size are once again given by the macroscopic equation, $\frac{\mathrm{d} x}{\mathrm{d} t} = a_1(x, y) $, while the fluctuation dynamics are now given by three coupled differential equations:
 
-$$
+which corresponds to mean-zero Gaussian noise with auto-correlation $\beta$, where the white-noise limit corresponds to $\beta \to 0$. Following the expansion as before (see @vanKampen2007 for details of the multi-variate case), the mean dynamics for the population size are once again given by the macroscopic equation, $\tfrac{\mathrm{d} x}{\mathrm{d} t} = a_1(x, y)$, while the fluctuation dynamics are now given by three coupled differential equations:
+
+
 \begin{align}
 \frac{\mathrm{d} \langle \xi^2 \rangle}{\mathrm{d} t} &= 2 \frac{\partial a_1}{\partial x} \langle \xi^2 \rangle + 2 \frac{\partial a_1 }{\partial y} \langle \xi \eta \rangle + a_2 \\
 \frac{\mathrm{d} \langle \xi \eta \rangle}{\mathrm{d} t} &= \left( \frac{\partial a_1}{\partial x} - \beta \right)\langle \xi \eta \rangle + \frac{\partial a_1 }{\partial y} \langle \eta^2 \rangle \\
 \frac{\mathrm{d} \langle \eta^2 \rangle}{\mathrm{d} t} &= -2 \beta \langle \eta^2 \rangle + \gamma_e^2
 \end{align}
 
-$$
+
 
 Note that the fluctuations in population density $x$ depends as before on the fluctuation-disspation tradeoff, $2 \frac{\partial a_1}{\partial x} \langle \xi^2 \rangle + a_2$, but include the additonal term arising from a covariance with the environmental flucatuations. We can simplify this expression as before by considering the equilibrium noise dynamics
 
-$$
+\begin{align}
 \langle \xi^2 \rangle = \underbrace{-\frac{a_2}{2\partial_x a_1}}_{\textrm{demographic noise}} + \underbrace{\frac{\left[\partial_{y} a_1\right] ^2}{\partial_x a_1 - \beta} \frac{\langle\eta^2\rangle}{2\partial_x a_1}}_{\textrm{environmental contribution}}
-$$
+\end{align}
 
 note that this process provides a justification for moving the noise from 'inside' the deterministic skeleton to merely an additive Gaussian random variable on the end of the determinstic process.  The details of how the noise term enter the dynamics are reflected in the dervative of the population equation with respect to the environmental variable, $\partial_y a_1(x,y)$, as well as the relative correlation times $\partial_x a_1$ and $\beta$ of the population process and environmental process.  This environmental contribution adds on to the variance contributed by the demographic noise.  Both demographic and environmental noise contributions are 'damped' in proportion to the stability of the macroscopic equation, $\partial_x a_1$.  
 
 Note that we have left this expression in terms of $\langle \eta^2 \rangle$, rather than subsituting in the equilibrium expression 
 
-$$\langle \eta^2 \rangle = \frac{\gamma_e^2}{2\beta},$$
+\begin{equation*}\langle \eta^2 \rangle = \frac{\gamma_e^2}{2\beta},\end{equation*}
 
 so that we can consider separately the limit of white environmental noise without also increasing the variance of the process. Changing the correlation while holding the total variation $\langle \eta^2\rangle$ constant thus amounds to increasing the intrinsic noise level $\gamma^2$ proportionally.  In general, a more mechanistic description of what it means to change the autocorrelation of an environmental process for a given variance is needed.  Nevertheless, considering the the white noise limit with some fixed variance, when $\beta \ll \partial_x \alpha_1$,  this expression simplifies as:
 
 
-$$
+\begin{equation}
 \langle \xi^2 \rangle = \underbrace{-\frac{a_2}{2\partial_x a_1}}_{\textrm{demographic noise}} +  \underbrace{\frac{1}{2} \left[\frac{\partial_{y} a_1}{ \partial_x a_1}\right] ^2}_{\textrm{environmental coupling}} \langle\eta^2\rangle
-$$
+\end{equation}
+
 Taking extinction as such a Gaussian white noise process with meant $\bar e$ and variance $\sigma_e^2$, we can plug in our birth-death equations for the Levins model (and rescaling by system size, from $x = n/N$ back to $n = xN$), into the above equation to find the expected fluctuations are: 
 
-$$\sigma_n^2 = \frac{\bar e}{c}N + \frac{\left[(1-\frac{\bar{e}}{c}) N\right]^2}{(\bar e-c)^2} \sigma_e^2$$
+\begin{equation}
+\sigma_n^2 = \frac{\bar e}{c}N + \frac{\left[(1-\frac{\bar{e}}{c}) N\right]^2}{(\bar e-c)^2} \sigma_e^2
+\end{equation}
 
 where we recognize the term $(1-\frac{\bar{e}}{c}) N$ as the equilibrium population size, $\bar n$.  Meanwhile, if timescale of environmental fluctuations is much longer than population fluctuations (a red noise limit, $\beta \gg \partial_x \alpha_1$) this can instead be written as
 
-$$
+\begin{equation}
 \langle \xi^2 \rangle = \underbrace{-\frac{a_2}{2\partial_x a_1}}_{\textrm{demographic noise}} + \underbrace{- \frac{\left[\partial_{y} a_1\right] ^2}{2\partial_x a_1 \beta}}_{\textrm{environmental coupling}}  \langle\eta^2\rangle
-$$
+\end{equation}
+
 (Recall that we have taken these expressions at equilibrium, and at equilibrium the derivative of the macroscopic equation $\partial_x a_1 < 0$ by definition, which guarentees the variances above are strictly positive).  In this limit ($\beta \gg \partial_x \alpha_1$), the overall noise decreases both with stronger dampening / higher autocorelation in the environmental process, (larger $\beta$) just as it does with increased dampening in population dynamics $\partial_x a_1$.  
 
 <!--

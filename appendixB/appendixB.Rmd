@@ -25,10 +25,10 @@ preamble: "\\newcommand{\\ud}{\\mathrm{d}}"
 
 $$ \frac{\textrm{d} n}{\textrm{d} t} = \underbrace{f(n)}_{\textrm{det skeleton}} + \underbrace{\sigma_d \xi_d(t) \sqrt{n}}_{\textrm{demographic noise}} + \underbrace{\sigma_e \xi_e(t) n}_{\textrm{environmental noise}}$$
 
-rather than the more formal stochastic differential equation notation shown in the text.  Equations of this form are so-called "Langevin equation," popular in the physics literature [@vanKampen2007].  This notation looks like a more familiar differential equation, but the resemblence is misleading as the standard calculus does not apply to stochastic equations.  
+rather than the more formal stochastic differential equation notation shown in the text.  Equations of this form are so-called "Langevin equation," popular in the physics literature [@vanKampen2007].  This notation looks like a more familiar differential equation, but the resemblance is misleading as the standard calculus does not apply to stochastic equations.  
 
 
-A stochastic differntial equation (SDE) of the form
+A stochastic differential equation (SDE) of the form
 
 \begin{equation}
 \textrm{d} X_t = \mu(X_t) \textrm{d}t + \sigma(X_t) \textrm{d}B_t \label{SDE}
@@ -42,9 +42,9 @@ X_{t+s} - X{t}  = \int_t^{t+s} \mu(X_{\tau}, \tau) \textrm{d}\tau + \int_t^{t+s}
 \end{equation}
 
 
-The first integral (over $\textrm{d}t$) is the familiar Reimann integral of the classic calculus, but the second is an Itô integral, which integrates over the stochastic process $B_t$ (Brownian motion, also termed a Weiner process). The Itô calculus follows different rules from the classic calculus, largely due to the fact that an Itô integral has non-zero quadratic variation. (Crudely put, $\textrm{d}x^2 \sim 0$, but $\textrm{d}B^2 \sim dx$).  The SDE notation also traditionally adopts capital letters such as $X_t$ to denote stochastic variables.  
+The first integral (over $\textrm{d}t$) is the familiar Riemann integral of the classic calculus, but the second is an Itô integral, which integrates over the stochastic process $B_t$ (Brownian motion, also termed a Wiener process). The Itô calculus follows different rules from the classic calculus, largely due to the fact that an Itô integral has non-zero quadratic variation. (Crudely put, $\textrm{d}x^2 \sim 0$, but $\textrm{d}B^2 \sim dx$).  The SDE notation also traditionally adopts capital letters such as $X_t$ to denote stochastic variables.  
 
-The intepretation of Langevin equation is less precise, as it can be read to correspond to one of two possible stochastic integrals, and is often associated with a Stratonovich integral.  (Unlike the Itô integral, the Stratonovich integral has zero quadratic variation and so obeys the same chain rule as the classic calculus, but it is not a martingale, e.g. an unbiased random walk, which is a convenient for property for proving theorems).  Fortunately, the notion as a partial differential equation over probabilities does not have this ambiguity, which shows that @Ovaskainen2010 is referring to an Itô expression, just as I have written it more explicitly.  See @vanKampen2007 for an excellent discussion of the Itô-Stratonovich dillema and its intepretation with respect to intrinsic vs environmental noise factors. To avoid this ambiguity, mathematical literature will frequently write the Statonovich-type SDE explicitly as $\mathrm{d} X_t = f(X_t) \mathrm{d}t +  g(X_t) \circ  B_t$
+The interpretation of Langevin equation is less precise, as it can be read to correspond to one of two possible stochastic integrals, and is often associated with a Stratonovich integral.  (Unlike the Itô integral, the Stratonovich integral has zero quadratic variation and so obeys the same chain rule as the classic calculus, but it is not a martingale, e.g. an unbiased random walk, which is a convenient for property for proving theorems).  Fortunately, the notion as a partial differential equation over probabilities does not have this ambiguity, which shows that @Ovaskainen2010 is referring to an Itô expression, just as I have written it more explicitly.  See @vanKampen2007 for an excellent discussion of the Itô-Stratonovich dilemma and its interpretation with respect to intrinsic vs environmental noise factors. To avoid this ambiguity, mathematical literature will frequently write the Stratonovich-type SDE explicitly as $\mathrm{d} X_t = f(X_t) \mathrm{d}t +  g(X_t) \circ  B_t$
 
 
 ### Partial Differential Equation formulation
@@ -100,7 +100,7 @@ which for historical reasons [see @vanKampen2007] is known as a master equation.
 \end{equation}
 
 
-The master equation can be thought of as a more process-based description of the Chapman-Kolmorogov equation defining a stochastic process [@vanKampen2007]. 
+The master equation can be thought of as a more process-based description of the Chapman-Kolmogorov equation defining a stochastic process [@vanKampen2007]. 
 
 
 <!--
@@ -132,7 +132,7 @@ While all moments can be derived as above, it is often impossible to solve these
 
 A derivation of diffusion approximation is originally credited to @Kramers1940 and later improved by @Moyal1949, though Einstein makes implicit use of this approximation in his own work on Brownian Motion decades earlier [@Gardiner2009].  The diffusion approximation has been a popular basis for ecological stochastic models as well, such as in @Nisbet1982's classic textbook on fluctuating populations, or more recently in @Lande2003 and work reviewed in @Ovaskainen2010.  This diffusion approximation is nicely summarized @Gardiner2009 and in @vanKampen2007, though I believe @Kurtz1978 provides a more formal proof that goes unmentioned by any of these references.  Both the diffusion approximation and the van Kampen expansion start with the same master equation that defines the underlying dynamics of births and deaths (matching the process implemented in the exact Gillespie algorithm, @Gillespie1977, see Appendix A).  
 
-The essence of the approach is to argue that in the limit of large populations, the discrete state for the number of indivduals in a population, $N$, can be replaced with a continuous variable, $n$, in which we can expand the master equation as a Taylor series and then truncate at second order.  In contrast to the system size expansion of van Kampen, this approach does not make system size explicit, but instead hinges on taking a simultaneous limit of both short time and small step size.  Consider small steps $x = \epsilon n$, and hence $p_n = \epsilon P_x$, where $\epsilon \ll 1$.  To keep the process from slowing down we consequently have to scale up the rates by $\epsilon$ as well:
+The essence of the approach is to argue that in the limit of large populations, the discrete state for the number of individuals in a population, $N$, can be replaced with a continuous variable, $n$, in which we can expand the master equation as a Taylor series and then truncate at second order.  In contrast to the system size expansion of van Kampen, this approach does not make system size explicit, but instead hinges on taking a simultaneous limit of both short time and small step size.  Consider small steps $x = \epsilon n$, and hence $p_n = \epsilon P_x$, where $\epsilon \ll 1$.  To keep the process from slowing down we consequently have to scale up the rates by $\epsilon$ as well:
 
 \begin{align*}
 	b_n - d_n = \frac{A_x}{\epsilon}
@@ -191,7 +191,7 @@ n = \Omega \phi(t) + \Omega^{1/2} \xi \label{n}
 \end{align}
 
 
-We will change Eq \eqref{master1} into the variables $\phi$ (the macrosopic value, i.e. density) and $\xi$ (i.e. fluctuations/deviations from the expected density).   We begin with the step operator, which can be approximated by a Taylor expansion.To formulate a Taylor expansion of the step operator (where $k$ can be a positive or negative integer), first consider the steop operator under the original discrete variable $n$:
+We will change Eq \eqref{master1} into the variables $\phi$ (the macroscopic value, i.e. density) and $\xi$ (i.e. fluctuations/deviations from the expected density).   We begin with the step operator, which can be approximated by a Taylor expansion.To formulate a Taylor expansion of the step operator (where $k$ can be a positive or negative integer), first consider the step operator under the original discrete variable $n$:
 
 \begin{align}
 \intertext{Take as the definition}
@@ -379,26 +379,26 @@ which corresponds to mean-zero Gaussian noise with auto-correlation $\beta$, whe
 
 
 
-Note that the fluctuations in population density $x$ depends as before on the fluctuation-disspation tradeoff, $2 \frac{\partial a_1}{\partial x} \langle \xi^2 \rangle + a_2$, but include the additonal term arising from a covariance with the environmental flucatuations. We can simplify this expression as before by considering the equilibrium noise dynamics
+Note that the fluctuations in population density $x$ depends as before on the fluctuation-dissipation trade-off, $2 \frac{\partial a_1}{\partial x} \langle \xi^2 \rangle + a_2$, but include the additional term arising from a covariance with the environmental fluctuations. We can simplify this expression as before by considering the equilibrium noise dynamics
 
 \begin{align}
 \langle \xi^2 \rangle = \underbrace{-\frac{a_2}{2\partial_x a_1}}_{\textrm{demographic noise}} + \underbrace{\frac{\left[\partial_{y} a_1\right] ^2}{\partial_x a_1 - \beta} \frac{\langle\eta^2\rangle}{2\partial_x a_1}}_{\textrm{environmental contribution}}
 \end{align}
 
-note that this process provides a justification for moving the noise from 'inside' the deterministic skeleton to merely an additive Gaussian random variable on the end of the determinstic process.  The details of how the noise term enter the dynamics are reflected in the dervative of the population equation with respect to the environmental variable, $\partial_y a_1(x,y)$, as well as the relative correlation times $\partial_x a_1$ and $\beta$ of the population process and environmental process.  This environmental contribution adds on to the variance contributed by the demographic noise.  Both demographic and environmental noise contributions are 'damped' in proportion to the stability of the macroscopic equation, $\partial_x a_1$.  
+note that this process provides a justification for moving the noise from 'inside' the deterministic skeleton to merely an additive Gaussian random variable on the end of the deterministic process.  The details of how the noise term enter the dynamics are reflected in the derivative of the population equation with respect to the environmental variable, $\partial_y a_1(x,y)$, as well as the relative correlation times $\partial_x a_1$ and $\beta$ of the population process and environmental process.  This environmental contribution adds on to the variance contributed by the demographic noise.  Both demographic and environmental noise contributions are 'damped' in proportion to the stability of the macroscopic equation, $\partial_x a_1$.  
 
-Note that we have left this expression in terms of $\langle \eta^2 \rangle$, rather than subsituting in the equilibrium expression 
+Note that we have left this expression in terms of $\langle \eta^2 \rangle$, rather than substituting in the equilibrium expression 
 
 \begin{equation*}\langle \eta^2 \rangle = \frac{\gamma_e^2}{2\beta},\end{equation*}
 
-so that we can consider separately the limit of white environmental noise without also increasing the variance of the process. Changing the correlation while holding the total variation $\langle \eta^2\rangle$ constant thus amounds to increasing the intrinsic noise level $\gamma^2$ proportionally.  In general, a more mechanistic description of what it means to change the autocorrelation of an environmental process for a given variance is needed.  Nevertheless, considering the the white noise limit with some fixed variance, when $\beta \ll \partial_x \alpha_1$,  this expression simplifies as:
+so that we can consider separately the limit of white environmental noise without also increasing the variance of the process. Changing the correlation while holding the total variation $\langle \eta^2\rangle$ constant thus amounts to increasing the intrinsic noise level $\gamma^2$ proportionally.  In general, a more mechanistic description of what it means to change the auto-correlation of an environmental process for a given variance is needed.  Nevertheless, considering the the white noise limit with some fixed variance, when $\beta \ll \partial_x \alpha_1$,  this expression simplifies as:
 
 
 \begin{equation}
 \langle \xi^2 \rangle = \underbrace{-\frac{a_2}{2\partial_x a_1}}_{\textrm{demographic noise}} +  \underbrace{\frac{1}{2} \left[\frac{\partial_{y} a_1}{ \partial_x a_1}\right] ^2}_{\textrm{environmental coupling}} \langle\eta^2\rangle
 \end{equation}
 
-Taking extinction as such a Gaussian white noise process with meant $\bar e$ and variance $\sigma_e^2$, we can plug in our birth-death equations for the Levins model (and rescaling by system size, from $x = n/N$ back to $n = xN$), into the above equation to find the expected fluctuations are: 
+Taking extinction as such a Gaussian white noise process with meant $\bar e$ and variance $\sigma_e^2$, we can plug in our birth-death equations for the Levins model (and re-scaling by system size, from $x = n/N$ back to $n = xN$), into the above equation to find the expected fluctuations are: 
 
 \begin{equation}
 \sigma_n^2 = \frac{\bar e}{c}N + \frac{\left[(1-\frac{\bar{e}}{c}) N\right]^2}{(\bar e-c)^2} \sigma_e^2
@@ -410,7 +410,7 @@ where we recognize the term $(1-\frac{\bar{e}}{c}) N$ as the equilibrium populat
 \langle \xi^2 \rangle = \underbrace{-\frac{a_2}{2\partial_x a_1}}_{\textrm{demographic noise}} + \underbrace{- \frac{\left[\partial_{y} a_1\right] ^2}{2\partial_x a_1 \beta}}_{\textrm{environmental coupling}}  \langle\eta^2\rangle
 \end{equation}
 
-(Recall that we have taken these expressions at equilibrium, and at equilibrium the derivative of the macroscopic equation $\partial_x a_1 < 0$ by definition, which guarentees the variances above are strictly positive).  In this limit ($\beta \gg \partial_x \alpha_1$), the overall noise decreases both with stronger dampening / higher autocorelation in the environmental process, (larger $\beta$) just as it does with increased dampening in population dynamics $\partial_x a_1$.  
+(Recall that we have taken these expressions at equilibrium, and at equilibrium the derivative of the macroscopic equation $\partial_x a_1 < 0$ by definition, which guarantees the variances above are strictly positive).  In this limit ($\beta \gg \partial_x \alpha_1$), the overall noise decreases both with stronger dampening / higher auto-correlation in the environmental process, (larger $\beta$) just as it does with increased dampening in population dynamics $\partial_x a_1$.  
 
 <!--
 ## Crowley model

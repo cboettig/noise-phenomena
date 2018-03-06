@@ -256,7 +256,7 @@ model, established in highly influential papers of @Leigh1981, @Lande1993,
 
 
 
-Where $\textrm{d}B_t^{(d)}$ and $\textrm{d}B_t^{(e)}$ refer to Brownian processes, (i.e. Gaussian white noise process) for demographic and environmental stochasticity respectively.  When $f(n)$ is simply a Verhulst logistic function this is often referred to as the canonical model [e.g. @Ovaskainen2010], and provides a clear illustration of the partition of separate deterministic and stochastic elements. Significant research continues to focus on extending the study of this model to consider more complex and higher-dimensional $f(n)$ (coexistence models, stage structured models) and consider the case of auto-correlated, rather than than white noise of $\textrm{d}B_t^{(e)}$.  
+Where $\textrm{d}B_t^{(d)}$ and $\textrm{d}B_t^{(e)}$ refer to Brownian processes, (i.e. Gaussian white noise process) for demographic and environmental stochasticity respectively.  When $f(n)$ is simply a Verhulst logistic function this is often referred to as the canonical model [e.g. @Ovaskainen2010], and provides a clear illustration of the partition of separate deterministic and stochastic elements. Significant research continues to focus on extending the study of this model to consider more complex and higher-dimensional $f(n)$ (coexistence models, stage structured models) and consider the case of auto-correlated, rather than than white noise of $\textrm{d}B_t^{(e)}$. 
 
 Before we follow that path, we will examine how this canonical model can emerge from a lower-level description and how it can deviate from that description. This approach will also set the stage to see how our understanding of stochastic models can be extended to better reflect natural processes that shape not only for the so-called deterministic skeleton, but the noise as well.  In so doing, I will highlight two tools fundamental to this analysis, one computational and one analytical: the exact simulation method of @Gillespie1977's stochastic simulation algorithm (SSA), and the van Kampen system size expansion [@vanKampen1976].
 
@@ -319,7 +319,7 @@ where $n$ individuals compete for a
 finite number of suitable habitats $N$.  Individuals die a constant
 rate $e$, and produce offspring at a constant rate $c$ who then
 have a probability of colonizing an open patch that is simply
-proportional to the fraction of available patches, $1 - n/N$.  
+proportional to the fraction of available patches, $1 - n/N$. 
 
 
 We choose this model because it has precisely same functional form
@@ -400,9 +400,9 @@ system size expansion, e.g. at stationary state:
 which will also prove useful later on.  Note this expression simply states that the equilibrium
 variance is a balance between noise terms, $b(x)+ d(x)$ and the slope or eigenvalue of the
 deterministic skeleton, $2 \partial_x \left[ b(x) - d(x) \right]$, (a balance that forms the basis of the
-the fluctuation-dissipation theorem) and that correlations fall off exponentially at a rate given by this slope.   
+the fluctuation-dissipation theorem) and that correlations fall off exponentially at a rate given by this slope.
 We will see both auto-correlation and variance play similar roles to infer this eigenvalue when we 
-reach the role of noise as informer.  
+reach the role of noise as informer.
 
 In the interests of a theoretical synthesis, I observe that this result
 is *different* than the canonical equation, Eq \eqref{canonical}, or more generally
@@ -434,7 +434,7 @@ shows that the macroscopic equation will continue to hold even when the
 variance does not; in contrast to the non-linear SDE from the diffusion approximation.
 Though the limit used in the diffusion approximation can break down in cases where the 
 van Kampen expansion is still valid [see @Gardiner2009], in most circumstances they
-produce similar results and both justify the postulates of the Eq \eqref{canonical}.  
+produce similar results and both justify the postulates of the Eq \eqref{canonical}.
 
 Applying the system size approximation to the example of the Levins model introduced
 previously lets us both recover the classic model while adding some nuance in 
@@ -473,7 +473,7 @@ it is rather the the *relative* time scales of the environmental process
 and population level process that really matter (more precisely, the relative 
 magnitudes of the auto-correlation time of the environmental dynamics and population dynamics.)
 An environment with comparatively short auto-correlation scale will act
-effectively as white noise upon the population dynamics.  
+effectively as white noise upon the population dynamics.
 
 
 The van Kampen expansion for extrinsic factors (appendix B) also highlights
@@ -550,15 +550,15 @@ will not only illustrate how ecological theory often sees noise in a
 very different role from ecological statistics, but will serve us well
 in our third section which seeks to turn that view of noise entirely on 
 it's head: not as something that obscures underlying processes but rather as
-a way of revealing them.  
+a way of revealing them. 
 
 
 
-## Persistence and coexistence  
+## Persistence and coexistence
 
 Perhaps there is no starker example of differences between the behavior
 of a deterministic skeleton and a stochastic model than in the case
-of persistence of a species and the coexistence of multiple species.  
+of persistence of a species and the coexistence of multiple species.
 Demographic noise guarantees extinction in the long-run for any finite
 population [e.g. @Kendall1949; @Lande2003;  @Bartlett1955; @Bartlett1960;
 @Lande1993; @Saether1998; @Coulson2001; @Schreiber2006;  @Schreiber2010; @Ovaskainen2010;
@@ -583,7 +583,7 @@ on other phenomena that can emerge in stochastic models: quasi-cycles and
 stochastic switching.  Both examples will illustrate patterns that differ
 sharply from those of the deterministic skeleton, both for different underlying
 reasons.  Interesting in their own right, these examples will also provide
-intuition for our third section on noise the informer.  
+intuition for our third section on noise the informer.
 
 
 <!-- Figure 2: Quasi-cycles -->
@@ -622,7 +622,7 @@ produces only damped oscillations, eventually settling into a stable
 state (Figure \ref{quasicycles}A).  However, the introduction of relatively small
 noise into the system can be sufficient to excite the system into
 sustained oscillations (Figure \ref{quasicycles}B) 
-[empirical discussed in @Greenman2003; @Bjornstad2004; @Black2010].  
+[empirical discussed in @Greenman2003; @Bjornstad2004; @Black2010].
 Figure \ref{quasicycles}C shows empirical data on records of bluefin 
 tuna catch that @Bjornstad2004 analyze as a possible example for such
 quasi-cycle oscillations in an important marine predator.
@@ -645,7 +645,7 @@ where $x_t$ is the prey density at time $t$, $r$ the growth rate, $K$ the carryi
 y_{t+1} = y_t + c  x_t  y_t - d  y_t+ \xi_{y,t} \label{quasi-cycle-predator}
 \end{equation}
 
-with $c$ the conversion ratio and $d$ the predator mortality rate.  Here we have assumed for the prey, $\xi_x \sim \mathcal{N(0, \sigma_x)}$, and similarly for the predator driven by $\xi_y$. Figure \ref{quasicycles}A shows examples for noise $\sigma_x = \sigma_y = 10^{-5}$, while Figure \ref{quasicycles}B shows $\sigma_x = \sigma_y = 0.01$.  
+with $c$ the conversion ratio and $d$ the predator mortality rate.  Here we have assumed for the prey, $\xi_x \sim \mathcal{N(0, \sigma_x)}$, and similarly for the predator driven by $\xi_y$. Figure \ref{quasicycles}A shows examples for noise $\sigma_x = \sigma_y = 10^{-5}$, while Figure \ref{quasicycles}B shows $\sigma_x = \sigma_y = 0.01$.
 
 
 Oscillations arise through the process known as stochastic resonance [@Nisbet1976; @Greenman2003].
@@ -682,7 +682,7 @@ explanation for oscillations and periodic outbreaks in pest ecosystems.
 to drive cyclic behavior in population abundances of Atlantic bluefin
 tuna and Atlantic Cod.  @McKane2005, @Alonso2007, and @Black2010 illustrate
 the emergence of quasi-cycles in common disease outbreak models, including
-the use of power spectrum analysis.  
+the use of power spectrum analysis.
 @Pineda-Krch2007 compare patterns from stochastically generated cycles to
 stable limit cycles they resemble to ask how we can discriminate between
 these mechanisms.  Stochastic resonance highlights
@@ -710,13 +710,9 @@ which fluctuations in the state variable remain concentrated around
 a high average value followed by sudden, rapid transitions into
 fluctuations concentrated around a lower value.  This behavior
 arises through the interaction of stochasticity and alternative
-stable state dynamics.  
-
-
-Both for clarity of presentation and highlight the generality of 
-stochastic switching in diverse models, we will focus not specifically
-on the more complex disease model analyzed in @Keeling2001 but
-rather rely on the classic resource consumption model of @May1977
+stable state dynamics.  To sidestep some of the complexity of the disease
+model proposed in @Keeling2001 we will illustrate the same stochastic 
+switching phenomenon in the classic resource consumption model of @May1977
 which has been widely used to study alternative state dynamics.
 As we shall see, stochastic switching is a generic property of 
 models with alternative stable states which will have other implications
@@ -857,7 +853,7 @@ this mechanism can explain the emergence of two alternative phenotypes
 in clonal microbial populations, which can act to buffer the
 population in a changing environment  [@Balaban2004]. This mechanism
 has also been explored in the emergence of multiple strategies
-under evolutionary dynamics in disease models [@Read2007].  
+under evolutionary dynamics in disease models [@Read2007].
 
 
 
@@ -877,7 +873,7 @@ timescales at the end of glaciation in the Pleistocene [@Taylor1993]
 to ecological scales over a few decades in lake ecosystems [@Wang2012].
 Flickering is then our first example of noise the informer -- in
 which the emergence of a stochastic phenomenon is re-interpreted 
-in a way that sheds light on an underlying process.  
+in a way that sheds light on an underlying process.
 
 In examining noise the creator, we began with a tension between
 the interpretation of noise as it is usually presented in the context of
@@ -1011,7 +1007,7 @@ external drivers without changing the auto-correlation, and both variance
 and auto-correlation can increase if a system loses stability without
 approaching a saddle-node bifurcation, but will not show flickering.
 Teasing these issues apart in greater mathematical formalism and under more
-complex and realistic models remain largely open problems.  
+complex and realistic models remain largely open problems.
 
 
 Interpreting stochastic processes as potential new sources of information
@@ -1074,7 +1070,7 @@ bring the divergent views of noise in empirical and theoretical communities
 together by turning the noise the nuisance on its head: drawing on
 examples from the early warning signals literature which have demonstrated
 how noisy phenomena can be used to reveal information about slow
-changes in the underlying deterministic skeleton.  
+changes in the underlying deterministic skeleton.
 
 Divergent views of the role of stochasticity have separated our community
 for too long. The eruption of interest in early warning signals for critical

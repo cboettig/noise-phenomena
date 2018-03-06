@@ -15,7 +15,7 @@ all other packages can be found on CRAN.  A reproducible Dockerfile for building
 
 
 ```{r include=FALSE}
-## note: needs library Cairo
+# note: needs library Cairo
 knitr::opts_chunk$set(message=FALSE, cache = 1, warning = FALSE,  dev="cairo_pdf")
 ```
 
@@ -23,31 +23,31 @@ knitr::opts_chunk$set(message=FALSE, cache = 1, warning = FALSE,  dev="cairo_pdf
 ```{r libraries, cache=FALSE, message=FALSE}
 library(nimble)
 library(RcppRoll)
-## devtools::install_github("cboettig/regimeshifts")
+# devtools::install_github("cboettig/regimeshifts")
 library(regimeshifts) 
-library(adaptivetau)  ## For Gillespie simulation only
+library(adaptivetau)  # For Gillespie simulation only
 library(tidyverse)
 library(ggthemes)
 library(gridExtra)
 library(scales)
-## Set a default color pallete
+# Set a default color pallete
 colours <- ptol_pal()(2)
 ```
 
 
 ```{r echo=FALSE, cache=FALSE, eval=TRUE, message=FALSE}
-## plot themes, non-essential. Comment out if theme creates trouble with fonts on your system.
+# plot themes, non-essential. Comment out if theme creates trouble with fonts on your system.
 library(Cairo)
 library(hrbrthemes)
 library(extrafont)
 
-## One-time setup
+# One-time setup
 hrbrthemes::import_roboto_condensed()   # One-time use to set up fonts 
 #d <- read.csv(extrafont:::fonttable_file(), stringsAsFactors = FALSE)
 #d[grepl("Light", d$FontName), ]$FamilyName <- "Roboto Condensed Light"
 #write.csv(d, extrafont:::fonttable_file(), row.names = FALSE)
 
-## load fonts (needed each time)
+# load fonts (needed each time)
 extrafont::loadfonts()
 ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
 
@@ -100,10 +100,10 @@ Exact Gillespie simulations can be run efficiently in R using the `adaptivetau::
 ```{r }
 set.seed(1234) # set random number generator seed to be reproducible
 
-e <- 0.2
-c <- 1
+e <- 0.2 # patch death rate
+c <- 1   # patch colonization rate
 
-## Run simulations
+# Run simulation for small and large N
 sim_small <- adaptivetau::ssa.exact(init.values = c(n = 50),
                        transitions, rateF,
                        params = list(c=c, e=e, N=100),
@@ -116,7 +116,7 @@ sim_large <- adaptivetau::ssa.exact(init.values = c(n = 500),
 ```
 
 
-We will also create a separate data frame (`tibble`) corresponding to our theoretical predictions from the system size expansion.  We use popular functions from the `tidyverse` suite of R packages for the manipulation of `data.frames`.  Below, the `mutate` function is used to add new columns for plus and minuse one standard deviation based on theoretical calculation of $\sqrt{N\tfrac{e}{c}}$, and the `map_dfr` function is used to apply this to both `small` and `large` cases.  We use `tidyverse` syntax  [see @Ross2017] instead of base R in these examples for the following reasons:
+We will also create a separate data frame (`tibble`) corresponding to our theoretical predictions from the system size expansion.  We use popular functions from the `tidyverse` suite of R packages for the manipulation of `data.frames`.  Below, the `mutate` function is used to add new columns for plus and minus one standard deviation based on theoretical calculation of $\sqrt{N\tfrac{e}{c}}$, and the `map_dfr` function is used to apply this to both `small` and `large` cases.  We use `tidyverse` syntax  [see @Ross2017] instead of base R in these examples for the following reasons:
 
 - the resulting code is more concise, due to use of higher-level relational data abstractions
 - the resulting code is closer to natural semantics.  This is in part because consecutive steps are connected by pipes `%>%`rather than temporary variable assignment, and in part by the use of functions named by verbs corresponding to standard relational data concepts.
@@ -136,20 +136,20 @@ Bind together both simulation results and theory results and store output data i
 
 
 ```{r}
-## combine data.frames, using column called "system_size"
-## to indicate large noise or small noise simulations
+# combine data.frames, using column called "system_size"
+# to indicate large noise or small noise simulations
 gillespie <- 
   bind_rows("large" = sim_large, 
             "small" = sim_small,  
             .id = "system_size") %>% 
   bind_rows(theory)
 
-## Write data to file
+# Write data to file
 write_csv(gillespie, "gillespie.csv")
 ```
 
 
-Example plotting command to generate the figure as shown in main text:
+Example plotting command to generate the figure as shown in main text, (using `ggplot2` plotting methods from `tidyverse`):
 
 ```{r gillespie, warning=FALSE, fig.width=7}
 read_csv("../appendixA/gillespie.csv", col_types = "cdiddd")  %>% 
@@ -168,59 +168,61 @@ read_csv("../appendixA/gillespie.csv", col_types = "cdiddd")  %>%
 
 # Quasi-cycles
 
-Simulations of the quasi-cycles can easily be performed in NIMBLE, which allows us to express the stochastic models in the familiar BUGS syntax.  Change the values of the model and noise parameters below to explore these results.  While the models below can easily be implemented in base R, the BUGS syntax for expressing a stochastic model provides a more generic formulation that can easily be used in parameter estimation as well; see @nimble.  This can also imporve computational performance because @nimble compiles these models into C++ code.
+Simulations of the quasi-cycles can easily be performed in NIMBLE, which allows us to express the stochastic models in the familiar BUGS syntax.  Change the values of the model and noise parameters below to explore these results.  While the models below can easily be implemented in base R, the BUGS syntax for expressing a stochastic model provides a more generic formulation that can easily be used in parameter estimation as well; see @deValpine2017 for details.  This can also improve computational performance because NIMBLE compiles these models into C++ code.
 
 ```{r}
-## Define the BUGS model:
+# Define the BUGS model:
 quasicycle  <- nimble::nimbleCode({
   x[1] <- x0
   y[1] <- y0
   for(t in 1:(N-1)){
+    # Deterministic terms look like normal R code:
     mu_x[t] <- x[t] + x[t] * r * (1 - x[t] / K) - b * x[t] * y[t]
+    # Stochastic assignment uses ~ to indicate 'distributed as' normal (Gaussian)
     x[t+1] ~ dnorm(mu_x[t], sd = sigma_x)
     mu_y[t] <- y[t] + c * x[t] * y[t] - d * y[t]
     y[t+1] ~ dnorm(mu_y[t], sd = sigma_y)
   }
 })
 
-## creates a data.frame of parameter combinations for each noise level
+# creates a data.frame of parameter combinations for each noise level
 p <- 
   data.frame(
   data.frame(r = .1, K = 5,  b = .1, c = .1, d = .1, N = 800),
   data.frame(sigma_x = c(.00001,0.01),  sigma_y = c(.00001,0.01)))
 
-## define a function to perform a simulation given a set of parameters (constants)
+# define a function to perform a simulation given a set of parameters (constants)
 f <- function(constants){
   model <- compileNimble(nimbleModel(quasicycle, 
                                      constants = constants, 
                                      inits = list(x0 = 1, y0 = 1)))
-  ## set random seed for reproducibility
+  # set random seed for reproducibility
   set.seed(123)
-  ## Run the actual simulation, using nimble
+  # Run the actual simulation, using nimble
   simulate(model)
   
-  ## Assemble the results into a data.frame (tibble).  
+  # Assemble the results into a data.frame (tibble).  
   tibble(t = seq_along(model$x), 
          x = model$x, 
          y = model$y, 
          sigma = constants$sigma_x)
 }
 
-## Do this simulation for each set of parameters, given 
+# Do this simulation for each set of parameters, given 
 quasicycle_df <- p %>% rowwise() %>% do(f(.)) 
 
-## Write results to file for later reference and plotting
+# Write results to file for later reference and plotting
 write_csv(quasicycle_df, "quasicycles.csv")
 ```
 
-From this quasicycle simulation data we can recreate the plot shown in Figure 2 as follows:
+From this quasi-cycle simulation data we can recreate the plot shown in Figure 2 as follows:
 
 
 ```{r quasicycles, fig.width=7}
 read_csv("quasicycles.csv") %>%
-  ## Data in long from
+  # Data in long from
   gather(species, population, -t, -sigma) %>%
-  ## Re-arrange and and re-lable for the plots:
+  # Re-arrange and and re-lable for the plots:
   mutate(sigma = as.factor(sigma)) %>%
   mutate(sigma = recode(sigma, "1e-05" = "A.", "0.01" = "B.")) %>%
   rename(time = t) %>%
@@ -232,7 +234,7 @@ read_csv("quasicycles.csv") %>%
 
 # Stochastic oscillator
 
-Our example of a stochastic osccilato is based on May's model:
+Our example of a stochastic oscillator is based on May's model:
 
 
 $$X_{t+1} = X_t + \underbrace{X_t r \left(1 -\frac{X_t}{K} \right)}_{\textrm{Vegitation growth}}  - \underbrace{\frac{a X_t ^ Q}{X_t^ Q + H ^ Q}}_{\textrm{Vegitation consumption}} + \xi_t,$$
@@ -243,11 +245,14 @@ $$X_{t+1} = X_t + \underbrace{X_t r \left(1 -\frac{X_t}{K} \right)}_{\textrm{Veg
 ```{r}
 p <- list(r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 1e4)
 
+# Define stochastic model in BUGS notation
 may  <- nimble::nimbleCode({
   
   x[1] <- x0
   for(t in 1:(N-1)){
+    # Determinstic mean looks like standard R
     mu[t] <- x[t] + x[t] * r * (1 - x[t] / K)  - a * x[t] ^ Q / (x[t] ^ Q + H ^ Q)
+    # Note the use of ~ in BUGS to show 'distributed as normal' 
     y[t+1] ~ dnorm(mu[t], sd = sigma)
     x[t+1] <- max(y[t+1],0)
   }
@@ -264,17 +269,17 @@ tibble(t = seq_along(cmodel$x), x = cmodel$x) %>%
 ```
 
 
-Seperately, we will also compute the growth and consumption curves and the potential function for comparison with theory:
+Separately, we will also compute the growth and consumption curves and the potential function for comparison with theory:
 
 ```{r}
 theory <- 
   tibble(x= seq(0,2, length.out = 100)) %>%
-  ## As before, we add columns with mutate
+  # As before, we add columns with mutate
   mutate(g = x * p$r * (1 - x / p$K), 
          c = p$a * x ^ p$Q / (x^p$Q + p$H^p$Q)) %>%
   mutate(potential = - cumsum(g - c)) %>%
-  ## assemble resulting data into "long" form with the
-  ## column headings as named here:
+  # assemble resulting data into "long" form with the
+  # column headings as named here:
   gather(curve, y, -x, -potential) 
 
 ```
@@ -319,17 +324,17 @@ Details of the Dai model are found in the appendix of @Dai2012, my best interpre
 
 ```{r}
 max_days <- 1000
-## Perform three simultaneous simulations, x,y,z, using
-## different dilution factors DF
+# Perform three simultaneous simulations, x,y,z, using
+# different dilution factors DF
 
-## Intialize variables
+# Intialize variables
 z <- y <- x <- numeric(max_days)
 z[1] <- y[1] <- x[1] <- 7e4 # 1.7e5
 
-## set random seed for reproduciblity
+# set random seed for reproduciblity
 set.seed(123)
 
-## simulate for max_days
+# simulate for max_days
 for(day in 1:(max_days-1)){
   x[day+1] <- dai(x[day], epsilon = rnorm(1,0, 0.001), DF = 1790)
   y[day+1] <- dai(y[day], epsilon = rnorm(1,0, 0.001), DF=1799)
@@ -337,18 +342,18 @@ for(day in 1:(max_days-1)){
   
 }
 
-## gather results into long data.frame 
+# gather results into long data.frame 
 df <- data.frame(t = 1:max_days, x = x, y = y, z = z) %>%
   gather(series, pop, -t) 
 
-## and plot results
+# and plot results
 ggplot(df, aes(t, pop, col=series)) + 
   geom_line() 
 
 ```
 
 
-We will also need a function for rolling autocorrelation for our warning sign calculation: 
+We will also need a function for rolling auto-correlation for our warning sign calculation: 
 
 $$\rho = \frac{1}{n-1} \frac{\sum_{i = 1}^n \left( x_{i,t} - \textrm{E}(x_t) \right)\left( x_{i,t+1} - \textrm{E}(x_{t+1})  \right)}{\sigma_{x_{t}}  \sigma_{x_{t+1}}}$$
 
@@ -366,11 +371,11 @@ roll_acor <- function(x, lag = 1, ...){
 ```
 
 
-## Simulation of Dai model:
+### Simulation of Dai model:
 
 ```{r}
-## Slow environmental degredation through small stepwise changes
-## (increasing the serial dilution factor, as in the Dai et al experiment.)
+# Slow environmental degredation through small stepwise changes
+# (increasing the serial dilution factor, as in the Dai et al experiment.)
 DF <- as.numeric(sapply(seq(0, 2000, length=9), rep, 40))
 
 # continuous linear increase
@@ -387,7 +392,7 @@ for(day in 1:(max_days-1)){
 
 tip_df <- tibble(t = seq_along(y), x = y)
 
-## also compute warning signs, include in single table
+# also compute warning signs, include in single table
 tip_df %>% 
   mutate(autocorrelation = roll_acor(x, n = 100, fill=NA),
          variance = roll_var(x, n = 100, fill=NA),
@@ -395,7 +400,7 @@ tip_df %>%
   write_csv("tipping.csv")
 ```
 
-We are now ready to create the panels shown in Figure 4:
+We are now ready to create the panels shown in Figure 4.  A little data tidying and `ggplot` layering creates the final plot:
 
 
 ```{r tipping, fig.width=7, fig.height=7}
@@ -416,6 +421,7 @@ p2 <- tipping %>%
   geom_line(col=colours[1]) + 
   geom_vline(aes(xintercept = tip_time), col=colours[2], lty=2) +
   scale_y_log10(labels=scientific)  + 
+  coord_cartesian(ylim=c(1e3, 5e5)) + 
   labs(subtitle = "C. Yeast population size", 
        caption = "Vertical red dashed line indicates tipping point location")
 
@@ -424,7 +430,7 @@ gridExtra::grid.arrange(p1,p2, layout_matrix = rbind(c(1,1), c(2,2)))
 ```
 
 
-Note that @Dai2015 plots coefficient of variation, (standard deviation over mean), rather than the variance.  This is a popular choice since the resulting indicator is a dimensionless measure of the noise relative to the mean, but also confounds changes in the mean dynamics with changes in the noise dynamics.  This can give a misleading impression of the performance of the indicator: in many models, the mean (that is, the value of the equilibrium population size, $\hat x$) will also decrease prior to the transition, resulting in a more pronounced increase in the coefficent of variation than in the variance.  However, changes in mean per se should are not a generic indicator of stability predicted by the theory -- indeed, the whole point of the theory was to detect changes that would not be manifested in the mean.  In general, systems going through a saddle-node bifurcation can vary greatly in how much the mean changes.  The mean will generally decrease, since it must eventually meet the 'saddle' point below it -- it is a question of whether the saddle point does most of the increasing or the node does most of the decreasing.  
+Note that @Dai2015 plots coefficient of variation, (standard deviation over mean), rather than the variance.  This is a popular choice since the resulting indicator is a dimensionless measure of the noise relative to the mean, but also confounds changes in the mean dynamics with changes in the noise dynamics.  This can give a misleading impression of the performance of the indicator: in many models, the mean (that is, the value of the equilibrium population size, $\hat x$) will also decrease prior to the transition, resulting in a more pronounced increase in the coefficient of variation than in the variance.  However, changes in mean per se should are not a generic indicator of stability predicted by the theory -- indeed, the whole point of the theory was to detect changes that would not be manifested in the mean.  In general, systems going through a saddle-node bifurcation can vary greatly in how much the mean changes.  The mean will generally decrease, since it must eventually meet the 'saddle' point below it -- it is a question of whether the saddle point does most of the increasing or the node does most of the decreasing.  
 
 
 ------
@@ -433,18 +439,18 @@ Note that @Dai2015 plots coefficient of variation, (standard deviation over mean
 
 While stochastic inflation is mentioned only in a footnote of the manuscript, I include this example to illustrate simulations of an ensemble of replicates, commonly needed to get a better picture of stochastic phenomena.  This example code is written for clarity rather than performance, and will take longer to run than the other examples.  
 
-Analytical predicted population size, as a fraction of $K$, is $\tfrac{1}{2} + \tfrac{1}{2} \sqrt{1- 8\sigma^2/K^2}$.  Note this is independent of $r$, and increases with $\sigma/K$, the larger the noise $\sigma_g$ as a fraction of the carrying capacity $K$.  Population sizes can also be inflated relative to their deterministic equilibrium whenever the second derivative is positive (as in the lower equilibrium in the May model of alternative stable states, considered below.)  As predicted by the system size expansion, the deviation from the deterministic result is of order $N^{-1}$.  
+Analytically predicted population size, as a fraction of $K$, is $\tfrac{1}{2} + \tfrac{1}{2} \sqrt{1- 8\sigma^2/K^2}$.  Note this is independent of $r$, and increases with $\sigma/K$, the larger the noise $\sigma_g$ as a fraction of the carrying capacity $K$.  Population sizes can also be inflated relative to their deterministic equilibrium whenever the second derivative is positive (as in the lower equilibrium in the May model of alternative stable states, considered below.)  As predicted by the system size expansion, the deviation from the deterministic result is of order $N^{-1}$.  
 
 Because a substantial number of replicate simulations are required to derive a precise mean state, this example will be significantly slower to run than others.  
 
 
 ```{r eval=FALSE}
 
-## Parameters
+# Parameters
 p <- list(r = .4, K = 1, sigma = .15, N = 500)
 equib <- (1 + sqrt(1 - 8 * p$sigma^2/p$K^2) )/ 2
 
-## BUGS model
+# BUGS model
 logistic  <- nimble::nimbleCode({
   x[1] <- x0
   for(t in 1:(N-1)){
@@ -453,7 +459,7 @@ logistic  <- nimble::nimbleCode({
   }
 })
 
-## Compile and run model
+# Compile and run model
 model <- 
 nimbleModel(logistic,
             constants = p,
@@ -461,7 +467,7 @@ nimbleModel(logistic,
 cmodel <- compileNimble(model)
 set.seed(123)
 
-## Perform the simulations
+# Perform the simulations
 df <- map_dfr(1:10000, 
               function(rep){
                 simulate(cmodel)
@@ -479,15 +485,18 @@ df %>%
   write_csv("inflation.csv")
 ```
 
-
+Note that the average across stochastic replicates is slightly less than K=1 (black line),
+and matches almost perfectly the equilibrium predicted by the higher order correction theory.
+The standard deviation of fluctuations shown for reference as well. 
 
 ```{r}
 read_csv("inflation.csv") %>% 
   gather(statistic, value, -t) %>%
   ggplot(aes(t,value, col=statistic, lty=statistic)) + 
   geom_line(lwd=1) + 
+  geom_hline(yintercept = 1, col="black") +
   scale_color_ptol() + 
-  coord_cartesian(xlim=c(100,500), ylim=c(1.2, .5))
+  coord_cartesian(xlim=c(100,500), ylim=c(0.1, 1.2))
 ```
 
 

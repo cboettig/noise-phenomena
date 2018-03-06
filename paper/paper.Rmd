@@ -33,7 +33,7 @@ abstract: |
   # Tables: 0
   # Word count: 
   # Word count in abstract: 
-  # Number of References: 
+  # Number of References: 117
   # Archive statement:
 
   All data (simulated data and code) is made available on GitHub (<https://github.com/cboettig/noise-phenomena>), and if accepted, will be archived with provided DOI in an appropriate scientific data repositoriy.
@@ -64,10 +64,13 @@ library(tidyverse)
 library(gridExtra)
 library(ggthemes)
 library(png)
+library(scales)
 colours <- ptol_pal()(2)
 
+
 #https://stackoverflow.com/a/24241954/258662
-fancy_scientific <- function(l) { 
+scientific <- function(l) {
+    if(max(l, na.rm=TRUE) < 1e3) return(l)
      l <- format(l, scientific = TRUE)
      l <- gsub("^(.*)e", "'\\1'e", l)
      l <- gsub("e", "%*%10^", l)
@@ -113,8 +116,6 @@ between respective primarily theoretical and primarily empirical communities by
 seeing noise not as mathematical curiosity or statistical bugbear, but as a
 source for new opportunities for inference. 
 
-<!-- -->
-
 The gap between specialists and non-specialists is particularly acute in the
 ecological literature on stochastic processes.  This makes the potential benefit
 for new synthesis all the greater, but also poses an obvious challenge in 
@@ -133,8 +134,6 @@ parameters inferred from time-series data. A copy of this appendix
 is maintained at <https://github.com/cboettig/noise-phenomena>, and
 bug reports, suggestions or help requests are welcome through the
 issue tracker. 
-
-
 
 To emphasize the underlying trend in the changing roles in which we
 see and understand noisy processes, I will also restrict my focus 
@@ -732,7 +731,7 @@ frequency of the damped oscillator [@Nisbet1982].
 
 Since @Nisbet1976, examples of stochastic resonance have been demonstrated in common
 models and implicated in empirical examples of increasing complexity, [@Greenman2003],
-particularly in higher-dimensional disease and outbreak models [@Blarer1999; @Greeman2003; @McKane2005; @Alonso2007; @Black2010].
+particularly in higher-dimensional disease and outbreak models [@Blarer1999; @Greenman2003; @McKane2005; @Alonso2007; @Black2010].
 @Blarer1999 identified quasi-cycles as a possible
 explanation for oscillations and periodic outbreaks in pest ecosystems.
 @Bjornstad2004 analyzes the potential for such stochastic effects
@@ -837,7 +836,7 @@ describing the y-axis in such ball-in-cup models.
 
 
 <!--Figure 3: Noisy switch -->
-```{r noisy_switch, fig.width=7, fig.height=7, fig.cap="Panel A: Data on prevelance of rubella in Copenhagen illustrating potential stochastic switching dynamics between two regimes, reproduced from @Keeling2001. B-D. Stochastic switiching in May's model of alternative stable state dynamics. Panel B: timeseries showning stochastic switching events between regimes. Panel C: separate nonlinear birth and death processes intersect at multiple points creating alternate stable states. Panel D: The corresponding potential well derived from the birth-death model: $U(x) = -\\int b(x) - d(x) \\ ud x $. Parameter values shown r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 10000, see code in Appendix A. \\label{noisy_switch}"}
+```{r noisy_switch, fig.width=7, fig.height=7, fig.cap="Panel A: Data on prevelance of rubella in Copenhagen illustrating potential stochastic switching dynamics between two regimes, reproduced from @Keeling2001. B-D. Stochastic switiching in May's model of alternative stable state dynamics. Panel B: timeseries showning stochastic switching events between regimes. Panel C: separate nonlinear birth and death processes intersect at multiple points creating alternate stable states. Panel D: The corresponding potential well derived from the birth-death model: $U(x) = -\\int b(x) - d(x) \\ud x$. Parameter values shown r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 10000, see code in Appendix A. \\label{noisy_switch}"}
 
 p <- list(r = .5, K = 2, Q = 5, H = .38, sigma = .04, a = 0.245, N = 1e4)
 
@@ -1004,7 +1003,7 @@ pop_sim <-
   select(t, population = x, tip_time) %>%
   ggplot(aes(t, population)) + geom_line(col=colours[1]) + 
   geom_vline(aes(xintercept = tip_time), col=colours[2], lty=2) + 
-  scale_y_log10(labels=fancy_scientific)  + 
+  scale_y_log10(labels=scientific)  + 
   coord_cartesian(ylim=c(1e3, 5e5)) +
   labs(subtitle = "C. Yeast population size", 
        caption = "Vertical red dashed line indicates tipping point location")
@@ -1072,39 +1071,29 @@ approaching a saddle-node bifurcation, but will not show flickering.
 Teasing these issues apart in greater mathematical formalism and under more
 complex and realistic models remain largely open problems.  
 
-More broadly, examples of early warning signals such as increasing variance,
-auto-correlation, and flickering all point to ways in which stochasticity
-and noise-driven phenomena can be transformed from something which obscures
-underlying processes to something which reveals them.  I believe this is
-role could apply far more broadly than in just the context of stability and
-tipping points.  The examples from fold bifurcations already suggest
+
+Interpreting stochastic processes as potential new sources of information
+has also proven to be an effective catalyst in bringing concepts from theory 
+to application. An array of experimental and observational tests of early
+warning signals [_i.e._ @Carpenter2011; @Dai2012; @Clements2016; @Clements2017; @Scheffer2015] 
+has illustrated where these phenomena can be seen in laboratory and field ecosystems,
+and also sparked discussion of
+a wide array of practical [@Boettiger2013b; @Scheffer2015], statistical
+[e.g. @Boettiger2012d; @Boettiger2012], and theoretical [e.g. @Dai2015;
+@Hastings2010] challenges that arise.  This creates a two-way dialog
+between empirical and theoretical work that does much to advance the field
+as a whole. Similar dialog between theory and experiment in other areas
+of stochastic dynamics could benefit both sides.
+
+The potential for stochastic phenomena to provide information about underlying
+processes goes well beyond avialable examples in stability and early warning signals.
+The examples from fold bifurcations already suggest
 that stochastic processes could play a similar role in identifying
 other critical transitions. For instance, stochastic resonance may be 
 visible in advance of a Hopf bifurcation, where a stable state gives
 way to stable oscillations (limit cycle) of growing magnitude
-[e.g. @Fussmann2000; @Nelson2013; @Strogatz2001].
-
-Interpreting stochastic processes as potential new sources of information
-has also proven to be a
-rich catalyst for bringing these concepts beyond the realm of abstract
-theory. A rich array of experimental and observational tests of early
-warning signals [_i.e._ @Carpenter2011; @Dai2012; @Clements2016; @Clements2017;
-and many others, _e.g._ see @Scheffer2015 review] has served not merely
-to illustrate these phenomena can be seen in laboratory and field ecosystems,
-but also to spark suggestions of additional possible indicators and surface
-a wide array of practical [@Boettiger2013b; @Scheffer2015], statistical
-[e.g. @Boettiger2012d; @Boettiger2012], and theoretical [e.g. @Dai2015;
-@Hastings2010] challenges to such application.  This creates a two-way dialog
-between empirical and theoretical work that does much to advance the field
-as a whole. 
-
-
-
-
-<!--
-One of the most interesting aspects of noise is as a source of
-additional information.  This can be realized in a variety of ways.
-For instance, in deriving expressions for the variance created by
+[e.g. @Fussmann2000; @Nelson2013; @Strogatz2001].  Noise can provide
+information in unrelated ways as well. in deriving expressions for the variance created by
 demographic noise above, we observed that different partitions of
 a logistic growth model can lead to the same macroscopic dynamics
 (same values for $b$ - $d$), while having different variance (due
@@ -1113,8 +1102,6 @@ observed in such a population could potentially help resolve
 how dynamics are partitioned between individual birth and death
 rates (though in practice one would have to first account for any
 contribution of environmental noise).
--->
-
 
 
 # Conclusions
@@ -1175,7 +1162,12 @@ predict that we will see greater discussion and use of stochastic
 phenomena to infer underlying processes in empirical patterns in
 similar interactions between theoretical and empirical research.
 
+# Acknowledgements
 
+The author acknowledges feedback and advice from the editor, 
+Tim Coulson and two anonymous reviewers. This work was supported in
+part by  USDA National Institute of Food and Agriculture, Hatch
+project CA-B-INS-0162-H.
 
 # References
 

@@ -33,7 +33,7 @@ abstract: |
   # Tables: 0
   # Word count: 7430
   # Word count in abstract: 181
-  # Number of References: 117
+  # Number of References: 111
   # Archive statement:
 
   All data (simulated data and code) is made available on GitHub (<https://github.com/cboettig/noise-phenomena>), and if accepted, will be archived with provided DOI in an appropriate scientific data repositoriy.

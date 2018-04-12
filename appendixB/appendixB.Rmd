@@ -466,4 +466,50 @@ Notably, both the SDE derived from the Kramer-Moyal diffusion approximation and 
 
 
 
+## Summary of more complex models
+
+
+
+There 
+
+
+
+Reference        |  Elements                   |  Description
+---------------- | ----------------------------|-----------------
+@Cohen1979       | Age/stage structure
+@Tuljapurkar1989 | Age/stage structure 
+@Tuljapurkar1997 | Age/stage structure 
+@Caswell2009     | Age/stage structure
+@Metcalf2015     | Age/stage structure 
+@Vindenes2017b   | Age/stage structure
+@Durrett1994     | Spatial structure
+@Dieckmann2000   | Spatial structure
+@Kerr2002        | Spatial structure
+@Schreiber2010   | Spatial structure
+@Vindenes2015    | Individual heterogeneity 
+@Hart2016        | Individual heterogeneity 
+@Caswell1978     | Coexistence
+@Tuljapurkar1980 | Coexistence
+@Chesson1981     | Coexistence
+@Chesson1982     | Coexistence
+@Chesson1985     | Coexistence
+@Chesson1989     | Coexistence
+@Melbourne2007   | Coexistence
+@Schreiber2017   | Coexistence
+@Ripa            | Colored noise
+@Roughgarden     | Colored noise
+@Ripa1999        | Colored noise
+@Petchey         | Colored noise
+@Schreiber2010   | Colored noise
+@Lee2017         | Colored noise 
+@Spanio2017      | Colored noise 
+@Coulson2001     | periodic/temporal structure
+@Bjornstad2001   | periodic/temporal structure
+@Keeling2001     | periodic/temporal structure
+@Saether1997     | eco-evolutionary
+@Ozgul2009       | eco-evolutionary
+@Lenormand2009   | eco-evolutionary
+@Vindenes2015    | eco-evolutionary
+@Schreiber2015   | eco-evolutionary
+
 # References

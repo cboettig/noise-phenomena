@@ -97,17 +97,17 @@ ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
 
 # Introduction: Noise the nuisance
 
-To the empirical ecologist, stochasticity, or more simply, noise,
+To many, stochasticity, or more simply, noise,
 is just that -- something which obscures patterns we are trying to infer [@Knape2011];
 and an ever richer batteries of statistical methods are developed largely in an
 attempt to strip away this undesirable randomness to reveal the patterns
-beneath [@Coulson2001].  Over the past several decades, theoretical ecology has transitioned
+beneath [@Coulson2001].  Over the past several decades, literature in stochasticity has transitioned
 from thinking of stochasticity in such terms; where noise is a nuisance
 that obscures the deterministic skeleton of the underlying mechanisms,
 to the recognition that stochasticity can itself be a mechanism for 
 driving many interesting phenomena [@Coulson2004].  Yet this transition from *noise the nuisance*
 to *noise the creator* of ecological phenomena has had, with a few notable exceptions,
-relatively little impact in empirical thinking about stochasticity.  One of the
+relatively little impact in broader thinking about stochasticity.  One of the
 most provocative of those exceptions has turned the classical notion of noise
 the nuisance on its head: recognizing that noise driven phenomena can become a tool
 to reveal underlying processes: to become *noise the informer*.  Here I argue that
@@ -116,12 +116,19 @@ between respective primarily theoretical and primarily empirical communities by
 seeing noise not as mathematical curiosity or statistical bugbear, but as a
 source for new opportunities for inference. 
 
-The gap between specialists and non-specialists is particularly acute in the
-ecological literature on stochastic processes.  This makes the potential benefit
-for new synthesis all the greater, but also poses an obvious challenge in 
-appealing to both audiences.  In recognition of this, I provide concise and
-commented code for simulating each of the models presented in the supplement,
-Appendix A, while more mathematical background and derivations are presented Appendix B.
+This distinction between a paradigms of noise the "nuisance" versus noise the "creator"
+is necessarily a simplification across a spectrum of perspectives. These categories
+should not be mistaken for either a sharp dichotomy nor a reference to a stictly
+empirical-theoretical divide.  It is also essential to recognize that each paradigm
+expands upon rather than rejects the previous notion of noise: the recognition that
+noise can create novel phenomena does not mean that noise cannot also obscure the 
+signal of some process of interest.  Likewise, seeking to use noise as a novel source
+of information about underlying processes will be informed by both previous paradigms,
+as our discussion will illustrate.  
+
+Accompanying this discussion, I provide concise and
+commented code for simulating each of the models we will discuss as
+Appendix A, while more mathematical background and derivations can be found in Appendix B.
 Numerical simulations permit poking and prodding of empirically-minded
 investigation unencumbered by either experimental design or mathematical formalism.
 Most stochastic models are expressed in the BUGS language, which
@@ -854,7 +861,8 @@ in clonal microbial populations, which can act to buffer the
 population in a changing environment  [@Balaban2004]. This mechanism
 has also been explored in the emergence of multiple strategies
 under evolutionary dynamics in disease models [@Read2007].
-
+This further underscores that the collection of more long-term data
+will essential to our understanding noisy phenomena and their underlying mechanisms.
 
 
 # Noise the informer: Noise can provide novel information

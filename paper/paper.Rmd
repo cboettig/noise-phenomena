@@ -159,7 +159,7 @@ of age and stage structure [e.g. @Cohen1979; @Tuljapurkar1989; @Tuljapurkar1997;
 heterogeneity [e.g. @Vindenes2015; @Hart2016] or the coexistence
 of multiple species [@Caswell1978; @Tuljapurkar1980; @Chesson1981;
 @Chesson1982; @Chesson1985; @Chesson1989; @Melbourne2007;
-@Schreiber2017]; correlated [@Ripa; @Ripa1999; @Petchey; @Schreiber2010;
+@Schreiber2017]; correlated [@Roughgarden; @Ripa; @Petchey; @Schreiber2010;
 @Lee2017; @Spanio2017] or periodic [@Coulson2001; @Bjornstad2001;
 @Keeling2001] structure in environmental noise, or the interaction
 of ecological and evolutionary processes [@Saether1997; @Ozgul2009;

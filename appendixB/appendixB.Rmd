@@ -6,12 +6,26 @@ author:
 address:
   - code: a
     address: "Dept of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley CA 94720-3114, USA"
-layout: 5p  
+layout: 3p  
 bibliography: "../paper/refs.bib"
 output: 
   rticles::elsevier_article:
     toc: true
-preamble: "\\newcommand{\\ud}{\\mathrm{d}}"
+preamble: "\\newcommand{\\ud}{\\mathrm{d}}" 
+header-includes: |
+      \usepackage[table]{xcolor}
+      \definecolor{table-row-color}{HTML}{F5F5F5}
+      \definecolor{table-rule-color}{HTML}{999999}
+      \arrayrulecolor{table-rule-color}
+      \setlength\heavyrulewidth{0.3ex}
+      \renewcommand{\arraystretch}{1.3}
+      \rowcolors{3}{}{table-row-color!100}
+      \let\oldlongtable\longtable
+      \let\endoldlongtable\endlongtable
+      \renewenvironment{longtable}{\oldlongtable} {
+      \endoldlongtable
+      \global\rownum=0\relax}
+
 ---
 
 \renewcommand{\thefigure}{B\arabic{figure}}
@@ -68,8 +82,7 @@ is equivalent to the PDE formulation [e.g. @vanKampen2007 or @Oksendal1985].
 # Master equations and the step operator
 
 
-
-\begin{figure}
+\begin{figure}{H}
 \begin{center}
 \includegraphics[width=.25\textwidth]{markov}
 \caption{Birth and death as state-dependent transition rates in a Markov process.}\label{markov}
@@ -465,51 +478,49 @@ Mimicking the structure of the Levins model only in multiple dimensions, this mo
 Notably, both the SDE derived from the Kramer-Moyal diffusion approximation and the central limit theorem result arising from the system size expansion break down in the case of large deviations.  @Ovaskainen2010 provides an overview literature in that addresses this limit and discusses the use of the WKB^[Wentzel, Kramers & Brillouin. Note that the physicist Gregor Wentzel is not the same as the mathematician Alexander Wentzell of the Fredilin-Wentzell theorem for large deviations years later, though I believe the former's result can be established more formally by the theorem from the latter.] method to address this case, which is of particular interest in the persistence / coexistence literature where stochastic extinction arises only from such large deviations. 
 
 
+\newpage
 
-## Summary of more complex models
-
-
-
-There 
+# Stochasticity in more complex models
 
 
 
-Reference        |  Elements                   |  Description
----------------- | ----------------------------|-----------------
-@Cohen1979       | Age/stage structure
-@Tuljapurkar1989 | Age/stage structure 
-@Tuljapurkar1997 | Age/stage structure 
-@Caswell2009     | Age/stage structure
-@Metcalf2015     | Age/stage structure 
-@Vindenes2017b   | Age/stage structure
-@Durrett1994     | Spatial structure
-@Dieckmann2000   | Spatial structure
-@Kerr2002        | Spatial structure
-@Schreiber2010   | Spatial structure
-@Vindenes2015    | Individual heterogeneity 
-@Hart2016        | Individual heterogeneity 
-@Caswell1978     | Coexistence
-@Tuljapurkar1980 | Coexistence
-@Chesson1981     | Coexistence
-@Chesson1982     | Coexistence
-@Chesson1985     | Coexistence
-@Chesson1989     | Coexistence
-@Melbourne2007   | Coexistence
-@Schreiber2017   | Coexistence
-@Ripa            | Colored noise
-@Roughgarden     | Colored noise
-@Ripa1999        | Colored noise
-@Petchey         | Colored noise
-@Schreiber2010   | Colored noise
-@Lee2017         | Colored noise 
-@Spanio2017      | Colored noise 
-@Coulson2001     | periodic/temporal structure
-@Bjornstad2001   | periodic/temporal structure
-@Keeling2001     | periodic/temporal structure
-@Saether1997     | eco-evolutionary
-@Ozgul2009       | eco-evolutionary
-@Lenormand2009   | eco-evolutionary
-@Vindenes2015    | eco-evolutionary
-@Schreiber2015   | eco-evolutionary
+The literature exploring how stochasticity plays out in more complex models, such as with age or stage structure, spatial structure, evolutionary dynamics and so forth is far more extensive than can be given justice here.  Without any suggestion of being a comprehensive review, the following table merely highlights just a few of the classic textbooks, papers, and reviews for any reader looking to explore further, as well as a handful of more recent papers merely to illustrate that these all remain active areas of research.  Addressing the intepretation, role, and consequences of stochasticity in each of these contexts would provide a more traditional introduction to the subject, such as a graduate course or seminar.  In the review and synthesis of the main text I have endeavored instead to deviate from this structure and constrain the focus to simpler models to better underscore the paradigms in which we do and might think about noise throughout the field.  
+
+
+
+Reference        |  Contexts          |  Description / Notes
+-----------------|--------------------|--------------------------------------------------
+@Cohen1979       | Age/stage structure         | Derives strong ergodic theorem for convergence to normalized age structure
+@Tuljapurkar1989 | Age/stage structure         | Classic review of demography in random environments
+@Tuljapurkar1997 | Age/stage structure         | Chapter on stochastic matrix models; from Tuljapurkar and Caswell's classic text on structured population modeling
+@Caswell2009     | Age/stage structure         | Nice recent paper exploring individual stochasticity in age and stage structured populations, with examples from right whales and a prairie plant. 
+@Metcalf2015     | Age/stage structure         | Excellent methods paper for using Integral Projection Models in stochastic population dynamics
+@Vindenes2017b   | Age/stage structure         | 
+@Dieckmann2000   | Spatial structure           | The book "The Geometry of Ecological Interactions" provides wide-ranging examples on approximations to spatially explicit dynamics, including stochastic context.
+@Durrett1994     | Spatial structure & Indiv heterogeneity       | Classic paper on "Importance of Being Discrete and Spatial", includes nice demonstration of how spatially explicit stochastic models with discrete individuals can give qualitatively different behavior from their associated limiting reaction-diffusion (i.e. a deterministic, continuous PDE) models.
+
+@Schreiber2010   | Spatial structure& Indiv heterogeneity       |
+@Vindenes2015    | Indiv heterogeneity         |
+@Hart2016        | Indiv heterogeneity         |
+@Caswell1978     | Coexistence                 |  
+@Tuljapurkar1980 | Coexistence                 |
+@Chesson1981     | Coexistence                 | Classic paper introducing what we now call the 'temporal storage effect' for coexistence of multiple species on the same resource through a varying (including but not limited to stochastic) environments. 
+@Chesson1985     | Coexistence                 | Storage effect in time and space -- again, stochasticity can be a driver of the necessary variation across space as well as time.
+@Melbourne2007   | Coexistence                 |
+@Schreiber2017   | Coexistence                 | Excellent overview of modern coexistence theory under both cases of demographic and environmental noise.  Includes several theorems showing how classic results (e.g. Chesson and others) can be extended to more general assumptions and also highlights some open questions and conjectures.  
+@Roughgarden     | Colored noise               | Elegant simple model showing how autocorrelated environments differ from the dynamics predicted by classic white-noise approximations
+@Ripa            | Colored noise               | Another simple model of colored noise in which extinciton risk decreases with positively auto-correlated noise and decreases with negatively-autocorrelated noise
+@Schreiber2010   | Colored noise               | Excellent illustration of how the impact of temporal auto-correlation in noise will depend on spatial heterogeneity and dispersal. (In particular, proves that a metapopulation in which expected fitness in every patch is less than 1 can still persist(!) given positive temporal auto-correlation in relative fitness and weak spatial correlation.)
+@Lee2017         | Colored noise               | Recent numerical study which stands out from most other examples in this list by arguing that under a wide range of parameterizations they consider, ignoring autocorrelation has only a limited impact on estimating expected extinction times. 
+@Coulson2001     | periodic/temporal           | 
+@Bjornstad2001   | periodic/temporal           | 
+@Keeling2001     | periodic/temporal           |
+@Saether1997     | eco-evolutionary            | 
+@Vindenes2015    | eco-evolutionary            | 
+@Schreiber2015   | eco-evolutionary            | Evolution of bet-hedging strategies in variable environments (a nice generalization of classic results from Gillespie 1973, 1974 through varying level of correlation within generations)
+@Lenormand2009   | evolutionary                | Excellent recent review of stochasticity in evolutionary models
+
+
+\pagebreak
 
 # References

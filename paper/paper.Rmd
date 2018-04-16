@@ -116,15 +116,22 @@ between respective primarily theoretical and primarily empirical communities by
 seeing noise not as mathematical curiosity or statistical bugbear, but as a
 source for new opportunities for inference. 
 
-This distinction between a paradigms of noise the "nuisance" versus noise the "creator"
-is necessarily a simplification across a spectrum of perspectives. These categories
-should not be mistaken for either a sharp dichotomy nor a reference to a stictly
-empirical-theoretical divide.  It is also essential to recognize that each paradigm
+
+In arguing for this shift, it essential to reconize this is a call for a bigger tent,
+not for the rejection of previous paradigms.  What I will characterize as 'noise the nuisance'
+reflects a predominately statistical approach, in which noise, almost by definition,
+represents all the processes we are not interested in that create additional variation
+which might obscure the pattern of interest.  By contrast, an extensive literature has
+long explored how noise itself can create patterns and explain processes from population
+cycling to coexistence.  These broad categories should be seen as a spectrum and not be
+mistaken for either a sharp
+dichotomy nor a reference to a stictly empirical-theoretical divide.  Each paradigm
 expands upon rather than rejects the previous notion of noise: the recognition that
-noise can create novel phenomena does not mean that noise cannot also obscure the 
+noise can create novel phenomena does not mean that noise cannot also obscure the
 signal of some process of interest.  Likewise, seeking to use noise as a novel source
 of information about underlying processes will be informed by both previous paradigms,
-as our discussion will illustrate.  
+as our discussion will illustrate.
+
 
 Accompanying this discussion, I provide concise and
 commented code for simulating each of the models we will discuss as
@@ -160,13 +167,12 @@ heterogeneity [e.g. @Vindenes2015; @Hart2016] or the coexistence
 of multiple species [@Caswell1978; @Tuljapurkar1980; @Chesson1981;
 @Chesson1982; @Chesson1985; @Chesson1989; @Melbourne2007;
 @Schreiber2017]; correlated [@Roughgarden; @Ripa; @Petchey; @Schreiber2010;
-@Lee2017; @Spanio2017] or periodic [@Coulson2001; @Bjornstad2001;
+@Lee2017; @Spanio2017; @Paniw2018] or periodic [@Coulson2001; @Bjornstad2001;
 @Keeling2001] structure in environmental noise, or the interaction
 of ecological and evolutionary processes [@Saether1997; @Ozgul2009;
 @Lenormand2009; @Vindenes2015; @Schreiber2015].  As such, we will 
 rely on both textbooks and recent reviews to provide a proper treatment
-of these issues, and focus on broader trends that may be less apparent
-to non-specialists.
+of these issues, and focus on broader trends.
 
 This review is structured into three sections: Origins of noise, emergent
 phenomena, and noise-driven inference.  The first section lays the conceptual
@@ -329,11 +335,10 @@ have a probability of colonizing an open patch that is simply
 proportional to the fraction of available patches, $1 - n/N$. 
 
 
-We choose this model because it has precisely same functional form
+We choose this model because it has the same functional form
 as the ubiquitous logistic growth model, $\frac{\ud n}{\ud t} = rn (1 - \tfrac{n}{K})$
 but is explicit about how this net growth rate is divided between
-birth and death rate.  As we shall see, this is not merely a notational
-convenience but leads to real differences in observed stochastic properties
+birth and death rate.  This leads to real differences in observed stochastic properties
 of the model. Both the numerical approach (details in Appendix A) and the 
 analytical approach (Appendix B) illustrate that it is straight-forward
 to use this same approach in alternate formulations.
@@ -535,8 +540,9 @@ Gaussian environmental noise.
 # Noise the creator: Noise can induce novel phenomena
 
 Most ecologists first encounter stochastic models in the context of statistics,
-where noise is just a nuisance to be stripped away [@Gotelli2004; @Bolker2007]. 
-In examining its origins, we were able to justify the simplistic
+where noise is a nuisance to be stripped away [@Gotelli2004; @Bolker2007] to reveal
+deterministic mechanisms beneath, rather than being seen as a mechanism in and of itself. 
+In examining the origins of noise, we were able to justify the simplistic
 view of noise as something merely added on to a deterministic skeleton
 to be less ad hoc than it appears; justified as it is by careful
 approximations and underlying theorems so long as our systems are 
@@ -572,7 +578,7 @@ population [e.g. @Kendall1949; @Lande2003;  @Bartlett1955; @Bartlett1960;
 @Schreiber2017]. Stochasticity can also
 do the opposite, allowing many species to coexist in scenarios where
 the deterministic skeleton would predict all but one of them to be
-doomed to extinction [@Caswell1978; @Tuljapurkar1980; @Chesson1981;
+doomed to extinction [@Tuljapurkar1980; @Chesson1981;
 @Chesson1982; @Chesson1985; @Chesson1989; @Melbourne2007; @Hart2016; @Schreiber2017].
 Two important trends in this literature have
 been establishing existing results in more general and precise language
@@ -1052,58 +1058,43 @@ contribution of environmental noise).
 
 # Conclusions
 
-This review has highlighted contrasting views of the role of noise
-between specialists and non-specialists and pointed the way to bridging
-that divide by seeing noise not as a new source of information.
-Most ecologists are introduced to the concept of stochastic models 
-through the lens of statistical inference, in which noise is some
-relatively abstract nuisance to be stripped away by clever statistical
-inference [@Gotelli2004; @Bolker2007].  As we have seen, specialists have long viewed noise in a 
-different light, emerging from the same underlying mechanisms that
-create both what we think of as the deterministic processes of interest
-and the additional fog of noise [@vanKampen2007; @Black2012].  An intuitive approximation of
-larger system size both justifies the convenient partition between
-a so-called deterministic skeleton and noise components of a model,
-while also illustrating how different demographic and environmental
-processes will create different noise dynamics [@Coulson2004; @Ovaskainen2010;
-@Schreiber2017].  We have also seen the divide in how noise is perceived
-goes well beyond merely a more mechanistic origin story. Specialists
-have focused heavily on the role of noise as creator of phenomena:
-qualitative differences in the behavior of fully stochastic models and
-their deterministic skeletons [@Coulson2004].  Tipping our hat to 
-the extensive examples in persistence and coexistence, we explored 
-examples of quasi-cycles and stochastic switching showing patterns
-wholly unlike their deterministic skeletons. Finally, we endeavor to
-bring the divergent views of noise in empirical and theoretical communities
-together by turning the noise the nuisance on its head: drawing on
-examples from the early warning signals literature which have demonstrated
-how noisy phenomena can be used to reveal information about slow
-changes in the underlying deterministic skeleton.
+This review has explored three paradigms in how noise is viewed throughout the 
+ecological literature, which I have dubbed respectively: noise the *nuisance*, 
+noise the *creator*, and noise the *informer*.  Noise can be seen as a nuisance
+almost by definition: in examining the origins of noise, we have seen how 
+stochasticity is introduced not because ecological processes are random in some fundamental
+sense, but rather, because those processes are influenced by a complex combination
+of forces we do not model explicitly.  In this view, noise captures all that additional
+variation that is separate from the process of interest, and a rich array of 
+statistical methods allow us to separate the one from the other in observations and
+experiments.  By examining the origins of noise, we have seen that despite the complex
+ways in this noise can enter a model, that a Gaussian white-noise approximation [@vanKampen2007; @Black2012] is often
+approriate given a limit of a large system size -- a fact often invoked implicitly but
+rarely derived explicitly from the theorems of @Kurtz1978 and others. 
 
-Divergent views of the role of stochasticity have separated our community
-for too long. The eruption of interest in early warning signals for critical
-transitions [@Scheffer2009] provides an excellent illustration of
-one way to bridge that divide and the value of greater dialogue between
-these two communities.  I hope this review challenges specialists to explore
-the potential of stochastic phenomena to inform on underlying processes --
-such results are more immediately applicable to empirical work that must
-infer process from pattern.  Meanwhile, non-specialists could also
-benefit from a more nuanced view of stochasticity as a part of the processes
-we seek to understand as well as a novel source of information.  All though
-mathematical complexity has frequently been a barrier, computational
-advances and the widespread
-adoption of computational tools such as the R language have made it possible
-to explore these phenomena numerically. Unlike static charts
-empirical data, simulations can be manipulated to build
-an intuition and generate sample data of these processes. To this end, I 
-have provided simple and documented code in Appendix B for each of
-examples discussed here.  In the past two
-decades, we have set to rest those deterministic skeletons that see
-noise only as nuisance and embraced the central role noise plays
-as the creator of ecological phenomena. Going forward, I hope and
-predict that we will see greater discussion and use of stochastic
-phenomena to infer underlying processes in empirical patterns in
-similar interactions between theoretical and empirical research.
+Building on these foundations, we turned to noise the creator, illustrating how
+even small magnitude Gaussian noise could itself create and drive interesting phenomena.
+While a purely statistical paradigm might look to explain patterns such as oscillations
+or sudden transistions in terms of deterministic processes, this section highlighted how
+noise can create and sustain cycles [e.g. @Nisbet1976; @Bjornstad2004] and switches [@Keeling2001].  While our examples focused on the most
+tractable systems, a wealth of literature has explored such phenomena in ever more complex
+contexts.  These examples paint a very different picture of noise, one where "everything matters" [@Bjornstad2001],
+where it can be difficult to know what drives a pattern and where ommitting any of the
+complexity (age or spatial structure, autocorrelation, individual heterogeneity) can
+qualitatively alter the behavior of a model.  
+
+Our third paradigm seeks a more optimistic middle ground of noise the informer.
+Here we saw the examples from an empricially driven literature on early warning signals
+[@Scheffer2009; @Dai2012] view noise as a source of countless miniature experiments
+which can reveal the underlying dynamics of a system and how they may be slowly changing.
+In this context, noise does not act to create phenomena of interest directly. The 
+sudden transistions we seek to anticipate are still explained by the deterministic part
+of the model -- bifurcations. But nor is noise a nuisance that merely cloaks this
+deterministic skeleton from plain view: rather, it becomes a novel source of information
+that would be inaccessible from a purely deterministic approach.  I believe more examples
+of how noise can inform on underlying processes is possible, but will require greater
+dialog between these world views.  
+
 
 # Acknowledgements
 

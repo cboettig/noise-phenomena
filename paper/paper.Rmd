@@ -4,18 +4,16 @@ author:
   - name: "Carl Boettiger"
     affiliation: a
     email: "cboettig@berkeley.edu"
-
 address:
   - code: a
     address: "Dept of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley CA 94720-3114, USA"
-
-## Use trends style to quickly count refs
 #csl: trendsjournals.csl
 csl: ecology-letters.csl
 bibliography: refs.bib
 output: 
   rticles::elsevier_article:
     keep_tex: true
+  word_document: default
 layout:  3p # review = doublespace, 3p = singlespace, 5p = two-column
 preamble: |
   \newcommand{\ud}{\mathrm{d}}
@@ -24,8 +22,6 @@ preamble: |
   \linenumbers
   \usepackage{setspace}
   \doublespacing
-
-
 abstract: |
   # Article Type: Review & Synthesis
   # Running title: From noise to knowledge
@@ -35,28 +31,28 @@ abstract: |
   # Word count in abstract: 181
   # Number of References: 111
   # Archive statement:
-
   All data (simulated data and code) is made available on GitHub (<https://github.com/cboettig/noise-phenomena>), and if accepted, will be archived with provided DOI in an appropriate scientific data repositoriy.
-
+  
   # Keywords: stochasticity, demographic noise, environmental noise, colored noise, quasi-cycles, tipping points
 
-  \newpage 
-    
   # Abstract
-  
+    
    Noise, as the term itself suggests, is most often seen a nuisance to ecological insight, a inconvenient reality that must be acknowledged, a haystack that must be stripped away to reveal the processes of interest underneath. Yet despite this well-earned reputation, noise is often interesting in its own right: noise can induce novel phenomena that could not be understood from some underlying determinstic model alone.  Nor is all noise the same, and close examination of differences in frequency, color or magnitude can reveal insights that would otherwise be inaccessible.  Yet with each aspect of stochasticity leading to some new or unexpected behavior, the time is right to move beyond the familiar refrain of "everything is important" [@Bjornstad2001].  Stochastic phenomena can suggest new ways of inferring process from pattern, and thus spark more dialog between theory and empirical perspectives that best advances the field as a whole. I highlight a few compelling examples, while observing that the study of stochastic phenomena are only beginning to make this translation into empirical inference.  There are rich opportunities at this interface in the years ahead.  
-  
-
-
-#keywords:
-#  - stochasticity
-#  - demographic noise
-#  - environmental noise
-#  - colored noise
-#  - quasi-cycles
-#  - tipping points
-
+   
+  \newpage 
+ 
 ---
+
+<!--
+keywords:
+  - stochasticity
+  - demographic noise
+  - environmental noise
+  - colored noise
+  - quasi-cycles
+  - tipping points
+-->
+
 
 ```{r libraries, include=FALSE, message=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE, dev="cairo_pdf", fig.width=7, fig.height=3.5, cache = TRUE)
@@ -117,7 +113,7 @@ seeing noise not as mathematical curiosity or statistical bugbear, but as a
 source for new opportunities for inference. 
 
 
-In arguing for this shift, it essential to reconize this is a call for a bigger tent,
+In arguing for this shift, it essential to recognize this is a call for a bigger tent,
 not for the rejection of previous paradigms.  What I will characterize as 'noise the nuisance'
 reflects a predominately statistical approach, in which noise, almost by definition,
 represents all the processes we are not interested in that create additional variation
@@ -125,7 +121,7 @@ which might obscure the pattern of interest.  By contrast, an extensive literatu
 long explored how noise itself can create patterns and explain processes from population
 cycling to coexistence.  These broad categories should be seen as a spectrum and not be
 mistaken for either a sharp
-dichotomy nor a reference to a stictly empirical-theoretical divide.  Each paradigm
+dichotomy nor a reference to a strictly empirical-theoretical divide.  Each paradigm
 expands upon rather than rejects the previous notion of noise: the recognition that
 noise can create novel phenomena does not mean that noise cannot also obscure the
 signal of some process of interest.  Likewise, seeking to use noise as a novel source
@@ -135,19 +131,11 @@ as our discussion will illustrate.
 
 Accompanying this discussion, I provide concise and
 commented code for simulating each of the models we will discuss as
-Appendix A, while more mathematical background and derivations can be found in Appendix B.
-Numerical simulations permit poking and prodding of empirically-minded
+Appendix A, and more mathematical background and derivations in Appendix B.
+Numerical simulations permit poking and prodding
 investigation unencumbered by either experimental design or mathematical formalism.
-Most stochastic models are expressed in the BUGS language, which
-may be more familiar to empirical readers than corresponding
-mathematical formulas. This also permits both efficient simulation
-and potential estimation of parameters given sample data using the
-R package, NIMBLE [@deValpine2017]; allowing the deductive models
-illustrated here to readily function as inductive models with
-parameters inferred from time-series data. A copy of this appendix
-is maintained at <https://github.com/cboettig/noise-phenomena>, and
-bug reports, suggestions or help requests are welcome through the
-issue tracker. 
+A copy of these appendices
+is maintained at <https://github.com/cboettig/noise-phenomena>. 
 
 To emphasize the underlying trend in the changing roles in which we
 see and understand noisy processes, I will also restrict my focus 
@@ -237,15 +225,13 @@ e.g. demographic stochasticity arises because the birth of an individual is prob
 [@Melbourne2012]. It is easy to forget that this is merely an assertion about a
 model, not an assertion about reality [@Bartlett1960].  Only in quantum mechanics do we find
 inherently probabilistic properties: births and deaths of organisms all have
-far more mechanistic explanations which we simply summarize in statistical terms:
-on average -- that is, summing over a wide range of possible mechanisms we have chosen
-not to explicitly model -- an individual death occurs at rate $\lambda$.
+far more mechanistic explanations which we simply summarize in statistical or average terms:
+an individual death occurs at rate $\lambda$.
 This is in fact an extrinsic factor (variables not modeled explicitly),
 which makes birth appear probabilistic; (just as we describe the toss of a coin
 as probabilistic when in fact it is a mechanistic outcome of Newton's laws).
 Demographic stochasticity arises only subsequently, when we change scales from
 a description at the individual level to one at the population level.
-
 
 In the extensive literature developing the consequences of both demographic
 and environmental noise in models of increasing complexity, it can 
@@ -267,17 +253,25 @@ model, established in highly influential papers of @Leigh1981, @Lande1993,
 \label{canonical}
 \end{equation}
 
+Where $\textrm{d}B_t^{(d)}$ and $\textrm{d}B_t^{(e)}$ refer to Brownian processes, 
+(i.e. Gaussian white noise process) for demographic and environmental stochasticity
+respectively.  When $f(n)$ is simply a Verhulst logistic function this is often
+referred to as the canonical model [e.g. @Ovaskainen2010], and provides a clear
+illustration of the partition of separate deterministic and stochastic elements. 
+Significant research continues to focus on extending the study of this model to consider
+more complex and higher-dimensional $f(n)$ (coexistence models, stage structured models) and
+consider the case of auto-correlated, rather than than white noise of $\textrm{d}B_t^{(e)}$. 
 
-
-Where $\textrm{d}B_t^{(d)}$ and $\textrm{d}B_t^{(e)}$ refer to Brownian processes, (i.e. Gaussian white noise process) for demographic and environmental stochasticity respectively.  When $f(n)$ is simply a Verhulst logistic function this is often referred to as the canonical model [e.g. @Ovaskainen2010], and provides a clear illustration of the partition of separate deterministic and stochastic elements. Significant research continues to focus on extending the study of this model to consider more complex and higher-dimensional $f(n)$ (coexistence models, stage structured models) and consider the case of auto-correlated, rather than than white noise of $\textrm{d}B_t^{(e)}$. 
-
-Before we follow that path, we will examine how this canonical model can emerge from a lower-level description and how it can deviate from that description. This approach will also set the stage to see how our understanding of stochastic models can be extended to better reflect natural processes that shape not only for the so-called deterministic skeleton, but the noise as well.  In so doing, I will highlight two tools fundamental to this analysis, one computational and one analytical: the exact simulation method of @Gillespie1977's stochastic simulation algorithm (SSA), and the van Kampen system size expansion [@vanKampen1976].
-
-
+Here, we will examine how this canonical model can emerge from a
+lower-level description and how it can deviate from that description. This approach will also
+set the stage to see how our understanding of stochastic models can be extended to better
+reflect natural processes that shape not only for the so-called deterministic skeleton, but the noise terms as well.
+In so doing, I will highlight two tools fundamental to this analysis, one computational and one analytical:
+the exact simulation method of @Gillespie1977's stochastic simulation algorithm (SSA), and the
+van Kampen system size expansion [@vanKampen1976].
 
 
 ## Demographic stochasticity
-
 
 Demographic stochasticity refers to fluctuations in population sizes
 or densities that arise from the fundamentally discrete nature of
@@ -303,8 +297,9 @@ mutations to continuously-valued traits in evolutionary dynamics [e.g. @Boettige
 
 
 The @Gillespie1977 provides an exact algorithm
-for simulating demographic stochasticity at an individual level.
-The algorithm is merely a simple and direct implementation of the master
+for simulating demographic stochasticity at an individual level, Figure \ref{gillespie}
+and Appendix A.
+The algorithm is a simple and direct implementation of the master
 equation, progressing in random step sizes determined
 by the waiting time until the next event.
 Free from both the approximations and mathematical complexity,
@@ -342,8 +337,10 @@ birth and death rate.  This leads to real differences in observed stochastic pro
 of the model. Both the numerical approach (details in Appendix A) and the 
 analytical approach (Appendix B) illustrate that it is straight-forward
 to use this same approach in alternate formulations.
-Figure \ref{gillespie} shows the results of two exact SSA simulations of this model with
-identical parameters except for the total number of available sites,
+
+
+Figure \ref{gillespie} shows the results of two exact SSA simulations of the classic patch model of @Levins1969,
+with identical parameters in both panels except for the total number of available sites,
 $N$, illustrating the magnitude of these fluctuations indeed scales in proportion
 to $\sqrt{N}$ as postulated by the canonical equation, Eq \eqref{canonical}.
 
@@ -416,7 +413,7 @@ the fluctuation-dissipation theorem) and that correlations fall off exponentiall
 We will see both auto-correlation and variance play similar roles to infer this eigenvalue when we 
 reach the role of noise as informer.
 
-In the interests of a theoretical synthesis, I observe that this result
+Note that this result
 is *different* than the canonical equation, Eq \eqref{canonical}, or more generally
 the diffusion approximation [or Kramer-Moyal expansion @Kramers1940; @Moyal1949; @Gardiner2009]
 which is much more typical in the ecological literature [e.g. @Nisbet1982; @Lande2003; 
@@ -424,10 +421,9 @@ which is much more typical in the ecological literature [e.g. @Nisbet1982; @Land
 to the van Kampen expansion as a connection between individual-based and population-level
 model descriptions and applications, but fails to point out these differences,
 mistakenly characterizing the van Kampen expansion as synonymous with the diffusion approximation.
-In brief, the diffusion approximation does not lead to a Gaussian distribution
+The diffusion approximation does not lead to a Gaussian distribution
 (equivalently, an SDE or PDE with linear noise term, see Appendix B), but rather
 a *non-linear* SDE of the form (e.g. @Ovaskainen2010)
-
 
 \begin{equation}
 \ud X_t = \left[ b(x) - d(x) \right] \ud t + \sqrt{b(X_t) + d(X_t)} \ud W_t \label{diffusion}
@@ -464,8 +460,6 @@ model with $b = rn$ and $d = rn^2/N$, we instead find the variance
 at steady state is $\sigma^2 = K$; significantly larger than in the
 Levins model.
 
-
-
 ## Environmental stochasticity
 
 The van Kampen expansion can also be useful in illustrating how extrinsic
@@ -478,10 +472,10 @@ noise has been a topic of significant theoretical interest
 [e.g. @Roughgarden; @Ellner; @Lawton; @Ripa1999; @Marshall2015], but such 
 formulations start from the empirical observation of auto-correlation 
 in environmental time series rather than a process-based derivation.
-As the expansion clearly shows, any bounded continuous-time process will
+Any bounded continuous-time process will
 involve auto-correlation -- measure a continuous process at ever-closer intervals in
-time and these measurements must converge. As the derivation in Appendix B makes clear,
-it is rather the the *relative* time scales of the environmental process
+time and these measurements must converge. Appendix B shows that
+it is the *relative* time scales of the environmental process
 and population level process that really matter (more precisely, the relative 
 magnitudes of the auto-correlation time of the environmental dynamics and population dynamics.)
 An environment with comparatively short auto-correlation scale will act
@@ -490,11 +484,7 @@ effectively as white noise upon the population dynamics.
 
 The van Kampen expansion for extrinsic factors (appendix B) also highlights
 the importance of how environmental noise couples to the population dynamics.
-A mechanistic description of environmental noise acts directly on parameters
-of the ecological model: for instance, in our Levins' model we may imagine
-that the extinction rate of patches does not occur at some fixed rate $e$
-but rather at some stochastically fluctuating rate of a given mean, variance,
-and auto-correlation.  The system size expansion illustrates how we replace
+The system size expansion illustrates how we can replace
 a model where stochasticity is nested inside some parameter into the simpler
 format of the canonical equation where this contribution can be merely added
 on as Gaussian noise at the end of a deterministic skeleton.  (The expansion
@@ -510,7 +500,7 @@ and environmental contributions:
 \end{equation}
 
 where $(1-\frac{\bar{e}}{c}) N$ is the equilibrium population size.
-This reflects the assumption of the canonical equation, Eq \eqref{canonical}
+This justifies the assumption of the canonical equation, Eq \eqref{canonical}
 that the standard deviation (e.g. square root of the variance) scales in direct proportion to the system size $N$,
 while the demographic noise scales as the square root.  Consequently,
 for a large system, the demographic contribution becomes proportionally smaller
@@ -658,7 +648,11 @@ where $x_t$ is the prey density at time $t$, $r$ the growth rate, $K$ the carryi
 y_{t+1} = y_t + c  x_t  y_t - d  y_t+ \xi_{y,t} \label{quasi-cycle-predator}
 \end{equation}
 
-with $c$ the conversion ratio and $d$ the predator mortality rate.  Here we have assumed for the prey, $\xi_x \sim \mathcal{N(0, \sigma_x)}$, and similarly for the predator driven by $\xi_y$. Figure \ref{quasicycles}A shows examples for noise $\sigma_x = \sigma_y = 10^{-5}$, while Figure \ref{quasicycles}B shows $\sigma_x = \sigma_y = 0.01$.
+with $c$ the conversion ratio and $d$ the predator mortality rate.  
+Here we have assumed for the prey, $\xi_x \sim \mathcal{N(0, \sigma_x)}$,
+and similarly for the predator driven by $\xi_y$. Figure \ref{quasicycles}A 
+shows examples for noise $\sigma_x = \sigma_y = 10^{-5}$, while Figure
+\ref{quasicycles}B shows $\sigma_x = \sigma_y = 0.01$.
 
 
 Oscillations arise through the process known as stochastic resonance [@Nisbet1976; @Greenman2003].
@@ -1009,7 +1003,6 @@ over a given window in time, computing these averages over a rolling
 time window as we illustrate here, rather than across an ensemble
 of replicates.
 
-
 In contrast to the examples we have considered previously, work that extends
 this analysis into more complex scenarios of structured populations, interacting species,
 auto-correlated noise etc are significantly underdeveloped. Issues of spatial
@@ -1069,26 +1062,26 @@ variation that is separate from the process of interest, and a rich array of
 statistical methods allow us to separate the one from the other in observations and
 experiments.  By examining the origins of noise, we have seen that despite the complex
 ways in this noise can enter a model, that a Gaussian white-noise approximation [@vanKampen2007; @Black2012] is often
-approriate given a limit of a large system size -- a fact often invoked implicitly but
+appropriate given a limit of a large system size -- a fact often invoked implicitly but
 rarely derived explicitly from the theorems of @Kurtz1978 and others. 
 
 Building on these foundations, we turned to noise the creator, illustrating how
 even small magnitude Gaussian noise could itself create and drive interesting phenomena.
 While a purely statistical paradigm might look to explain patterns such as oscillations
-or sudden transistions in terms of deterministic processes, this section highlighted how
+or sudden transitions in terms of deterministic processes, this section highlighted how
 noise can create and sustain cycles [e.g. @Nisbet1976; @Bjornstad2004] and switches [@Keeling2001].  While our examples focused on the most
 tractable systems, a wealth of literature has explored such phenomena in ever more complex
 contexts.  These examples paint a very different picture of noise, one where "everything matters" [@Bjornstad2001],
-where it can be difficult to know what drives a pattern and where ommitting any of the
-complexity (age or spatial structure, autocorrelation, individual heterogeneity) can
+where it can be difficult to know what drives a pattern and where omitting any of the
+complexity (age or spatial structure, auto-correlation, individual heterogeneity) can
 qualitatively alter the behavior of a model.  
 
 Our third paradigm seeks a more optimistic middle ground of noise the informer.
-Here we saw the examples from an empricially driven literature on early warning signals
+Here we saw the examples from an empirically driven literature on early warning signals
 [@Scheffer2009; @Dai2012] view noise as a source of countless miniature experiments
 which can reveal the underlying dynamics of a system and how they may be slowly changing.
 In this context, noise does not act to create phenomena of interest directly. The 
-sudden transistions we seek to anticipate are still explained by the deterministic part
+sudden transitions we seek to anticipate are still explained by the deterministic part
 of the model -- bifurcations. But nor is noise a nuisance that merely cloaks this
 deterministic skeleton from plain view: rather, it becomes a novel source of information
 that would be inaccessible from a purely deterministic approach.  I believe more examples

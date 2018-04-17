@@ -1,12 +1,12 @@
-FROM rocker/verse:3.4.2
+FROM rocker/binder:3.4.2
 
-## Install dependencies manually
-RUN apt-get update && \
-  apt-get -y install fonts-roboto  
+## Copies your repo files into the Docker Container
+USER root
+COPY . ${HOME}
+RUN chown -R ${NB_USER} ${HOME}
 
-COPY . /home/rstudio/noise-phenomena
-WORKDIR /home/rstudio/noise-phenomena
+## Become normal user again
+USER ${NB_USER}
 
-RUN R -e "devtools::install(dep=TRUE)"
-RUN R -e "rmarkdown::render('appendixA/appendixA.Rmd')"
-
+## Run an install.R script, if it exists.
+RUN if [ -f DESCRIPTION ]; then R --quiet -e "devtools::install(dep=TRUE)"; fi

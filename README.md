@@ -2,9 +2,12 @@
 
 [![Binder](http://mybinder.org/badge.svg)](http://beta.mybinder.org/v2/gh/cboettig/noise-phenomena/master)
 [![Build Status](https://travis-ci.org/cboettig/noise-phenomena.svg?branch=master)](https://travis-ci.org/cboettig/noise-phenomena)
-[![Build Status](https://drone.carlboettiger.info/api/badges/cboettig/noise-phenomena/status.svg)](https://drone.carlboettiger.info/cboettig/noise-phenomena)
 [![DOI](https://zenodo.org/badge/94135460.svg)](https://zenodo.org/badge/latestdoi/94135460)
 
+<!--
+public repo, so drone badge no longer needed since we can run on travis.  
+[![Build Status](https://drone.carlboettiger.info/api/badges/cboettig/noise-phenomena/status.svg)](https://drone.carlboettiger.info/cboettig/noise-phenomena)
+-->
 
 ## From noise to knowledge: how randomness generates novel phenomena and reveals information
 

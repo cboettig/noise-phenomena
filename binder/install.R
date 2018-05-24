@@ -1,0 +1,1 @@
+devtools::install(".", dep=TRUE)

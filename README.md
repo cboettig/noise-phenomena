@@ -11,10 +11,7 @@ public repo, so drone badge no longer needed since we can run on travis.
 
 A compendium of code, data, and author's manuscript accompanying the publication:
 
-#### From noise to knowledge: how randomness generates novel phenomena and reveals information
-#### by Carl Boettiger [![](https://orcid.org/sites/default/files/images/orcid_16x16.png)](https://orcid.org/0000-0002-1642-628X). Published in *Ecology Letters*, 22 May 2018 <https://doi.org/10.1111/ele.13085>
-
-Author: Carl Boettiger
+#### Carl Boettiger [![](https://orcid.org/sites/default/files/images/orcid_16x16.png)](https://orcid.org/0000-0002-1642-628X). *From noise to knowledge: how randomness generates novel phenomena and reveals information*.  Published in *Ecology Letters*, 22 May 2018 <https://doi.org/10.1111/ele.13085>
 
 ## Overview
 

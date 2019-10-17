@@ -449,7 +449,7 @@ previously lets us both recover the classic model while adding some nuance in
 the interpretation.
 Taking $b(n) = n (1 - \tfrac{n}{N})$ and $d(n) = en$ and solving for the steady
 state to van Kampen's ODEs, we see the average number $\langle n \rangle$  of occupied patches is
-$\langle n \rangle = N\tfrac{e}{c}$ with variance at steady-state of 
+$\langle n \rangle = N\left(1 - \tfrac{e}{c}\right)$ with variance at steady-state of 
 $\sigma^2_n = N \tfrac{e}{c}$.  Observe that the variance scales proportionally
 to the system size, $N$, which explains the standard deviation
 increases as $\sqrt{N}$, as in the canonical model and as predicted by Figure \ref{gillespie}.
